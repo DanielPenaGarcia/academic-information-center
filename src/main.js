@@ -1,5 +1,6 @@
 import { QueryBuilder } from "./query-builder/query.builder.js";
 import { where } from "./query-builder/condition.builder.js";
+
 const condition = where()
   .equal("id", 1)
   .and(where().equal("username", "Jhon").or().equal("username", "Doe").build())
