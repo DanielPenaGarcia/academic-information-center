@@ -7,14 +7,15 @@ export function conditionsStringParser(conditions, where = true) {
     }
     conditions.forEach(element => {
         if (typeof element === 'string') {
-            conditionsString += ` ${element}`;
+            conditionsString += ` ${element} `;
         }
         if (element instanceof Array) {
-            conditionsString += ` (${conditionsStringParser(element, false)})`;
+            conditionsString += ` (${conditionsStringParser(element, false)}) `;
         }
         if (element instanceof Condition) {
-            conditionsString += ` ${element.toString}`;
+            conditionsString += ` ${element.toString()} `;
         }
     });
+    console.log(conditions);
     return conditionsString;
 }
