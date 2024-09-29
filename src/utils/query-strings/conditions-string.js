@@ -16,6 +16,5 @@ export function conditionsStringParser(conditions, where = true) {
             conditionsString += ` ${element.toString()} `;
         }
     });
-    console.log(conditions);
     return conditionsString;
 }

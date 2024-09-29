@@ -14,18 +14,31 @@ export class Query {
 }
 
 export class SelectQuery extends Query {
-  constructor(fields = "*", table, conditions) {
+  constructor(fields = "*", table, conditions, limit = null, offset = null) {
     super(table);
     this.fields = Array.isArray(fields) ? fields.join(", ") : fields;
     this.conditions = conditions;
+    this.limit = limit;
+    this.offset = offset;
   }
 
   toString() {
     const parsedConditions = conditionsStringParser(this.conditions, true);
     let query = `SELECT ${this.fields} FROM ${this.table}`;
+    
+    // Agregar condiciones (si las hay)
     if (parsedConditions) {
       query += ` ${parsedConditions}`;
     }
+
+    // Agregar paginación (limit y offset)
+    if (this.limit !== null) {
+      query += ` LIMIT ${this.limit}`;
+    }
+    if (this.offset !== null && this.limit !== null) {
+      query += ` OFFSET ${this.offset}`;
+    }
+
     return query;
   }
 }

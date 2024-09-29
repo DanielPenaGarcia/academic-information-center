@@ -26,6 +26,8 @@ const SelectQueryBuilder = function (tableName) {
   let fields = [];
   let conditions = [];
   let table = tableName;
+  let limit = null;
+  let offset = null;
 
   return {
     fields: function (fieldInput) {
@@ -41,9 +43,17 @@ const SelectQueryBuilder = function (tableName) {
       conditions = conditionInput;
       return this;
     },
+    limit: function (limitInput) {
+      limit = limitInput;
+      return this;
+    },
+    offset: function (offsetInput) {
+      offset = offsetInput;
+      return this;
+    },
     build: function () {
       const selectedFields = fields.length === 0 ? "*" : fields;
-      return new SelectQuery(selectedFields, table, conditions);
+      return new SelectQuery(selectedFields, table, conditions, limit, offset);
     },
   };
 };
