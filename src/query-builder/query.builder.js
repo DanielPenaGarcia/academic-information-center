@@ -1,5 +1,5 @@
 import { QueryBuilderException } from "../utils/exceptions/query-builder.exception.js";
-import { DeleteQuery, InsertQuery, SelectQuery, UpdateQuery } from "./query.js";
+import { DeleteQuery, InsertQuery, JoinQuery, SelectQuery, UpdateQuery } from "./query.js";
 
 export const QueryBuilder = function () {
   return {
@@ -18,7 +18,7 @@ export const QueryBuilder = function () {
   };
 };
 
-const SelectQueryBuilder = function (tableName) {
+export const SelectQueryBuilder = function (tableName) {
   if (!tableName) {
     throw new QueryBuilderException("Table must be defined");
   }
@@ -28,6 +28,7 @@ const SelectQueryBuilder = function (tableName) {
   let table = tableName;
   let limit = null;
   let offset = null;
+  let innerQueries = [];
 
   return {
     fields: function (fieldInput) {
@@ -39,7 +40,7 @@ const SelectQueryBuilder = function (tableName) {
       }
       return this;
     },
-    where: function (conditionInput) {
+    conditions: function (conditionInput) {
       conditions = conditionInput;
       return this;
     },
@@ -51,14 +52,18 @@ const SelectQueryBuilder = function (tableName) {
       offset = offsetInput;
       return this;
     },
+    joinTable: function (innerTable, type, field, selectFields = [], fieldNameReference) {
+      const innerQuery = new JoinQuery(table, innerTable, type, field, selectFields, fieldNameReference);
+      innerQueries.push(innerQuery);
+      return this;
+    },
     build: function () {
-      const selectedFields = fields.length === 0 ? "*" : fields;
-      return new SelectQuery(selectedFields, table, conditions, limit, offset);
+      return new SelectQuery(fields, table, conditions, limit, offset, innerQueries);
     },
   };
 };
 
-const InsertQueryBuilder = function (tableName) {
+export const InsertQueryBuilder = function (tableName) {
   if (!tableName) {
     throw new QueryBuilderException("Table must be defined");
   }
@@ -90,7 +95,7 @@ const InsertQueryBuilder = function (tableName) {
   };
 };
 
-const DeleteQueryBuilder = function (tableName) {
+export const DeleteQueryBuilder = function (tableName) {
   if (!tableName) {
     throw new QueryBuilderException("Table must be defined");
   }
@@ -99,7 +104,7 @@ const DeleteQueryBuilder = function (tableName) {
   let table = tableName;
 
   return {
-    where: function (conditionInput) {
+    conditions: function (conditionInput) {
       conditions = conditionInput;
       return this;
     },
@@ -109,7 +114,7 @@ const DeleteQueryBuilder = function (tableName) {
   };
 };
 
-const UpdateQueryBuilder = function (tableName) {
+export const UpdateQueryBuilder = function (tableName) {
   if (!tableName) {
     throw new QueryBuilderException("Table must be defined");
   }
@@ -130,7 +135,7 @@ const UpdateQueryBuilder = function (tableName) {
       }
       return this;
     },
-    condition: function (conditionInput) {
+    conditions: function (conditionInput) {
       conditions = conditionInput;
       return this;
     },
