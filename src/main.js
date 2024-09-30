@@ -5,7 +5,8 @@ const condition = where().equal("username", "Jhon Doe").build();
 
 const selectQuery = QueryBuilder()
   .select("users")
-  .joinTable("tasks", JoinTypes.INNER, "id", ["*"], "user_id")
+  .fields(["id", "username"])
+  .joinTable("tasks", JoinTypes.INNER, "id", ["description"], "user_id")
   .joinTable("tasks_completed", JoinTypes.INNER, "id", ["completed_at"], "user_id")
   .conditions(condition)
   .build();
@@ -18,4 +19,8 @@ console.log(selectQuery.toString());
  * INNER JOIN tasks ON users.id = tasks.user_id
  * INNER JOIN tasks_completed ON users.id = tasks_completed.user_id
  * WHERE username = 'Jhon Doe'
+ */
+
+/**
+ * 
  */

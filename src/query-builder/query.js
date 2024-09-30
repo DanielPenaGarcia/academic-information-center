@@ -30,7 +30,7 @@ export class SelectQuery extends Query {
     if (fields.length === 0) {
       return `${table}.*`;
     }
-    return fields.map((field) => `${table}.${field}`).join(", ");
+    return fields.map((field) => `${table}.${field} AS ${table}_${field}`).join(", ");
   }
 
   // Método para leer y concatenar los campos de los inner queries (joins)
@@ -79,7 +79,7 @@ export class JoinQuery extends Query {
 
   // Método para obtener los campos de la tabla relacionada (join)
   get fields() {
-    return this.selectFields.map((field) => `${this.innerTable}.${field}`);
+    return this.selectFields.map((field) => `${this.innerTable}.${field} AS ${this.innerTable}_${field}`);
   }
 
   // Método para construir el join
