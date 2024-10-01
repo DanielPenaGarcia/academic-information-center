@@ -19,9 +19,9 @@ export class TeacherRepository extends RepositoryStrategy {
             //Conditions must be an array of objects
             query.conditions(object.conditions);
         }
-        if (object.inners){
+        if (object.joins){
             //Inners must be an array of objects
-            query.joinTable(object.inners);
+            query.joinTable(object.joins);
         }
         if (object.limit){
             //Limit must be a number

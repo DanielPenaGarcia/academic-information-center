@@ -52,8 +52,8 @@ export const SelectQueryBuilder = function (tableName) {
       offset = offsetInput;
       return this;
     },
-    joinTable: function (innerTable, type, field, selectFields = [], fieldNameReference) {
-      const innerQuery = new JoinQuery(table, innerTable, type, field, selectFields, fieldNameReference);
+    joinTable: function (joinTable, type, field, selectFields = [], fieldNameReference) {
+      const innerQuery = new JoinQuery(table, joinTable, type, field, selectFields, fieldNameReference);
       innerQueries.push(innerQuery);
       return this;
     },
