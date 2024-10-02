@@ -1,4 +1,4 @@
-import { RepositoryStrategyException } from "../../utils/exceptions/repository-strategy.exception";
+import { RepositoryStrategyException } from "../../utils/exceptions/repository-strategy.exception.js";
 
 export class RepositoryStrategy {
     constructor(){}
@@ -27,4 +27,6 @@ export class RepositoryStrategy {
 export const RepoStrategy = Object.freeze({
     TEACHER: 'teachers',
     REVIEW: 'reviews',
+    ENROLLMENT_PERIOD: 'enrollment_period',
+    ENROLLMENT_APPOINTMENT: 'enrollment_appoinment'
 });
