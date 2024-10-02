@@ -1,26 +1,21 @@
-import { QueryBuilder } from "./query-builder/query.builder.js";
 import { where } from "./query-builder/condition.builder.js";
-import { JoinTypes } from "./query-builder/query.js";
-const condition = where().equal("username", "Jhon Doe").build();
+import { JoinQuery, JoinTypes } from "./query-builder/query.js";
+import { TeacherRepository } from "./repositories/teacher.repository.js";
 
-const selectQuery = QueryBuilder()
-  .select("users")
-  .fields(["id", "username"])
-  .joinTable("tasks", JoinTypes.INNER, "id", ["description"], "user_id")
-  .joinTable("tasks_completed", JoinTypes.INNER, "id", ["completed_at"], "user_id")
-  .conditions(condition)
-  .build();
+const teacherRepository = new TeacherRepository();
 
-console.log(selectQuery.toString());
-/**
- * Output:
- * SELECT users.*, tasks.*, tasks_completed.completed_at
- * FROM users
- * INNER JOIN tasks ON users.id = tasks.user_id
- * INNER JOIN tasks_completed ON users.id = tasks_completed.user_id
- * WHERE username = 'Jhon Doe'
- */
+teacherRepository.find({ fields: ['id','name','email'], limit: 10, offset: 0, joins: [
+  { table: 'classes', type: JoinTypes.INNER, fields: ['name', 'description'], field: 'id', fieldNameReference: 'teacher_id' },
+], conditions: [
+  where().equal('id', 1).build()
+]});
 
-/**
- * 
- */
+/** */
+// SELECT 
+// teachers.id AS teachers_id, 
+// teachers.name AS teachers_name, 
+// teachers.email AS teachers_email, 
+//classes.name AS classes_name, 
+//classes.description AS classes_description
+// FROM teachers INNER JOIN classes ON teachers.id = classes.teacher_id 
+// WHERE teachers.id = 1  LIMIT 10 OFFSET 0
