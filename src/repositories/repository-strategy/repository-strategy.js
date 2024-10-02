@@ -1,4 +1,4 @@
-import { RepositoryStrategyException } from "../../utils/exceptions/repository-strategy.exception";
+import { RepositoryStrategyException } from "../../utils/exceptions/repository-strategy.exception.js";
 
 export class RepositoryStrategy {
     constructor(){}

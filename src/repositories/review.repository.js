@@ -1,15 +1,13 @@
-import { connection } from "../configs/database.config.js";
 import { where } from "../query-builder/condition.builder.js";
 import { QueryBuilder } from "../query-builder/query.builder.js";
 import { RepositoryStrategy, RepoStrategy } from "./repository-strategy/repository-strategy.js";
 
-export class TeacherRepository extends RepositoryStrategy {
-    
+export class ReviewRepository extends RepositoryStrategy {
     connection;
 
     constructor() {
         super();
-        this.table = RepoStrategy.TEACHER;
+        this.table = RepoStrategy.REVIEW;
         this.connection = connection;
     }
 
@@ -67,7 +65,7 @@ export class TeacherRepository extends RepositoryStrategy {
             query.offset(object.offset);
         }
         const [result] = await this.connection.execute(query.build().toString());
-        return result[0];  // Devuelve el resultado de la ejecución de la query
+        return result;  // Devuelve el resultado de la ejecución de la query
     }
 
     async create(object) {

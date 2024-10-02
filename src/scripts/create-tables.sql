@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS `classes` (
     `subject_id` INT NOT NULL,
     `teacher_id` INT NOT NULL,
     `start_time` VARCHAR(255) NOT NULL,
+    `description` TEXT NOT NULL,
     `duration` INT NOT NULL,
     `days` VARCHAR(255) NOT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -109,6 +110,7 @@ CREATE TABLE IF NOT EXISTS `enrollment_appoinment` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `student_id` INT NOT NULL,
     `enrollment_period_id` INT NOT NULL,
+    `start_date_time` DATETIME NOT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
