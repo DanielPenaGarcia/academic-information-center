@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS `classes` (
     `subject_id` INT NOT NULL,
     `teacher_id` INT NOT NULL,
     `start_time` VARCHAR(255) NOT NULL,
+    `description` TEXT NOT NULL,
     `duration` INT NOT NULL,
     `days` VARCHAR(255) NOT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
