@@ -27,4 +27,5 @@ export class RepositoryStrategy {
 export const RepoStrategy = Object.freeze({
     TEACHER: 'teachers',
     REVIEW: 'reviews',
+    STUDENT: 'students',
 });
