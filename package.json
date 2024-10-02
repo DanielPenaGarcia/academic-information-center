@@ -10,5 +10,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "Academic system for students and teachers to enroll in courses and manage their academic information."
+  "description": "Academic system for students and teachers to enroll in courses and manage their academic information.",
+  "dependencies": {
+    "mysql2": "^3.11.3"
+  }
 }
