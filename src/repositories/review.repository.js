@@ -3,9 +3,12 @@ import { QueryBuilder } from "../query-builder/query.builder.js";
 import { RepositoryStrategy, RepoStrategy } from "./repository-strategy/repository-strategy.js";
 
 export class ReviewRepository extends RepositoryStrategy {
+    connection;
+
     constructor() {
         super();
         this.table = RepoStrategy.REVIEW;
+        this.connection = connection;
     }
 
     async find(object) {
@@ -32,13 +35,14 @@ export class ReviewRepository extends RepositoryStrategy {
             //Offset must be a number
             query.offset(object.offset);
         }
-        return query.build().toString();
+        const [result] = await this.connection.execute(query.build().toString());
+        return result;  // Devuelve el resultado de la ejecución de la query
     }
 
     async findById(id, object) {
         let condition = where().equal(`${this.table}.id`, id).build();
         let query = QueryBuilder().select(this.table).conditions(condition);
-        if (object.fields) {
+        if (object.fields !== undefined) {
             //Fields must be an array of strings or a string
             query.fields(object.fields);
         }
@@ -60,11 +64,11 @@ export class ReviewRepository extends RepositoryStrategy {
             //Offset must be a number
             query.offset(object.offset);
         }
-        return query.build().toString();
+        const [result] = await this.connection.execute(query.build().toString());
+        return result;  // Devuelve el resultado de la ejecución de la query
     }
 
     async create(object) {
-        // Implement create method
         let query = QueryBuilder().insert(this.table);
         if (object.fields) {
             query.fields(object.fields);
@@ -72,7 +76,9 @@ export class ReviewRepository extends RepositoryStrategy {
         if (object.values) {
             query.values(object.values);
         }
-        return query.build().toString();
+
+        const [result] = await this.connection.execute(query.build().toString());
+        return result;  // Devuelve el resultado de la ejecución de la query
     }
 
     async update(object) {
@@ -83,7 +89,8 @@ export class ReviewRepository extends RepositoryStrategy {
         if(object.conditions){
             query.conditions(object.conditions);
         }
-        return query.build().toString();
+        const [result] = await this.connection.execute(query.build().toString());
+        return result;  // Devuelve el resultado de la ejecución de la query
     }
 
     async delete(object) {
@@ -92,6 +99,7 @@ export class ReviewRepository extends RepositoryStrategy {
         if (object.conditions){
             query.conditions(object.conditions);
         }
-        return query.build().toString();
+        const [result] = await this.connection.execute(query.build().toString());
+        return result;  // Devuelve el resultado de la ejecución de la query
     }
 }
