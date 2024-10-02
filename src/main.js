@@ -1,26 +1,12 @@
-import { QueryBuilder } from "./query-builder/query.builder.js";
-import { where } from "./query-builder/condition.builder.js";
-import { JoinTypes } from "./query-builder/query.js";
-const condition = where().equal("username", "Jhon Doe").build();
+import { TeacherRepository } from "./repositories/teacher.repository.js";
 
-const selectQuery = QueryBuilder()
-  .select("users")
-  .fields(["id", "username"])
-  .joinTable("tasks", JoinTypes.INNER, "id", ["description"], "user_id")
-  .joinTable("tasks_completed", JoinTypes.INNER, "id", ["completed_at"], "user_id")
-  .conditions(condition)
-  .build();
+const teacherRepository = new TeacherRepository();
 
-console.log(selectQuery.toString());
-/**
- * Output:
- * SELECT users.*, tasks.*, tasks_completed.completed_at
- * FROM users
- * INNER JOIN tasks ON users.id = tasks.user_id
- * INNER JOIN tasks_completed ON users.id = tasks_completed.user_id
- * WHERE username = 'Jhon Doe'
- */
+const insert = await teacherRepository.create({
+  fields: ['email', 'password', 'academic_id', 'photo', 'names', 'father_last_name', 'mother_last_name', 'curp'],  // Corregido el typo en 'password'
+  values: [
+      ['dapgpena@gmail.com', '1234', 1, '', 'David', 'Pena', 'Gonzalez', 'PEGD021110HSRXRNA6']
+  ]
+});
 
-/**
- * 
- */
+console.log(insert);
