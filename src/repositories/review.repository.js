@@ -2,11 +2,10 @@ import { where } from "../query-builder/condition.builder.js";
 import { QueryBuilder } from "../query-builder/query.builder.js";
 import { RepositoryStrategy, RepoStrategy } from "./repository-strategy/repository-strategy.js";
 
-export class TeacherRepository extends RepositoryStrategy {
-    
+export class ReviewRepository extends RepositoryStrategy {
     constructor() {
         super();
-        this.table = RepoStrategy.TEACHER;
+        this.table = RepoStrategy.REVIEW;
     }
 
     async find(object) {
