@@ -110,6 +110,7 @@ CREATE TABLE IF NOT EXISTS `enrollment_appoinment` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `student_id` INT NOT NULL,
     `enrollment_period_id` INT NOT NULL,
+    `start_date_time` DATETIME NOT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
