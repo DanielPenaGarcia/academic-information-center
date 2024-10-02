@@ -5,9 +5,7 @@ import { TeacherRepository } from "./repositories/teacher.repository.js";
 const teacherRepository = new TeacherRepository();
 
 teacherRepository.find({ fields: ['id','name','email'], limit: 10, offset: 0, joins: [
-  { table: 'classes', type: JoinTypes.INNER, fields: ['name', 'description'], field: 'id', fieldNameReference: 'teacher_id' },
-], conditions: [
-  where().equal('id', 1).build()
+  { table: 'classes', type: JoinTypes.INNER, field: 'id', fields: ['name', 'description'], fieldNameReference: 'teacher_id' },
 ]});
 
 /** */

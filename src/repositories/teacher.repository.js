@@ -11,7 +11,29 @@ export class TeacherRepository extends RepositoryStrategy {
 
     async find(object) {
         let query = QueryBuilder().select(this.table);
-        query.build();
+        if (object.fields) {
+            //Fields must be an array of strings or a string
+            query.fields(object.fields);
+        }
+        if (object.conditions){
+            //Conditions must be an array of objects
+            query.conditions(object.conditions);
+        }
+        if (object.joins){
+            //Joins must be an array of objects
+            object.joins.forEach(join => {
+                query.joinTable(join.table, join.type, join.field, join.fields, join.fields, join.fieldNameReference);
+            });
+        }
+        if (object.limit){
+            //Limit must be a number
+            query.limit(object.limit);
+        }
+        if (object.limit && object.offset){
+            //Offset must be a number
+            query.offset(object.offset);
+        }
+        console.log(query.build().toString());
     }
 
     async findById(id, object) {
