@@ -4,80 +4,83 @@ import { TeacherRepository } from "./repositories/teacher.repository.js";
 import { SubjectRepository } from "./repositories/subject-repository.js";
 import { EnrollmentPeriodRepository } from './repositories/enrollment_period.repository.js';
 import {EnrollmentAppointmentRepository} from './repositories/enrollment_appointment.repository.js';
-// const teacherRepository = new TeacherRepository();
+const teacherRepository = new TeacherRepository();
 
-// let createTeacher = await teacherRepository.create({
-//   fields: ['email', 'password', 'academic_id', 'photo', 'names', 'father_last_name', 'mother_last_name', 'curp'],
-//   values: [
-//     ['dapgpena@gmail.com', '1234', '00000229185', '', 'Daniel Armando', 'Peña', 'García', 'PEGD021110HSRXRNA6']
-//   ]
-// });
+let createTeacher = await teacherRepository.create({
+  fields: ['email', 'password', 'academic_id', 'photo', 'names', 'father_last_name', 'mother_last_name', 'curp'],
+  values: [
+    ['dapgpena@gmail.com', '1234', '00000229185', '', 'Daniel Armando', 'Peña', 'García', 'PEGD021110HSRXRNA6']
+  ]
+});
 
-// console.log(createTeacher);
+console.log(createTeacher);
 
-// let findTeachers = await teacherRepository.find({
-//   fields: ['email', 'names', 'father_last_name', 'mother_last_name'],
-//   conditions: where().like('email', '%@gmail%').build(),
-// });
+let findTeachers = await teacherRepository.find({
+  fields: ['email', 'names', 'father_last_name', 'mother_last_name'],
+  conditions: where().like('email', '%@gmail%').build(),
+});
 
-// console.log(findTeachers);
+console.log(findTeachers);
 
-// const teacherIdSaved = createTeacher.insertId;
+const teacherIdSaved = createTeacher.insertId;
 
-// let findTeacherById = await teacherRepository.findById(teacherIdSaved, {
-//   fields: ['email', 'names', 'father_last_name', 'mother_last_name'],
-// });
+let findTeacherById = await teacherRepository.findById(teacherIdSaved, {
+  fields: ['email', 'names', 'father_last_name', 'mother_last_name'],
+});
 
-// console.log(findTeacherById);
+console.log(findTeacherById);
 
-// let updateTeachers = await teacherRepository.update({
-//   setValues: [{ column: 'email', value: 'dapgpena91@gmail.com' }],
-//   conditions: where().equal('id', teacherIdSaved).build()
-// });
+let updateTeachers = await teacherRepository.update({
+  setValues: [{ column: 'email', value: 'dapgpena91@gmail.com' }],
+  conditions: where().equal('id', teacherIdSaved).build()
+});
 
-// console.log(updateTeachers);
+console.log(updateTeachers);
 
-// let deleteTeachers = await teacherRepository.delete({
-//   conditions: where().equal('id', teacherIdSaved).build()
-// });
+let deleteTeachers = await teacherRepository.delete({
+  conditions: where().equal('id', teacherIdSaved).build()
+});
 
-// console.log(deleteTeachers);
+console.log(deleteTeachers);
 
-// // Tests for SubjectRepository
+// Tests for SubjectRepository
 
-// const subjectRepository = new SubjectRepository();
+const subjectRepository = new SubjectRepository();
 
-// let createSubject = await subjectRepository.create({
-//   fields: ['name', 'hours_per_week', 'semester'],
-//   values: [
-//     ['Programación I', '8','1']
-//   ]
-// });
+let createSubject = await subjectRepository.create({
+  fields: ['name', 'hours_per_week', 'semester'],
+  values: [
+    ['Programación I', '8','1']
+  ]
+});
 
-// console.log(createSubject);
+console.log(createSubject);
 
 
-// let findSubjects = await subjectRepository.find({
-//   fields: ['name', 'hours_per_week', 'semester'],
-//   conditions: where().like('name', '%Programación%').build(),
-// });
+let findSubjects = await subjectRepository.find({
+  fields: ['name', 'hours_per_week', 'semester'],
+  conditions: where().like('name', '%Programación%').build(),
+});
 
-// console.log(findSubjects);
+console.log(findSubjects);
 
-// const subjectIdSaved = createSubject.insertId;
+const subjectIdSaved = createSubject.insertId;
 
-// let findSubjectById = await subjectRepository.findById(subjectIdSaved,{
-//   fields: ['name', 'hours_per_week', 'semester'],
-// });
+let findSubjectById = await subjectRepository.findById(subjectIdSaved,{
+  fields: ['name', 'hours_per_week', 'semester'],
+});
 
-// console.log(findSubjectById);
+console.log(findSubjectById);
 
-// let updateSubjects = await subjectRepository.findById(subjectIdSaved,{
-//   setValues: [{column: 'name', value: 'Programación II'}],
-//   conditions: where().equal('id', subjectIdSaved).build()
-// });
+let updateSubjects = await subjectRepository.findById(subjectIdSaved,{
+  setValues: [{column: 'name', value: 'Programación II'}],
+  conditions: where().equal('id', subjectIdSaved).build()
+});
 
-// console.log(updateSubjects);
+console.log(updateSubjects);
+
+
+// Testing Enrollment Period Repository
 
 const epr = new EnrollmentPeriodRepository();
 
@@ -90,6 +93,7 @@ let createEnrollmentPeriod = await epr.create({
 
 console.log(createEnrollmentPeriod);
 
+// Testing Enrollment Appointment Repository
 
 const ear = new EnrollmentAppointmentRepository();
 
