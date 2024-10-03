@@ -2,6 +2,7 @@ import { where } from "./query-builder/condition.builder.js";
 import { ReviewRepository } from "./repositories/review.repository.js";
 import { TeacherRepository } from "./repositories/teacher.repository.js";
 import { SubjectRepository } from "./repositories/subject-repository.js";
+import { StudentRepository } from "./repositories/student.repository.js";
 const teacherRepository = new TeacherRepository();
 
 let createTeacher = await teacherRepository.create({
@@ -22,14 +23,14 @@ console.log(findTeachers);
 
 const teacherIdSaved = createTeacher.insertId;
 
-let findTeacherById = await teacherRepository.findById(teacherIdSaved,{
+let findTeacherById = await teacherRepository.findById(teacherIdSaved, {
   fields: ['email', 'names', 'father_last_name', 'mother_last_name'],
 });
 
 console.log(findTeacherById);
 
 let updateTeachers = await teacherRepository.update({
-  setValues: [{column: 'email', value: 'dapgpena91@gmail.com'}],
+  setValues: [{ column: 'email', value: 'dapgpena91@gmail.com' }],
   conditions: where().equal('id', teacherIdSaved).build()
 });
 
