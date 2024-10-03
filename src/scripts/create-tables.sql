@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `students_classes` (
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS `enrrollment_period` (
+CREATE TABLE IF NOT EXISTS `enrollment_period` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `start_date` DATE NOT NULL,
     `end_date` DATE NOT NULL,
