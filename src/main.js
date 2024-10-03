@@ -2,7 +2,8 @@ import { where } from "./query-builder/condition.builder.js";
 import { ReviewRepository } from "./repositories/review.repository.js";
 import { TeacherRepository } from "./repositories/teacher.repository.js";
 import { SubjectRepository } from "./repositories/subject-repository.js";
-import { StudentRepository } from "./repositories/student.repository.js";
+import { EnrollmentPeriodRepository } from './repositories/enrollment_period.repository.js';
+import {EnrollmentAppointmentRepository} from './repositories/enrollment_appointment.repository.js';
 const teacherRepository = new TeacherRepository();
 
 let createTeacher = await teacherRepository.create({
@@ -78,3 +79,29 @@ let updateSubjects = await subjectRepository.findById(subjectIdSaved,{
 
 console.log(updateSubjects);
 
+
+// Testing Enrollment Period Repository
+
+const epr = new EnrollmentPeriodRepository();
+
+let createEnrollmentPeriod = await epr.create({
+  fields: ['start_date','end_date'],
+  values: [
+    [new Date().toISOString().slice(0, 19).replace('T', ' '),new Date("2024-10-12").toISOString().slice(0, 19).replace('T', ' ')]
+  ]
+});
+
+console.log(createEnrollmentPeriod);
+
+// Testing Enrollment Appointment Repository
+
+const ear = new EnrollmentAppointmentRepository();
+
+let createAppointmentPeriod = await ear.create({
+  fields: ['student_id','enrollment_period_id','start_date_time'],
+  values: [
+    [1,1,new Date().toISOString().slice(0, 19).replace('T', ' ')]
+  ]
+});
+
+console.log(createAppointmentPeriod);
