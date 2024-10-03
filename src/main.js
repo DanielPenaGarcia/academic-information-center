@@ -1,7 +1,7 @@
 import { where } from "./query-builder/condition.builder.js";
 import { ReviewRepository } from "./repositories/review.repository.js";
 import { TeacherRepository } from "./repositories/teacher.repository.js";
-
+import { SubjectRepository } from "./repositories/subject-repository.js";
 const teacherRepository = new TeacherRepository();
 
 let createTeacher = await teacherRepository.create({
@@ -40,3 +40,40 @@ let deleteTeachers = await teacherRepository.delete({
 });
 
 console.log(deleteTeachers);
+
+// Tests for SubjectRepository
+
+const subjectRepository = new SubjectRepository();
+
+let createSubject = await subjectRepository.create({
+  fields: ['name', 'hours_per_week', 'semester'],
+  values: [
+    ['Programación I', '8','1']
+  ]
+});
+
+console.log(createSubject);
+
+
+let findSubjects = await subjectRepository.find({
+  fields: ['name', 'hours_per_week', 'semester'],
+  conditions: where().like('name', '%Programación%').build(),
+});
+
+console.log(findSubjects);
+
+const subjectIdSaved = createSubject.insertId;
+
+let findSubjectById = await subjectRepository.findById(subjectIdSaved,{
+  fields: ['name', 'hours_per_week', 'semester'],
+});
+
+console.log(findSubjectById);
+
+let updateSubjects = await subjectRepository.findById(subjectIdSaved,{
+  setValues: [{column: 'name', value: 'Programación II'}],
+  conditions: where().equal('id', subjectIdSaved).build()
+});
+
+console.log(updateSubjects);
+

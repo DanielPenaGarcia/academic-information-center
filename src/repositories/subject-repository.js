@@ -1,8 +1,8 @@
-import { where } from "../query-builder/condition.builder";
-import { QueryBuilder } from "../query-builder/query.builder";
-import { RepositoryStrategy, RepoStrategy } from "./repository-strategy/repository-strategy";
-import { QueryBuilderException } from "../utils/exceptions/query-builder.exception";
-
+import { where } from "../query-builder/condition.builder.js";
+import { QueryBuilder } from "../query-builder/query.builder.js";
+import { RepositoryStrategy, RepoStrategy } from "./repository-strategy/repository-strategy.js";
+import { QueryBuilderException } from "../utils/exceptions/query-builder.exception.js";
+import { connection } from "../configs/database.config.js";
 
 export class SubjectRepository extends RepositoryStrategy {
     
@@ -10,18 +10,36 @@ export class SubjectRepository extends RepositoryStrategy {
     constructor() {
         super();
         this.table = RepoStrategy.SUBJECT;
-        
+        this.connection = connection;
     }
 
 
-    async find() {
+    async find(object) {
         let query = QueryBuilder().select(this.table);
-        try {
-        query.build();  
-        } catch (error) {
-            QueryBuilderException(error.message);
-            
+        if (object.fields) {
+            //Fields must be an array of strings or a string
+            query.fields(object.fields);
         }
+        if (object.conditions){
+            //Conditions must be an array of objects
+            query.conditions(object.conditions);
+        }
+        if (object.joins){
+            //Joins must be an array of objects
+            object.joins.forEach(join => {
+                query.joinTable(join.table, join.type, join.field, join.fields, join.fields, join.fieldNameReference);
+            });
+        }
+        if (object.limit){
+            //Limit must be a number
+            query.limit(object.limit);
+        }
+        if (object.limit && object.offset >= 0){
+            //Offset must be a number
+            query.offset(object.offset);
+        }
+        const [result] = await this.connection.execute(query.build().toString());
+        return result;  // Devuelve el resultado de la ejecución de la query
     }
 
     async findById(id, object) {
@@ -36,53 +54,70 @@ export class SubjectRepository extends RepositoryStrategy {
             
             query.joinTable(object.joins);
         }
-        try {
-            let result = query.build().toString();
-            console.log(result);
-        } catch (error) {
-            QueryBuilderException(error.message);
+
+        if(object.limit){
+            query.limit(object.limit);
         }
+
+        if(object.limit && object.offset){
+            query.offset(object.offset);
+        }
+
+        const [result] = await this.connection.execute(query.build().toString());
+        return result[0];  // Devuelve el resultado de la ejecución de la query
+    
     }
 
     async create(object) {
-        const fields = [`${this.table}.name`, `${this.table}.hours_per_week`, `${this.table}.semester`, `${this.table}.created_at`];
-        const values = [object.name, object.hoursPerWeek, object.semester, new Date().toISOString()];
-        let query = QueryBuilder().insert(this.table).fields(fields).values(values);
+
+        let query = QueryBuilder().insert(this.table);
+
+        if (object.fields) {
+            query.fields(object.fields);
+        }
+        if (object.values) {
+            query.values(object.values);
+        }
     
         try {
-            let result = query.build().toString();
-            console.log(result);
+            const [result] = await this.connection.execute(query.build().toString());
+            return result;  // Devuelve el resultado de la ejecución de la query
         } catch (error) {
             throw new QueryBuilderException(error.message);
         }
     }
 
-    async update(id, object) {
-        const condition = where().equal(`${this.table}.id`, id).build();
-        const fields = object.fields;
-        const values = object.values;
+    async update(object) {
+        
     
-        let query = QueryBuilder().update(this.table).fields(fields).values(values).conditions(condition);
-    
+        let query = QueryBuilder().update(this.table);
+        
+        if(object.setValues){
+            query.setValues(object.setValues);
+        }
+        if(object.conditions){
+            query.conditions(object.conditions);
+        }
+        
         try {
-            let result = query.build().toString();
-            console.log(result);
+            const [result] = await this.connection.execute(query.build().toString());
+            return result;  // Devuelve el resultado de la ejecución de la query
         } catch (error) {
             throw new QueryBuilderException(error.message);
         }
     }
 
     async delete(id, object) {
-        const condition = where().equal(`${this.table}.id`, id).build();
-        let query = QueryBuilder().delete(this.table).conditions(condition);
+
+        let query = QueryBuilder().delete(this.table);
 
         if (object.conditions) {
             query.conditions(object.conditions);
         }
 
         try {
-            let result = query.build().toString();
-            console.log(result);
+            const [result] = await this.connection.execute(query.build().toString());
+            return result;  // Devuelve el resultado de la ejecución de la query
         }
         catch (error) {
             QueryBuilderException(error.message);

@@ -2,7 +2,7 @@ import mysql from 'mysql2/promise';
 
 export const connection = await mysql.createConnection({
     user: 'root',
-    password: '1234',
+    password: 'admin',
     database: 'academic_information_center',
     host: 'localhost',
     port: 3306
