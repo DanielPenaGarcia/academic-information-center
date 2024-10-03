@@ -14,7 +14,7 @@ export class EnrollmentPeriodRepository extends RepositoryStrategy{
 
     async find(object) {
         let query = QueryBuilder().select(this.table);
-        if (object.fields) {
+        if (object.fields !== undefined) {
             //Fields must be an array of strings or a string
             query.fields(object.fields);
         }
@@ -37,7 +37,7 @@ export class EnrollmentPeriodRepository extends RepositoryStrategy{
             query.offset(object.offset);
         }
 
-        const [result] = await this.connection.execute(query.build.toString());
+        const [result] = await this.connection.execute(query.build().toString());
 
         return result;
     }

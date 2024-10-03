@@ -113,7 +113,7 @@ export class InsertQuery extends Query {
   }
 
   toString() {
-    return `INSERT INTO ${this.table} (${this.fieldsString}) VALUES ${this.valuesString}`;
+    return `INSERT INTO ${this.table} (${this.fieldsString}) VALUES (${this.valuesString})`;
   }
 }
 
