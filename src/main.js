@@ -4,6 +4,7 @@ import { TeacherRepository } from "./repositories/teacher.repository.js";
 import { SubjectRepository } from "./repositories/subject-repository.js";
 import { EnrollmentPeriodRepository } from './repositories/enrollment_period.repository.js';
 import {EnrollmentAppointmentRepository} from './repositories/enrollment_appointment.repository.js';
+import { StudentRepository } from "./repositories/student-repository.js";
 const teacherRepository = new TeacherRepository();
 
 let createTeacher = await teacherRepository.create({
@@ -105,3 +106,13 @@ let createAppointmentPeriod = await ear.create({
 });
 
 console.log(createAppointmentPeriod);
+const studentRepository = new StudentRepository();
+
+let createStudent = await studentRepository.create({
+  fields: ['email', 'password', 'academic_id', 'photo', 'names', 'father_last_name', 'mother_last_name', 'curp'],
+  values: [['lubj0818@gmail.com', '1234', '0000023765', '', 'Jesus Raul', 'Luna', 'Bringas', 'LUBJ03088HSRNRSA4']
+  ]
+});
+
+console.log(createStudent);
+

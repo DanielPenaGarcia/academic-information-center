@@ -1,8 +1,8 @@
-import { where } from "../query-builder/condition.builder";
-import { QueryBuilder } from "../query-builder/query.builder";
-import { QueryBuilderException } from "../utils/exceptions/query-builder.exception";
-import { RepositoryStrategy, RepoStrategy } from "./repository-strategy/repository-strategy";
-import { connection } from "../database/connection";
+import { connection } from "../configs/database.config.js";
+import { QueryBuilder } from "../query-builder/query.builder.js";
+import { QueryBuilderException } from "../utils/exceptions/query-builder.exception.js";
+import { RepositoryStrategy, RepoStrategy } from "./repository-strategy/repository-strategy.js";
+
 export class StudentRepository extends RepositoryStrategy{
 
     constructor() {
