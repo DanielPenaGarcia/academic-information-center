@@ -1,7 +1,7 @@
 import { where } from "./query-builder/condition.builder.js";
 import { ReviewRepository } from "./repositories/review.repository.js";
 import { TeacherRepository } from "./repositories/teacher.repository.js";
-
+import { StudentRepository } from "./repositories/student.repository.js";
 const teacherRepository = new TeacherRepository();
 
 let createTeacher = await teacherRepository.create({
@@ -22,14 +22,14 @@ console.log(findTeachers);
 
 const teacherIdSaved = createTeacher.insertId;
 
-let findTeacherById = await teacherRepository.findById(teacherIdSaved,{
+let findTeacherById = await teacherRepository.findById(teacherIdSaved, {
   fields: ['email', 'names', 'father_last_name', 'mother_last_name'],
 });
 
 console.log(findTeacherById);
 
 let updateTeachers = await teacherRepository.update({
-  setValues: [{column: 'email', value: 'dapgpena91@gmail.com'}],
+  setValues: [{ column: 'email', value: 'dapgpena91@gmail.com' }],
   conditions: where().equal('id', teacherIdSaved).build()
 });
 
@@ -40,3 +40,16 @@ let deleteTeachers = await teacherRepository.delete({
 });
 
 console.log(deleteTeachers);
+
+//Test for StudentRepository
+
+const studentRepository = new StudentRepository();
+
+let createStudent = await studentRepository.create({
+  fields: ['email', 'password', 'academic_id', 'photo', 'names', 'father_last_name', 'mother_last_name', 'curp'],
+  values: [['lubj0818@gmail.com', '1234', '0000023765', '', 'Jesus Raul', 'Luna', 'Bringas', 'LUBJ03088HSRNRSA4']
+  ]
+});
+
+console.log(createStudent);
+
