@@ -27,8 +27,12 @@ export class RepositoryStrategy {
 export const RepoStrategy = Object.freeze({
     TEACHER: 'teachers',
     REVIEW: 'reviews',
+    SUBJECT: 'subjects',
+    STUDENT: 'students',
     ENROLLMENT_PERIOD: 'enrollment_period',
     ENROLLMENT_APPOINTMENT: 'enrollment_appoinment',
     COURSEMAP: 'courses_map',
     CLASS: 'classes',
+    ENROLLMENT_APPOINTMENT: 'enrollment_appoinment'
+
 });
