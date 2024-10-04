@@ -1,5 +1,4 @@
 import { where } from "./query-builder/condition.builder.js";
-import { ReviewRepository } from "./repositories/review.repository.js";
 import { TeacherRepository } from "./repositories/teacher.repository.js";
 import { ClassRepository } from "./repositories/class.repository.js";
 import { CourseMapRepository } from "./repositories/courseMap.repository.js";
