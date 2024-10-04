@@ -132,6 +132,11 @@ let createEnrollmentPeriod = await epr.create({
 
 console.log(createEnrollmentPeriod);
 
+let periodFound = await epr.find({});
+console.log('Period encontrados')
+console.log(periodFound);
+
+
 // Testing Enrollment Appointment Repository
 
 const ear = new EnrollmentAppointmentRepository();
@@ -143,7 +148,15 @@ let createAppointmentPeriod = await ear.create({
   ]
 });
 
+console.log(`Appointment creado id: ${createAppointmentPeriod.insertId}`);
+
+
+let appointmentFound = await ear.find({});
+console.log('Appointment encontrados')
+console.log(appointmentFound);
 console.log(createAppointmentPeriod);
+
+
 const studentRepository = new StudentRepository();
 
 let createStudent = await studentRepository.create({
