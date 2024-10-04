@@ -1,9 +1,9 @@
-import { Class } from './Class.js';
-
-export class CourseMap{
-    constructor(year, semesters, classes=[]){
-        this.year=year;
-        this.semesters=semesters;
-        this.classes=classes;
-    }   
+export class CourseMap {
+  constructor(year, semesters, classes = [], createdAt = null, updatedAt = null) {
+    this.year = year;
+    this.semesters = semesters;
+    this.classes = classes;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
 }

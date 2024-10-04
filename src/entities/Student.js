@@ -1,10 +1,33 @@
-import { User } from './User.js';
-import { EnrollmentAppointment } from './EnrollmentAppointment.js';
+import { User } from "./User.js";
 
-
-export class Student extends User{
-    constructor(id,name,fatherLastname, motherLastname,curp, email, password, academicId,photo,enrollmentAppointments=[]){
-        super(id,name,fatherLastname, motherLastname,curp, email, password, academicId,photo);
-        this.enrollmentAppointments=enrollmentAppointments;
-    }
+export class Student extends User {
+  constructor(
+    id,
+    name,
+    fatherLastname,
+    motherLastname,
+    curp,
+    email,
+    password,
+    academicId,
+    photo,
+    createdAt = null,
+    updatedAt = null,
+    enrollmentAppointments = []
+  ) {
+    super(
+      id,
+      name,
+      fatherLastname,
+      motherLastname,
+      curp,
+      email,
+      password,
+      academicId,
+      photo,
+      createdAt,
+      updatedAt
+    );
+    this.enrollmentAppointments = enrollmentAppointments;
+  }
 }
