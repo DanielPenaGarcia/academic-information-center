@@ -28,5 +28,7 @@ export const RepoStrategy = Object.freeze({
     TEACHER: 'teachers',
     REVIEW: 'reviews',
     ENROLLMENT_PERIOD: 'enrollment_period',
-    ENROLLMENT_APPOINTMENT: 'enrollment_appoinment'
+    ENROLLMENT_APPOINTMENT: 'enrollment_appoinment',
+    COURSEMAP: 'courses_map',
+    CLASS: 'classes',
 });
