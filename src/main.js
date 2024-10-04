@@ -1,9 +1,13 @@
 import { where } from "./query-builder/condition.builder.js";
 import { ReviewRepository } from "./repositories/review.repository.js";
 import { TeacherRepository } from "./repositories/teacher.repository.js";
+import { ClassRepository } from "./repositories/class.repository.js";
+import { CourseMapRepository } from "./repositories/courseMap.repository.js";
+
 import { SubjectRepository } from "./repositories/subject-repository.js";
 import { EnrollmentPeriodRepository } from './repositories/enrollment_period.repository.js';
 import {EnrollmentAppointmentRepository} from './repositories/enrollment_appointment.repository.js';
+import { StudentRepository } from "./repositories/student-repository.js";
 const teacherRepository = new TeacherRepository();
 
 let createTeacher = await teacherRepository.create({
@@ -43,6 +47,41 @@ let deleteTeachers = await teacherRepository.delete({
 
 console.log(deleteTeachers);
 
+const classRepository = new ClassRepository();
+let createClass = await classRepository.create({
+  fields: ['subject_id','teacher_id','start_time', 'description', 'duration', 'days'],
+  values: [[1,1,'09:00:', 'Physics 101', 1,"Monday"]]
+});
+
+console.log(createClass);
+
+let updateClass = await classRepository.update({
+      setValues: [{column: 'start_time', value: '10:00'}],
+      conditions: where().equal('id', 1).build()
+});
+console.log(updateClass);
+
+let deleteClass = await classRepository.delete({conditions: where().equal('id', 1).build()})
+console.log(deleteClass);
+
+const courseMapRepository = new CourseMapRepository();
+
+let createCourseMap = await courseMapRepository.create({
+  fields: ['semesters'],
+  values: [['2']]
+});
+console.log(createCourseMap);
+
+let updateCourseMap = await courseMapRepository.update({
+      setValues: [{column: 'semesters', value: '191028419'}],
+      conditions: where().equal('id', 1).build()  
+});
+
+console.log(updateCourseMap);
+
+let deleteCourseMap = await courseMapRepository.delete({conditions: where().equal('id', 1).build()});
+
+console.log(deleteCourseMap);
 // Tests for SubjectRepository
 
 const subjectRepository = new SubjectRepository();
@@ -109,11 +148,22 @@ let createAppointmentPeriod = await ear.create({
   ]
 });
 
-
 console.log(`Appointment creado id: ${createAppointmentPeriod.insertId}`);
 
 
 let appointmentFound = await ear.find({});
 console.log('Appointment encontrados')
 console.log(appointmentFound);
+console.log(createAppointmentPeriod);
+
+
+const studentRepository = new StudentRepository();
+
+let createStudent = await studentRepository.create({
+  fields: ['email', 'password', 'academic_id', 'photo', 'names', 'father_last_name', 'mother_last_name', 'curp'],
+  values: [['lubj0818@gmail.com', '1234', '0000023765', '', 'Jesus Raul', 'Luna', 'Bringas', 'LUBJ03088HSRNRSA4']
+  ]
+});
+
+console.log(createStudent);
 
