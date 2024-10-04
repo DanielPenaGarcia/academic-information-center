@@ -41,11 +41,11 @@ let updateTeachers = await teacherRepository.update({
 
 console.log(updateTeachers);
 
-let deleteTeachers = await teacherRepository.delete({
-  conditions: where().equal('id', teacherIdSaved).build()
-});
+// let deleteTeachers = await teacherRepository.delete({
+//   conditions: where().equal('id', teacherIdSaved).build()
+// });
 
-console.log(deleteTeachers);
+// console.log(deleteTeachers);
 
 const classRepository = new ClassRepository();
 let createClass = await classRepository.create({
@@ -61,8 +61,8 @@ let updateClass = await classRepository.update({
 });
 console.log(updateClass);
 
-let deleteClass = await classRepository.delete({conditions: where().equal('id', 1).build()})
-console.log(deleteClass);
+// let deleteClass = await classRepository.delete({conditions: where().equal('id', 1).build()})
+// console.log(deleteClass);
 
 const courseMapRepository = new CourseMapRepository();
 
@@ -79,9 +79,9 @@ let updateCourseMap = await courseMapRepository.update({
 
 console.log(updateCourseMap);
 
-let deleteCourseMap = await courseMapRepository.delete({conditions: where().equal('id', 1).build()});
+// let deleteCourseMap = await courseMapRepository.delete({conditions: where().equal('id', 1).build()});
 
-console.log(deleteCourseMap);
+// console.log(deleteCourseMap);
 // Tests for SubjectRepository
 
 const subjectRepository = new SubjectRepository();
