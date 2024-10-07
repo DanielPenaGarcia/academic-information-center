@@ -1,4 +1,6 @@
 import { Teacher } from "../../entities/Teacher.js";
+import { where } from "../../query-builder/condition.builder.js";
+import { BusinessException } from "../../utils/exceptions/business.exception.js";
 import { Repository, RepositoryTable } from "../../utils/repository/repository.js";
 
 export class TeacherService {
@@ -35,5 +37,15 @@ export class TeacherService {
     }
     const teacherSaved = await this.teacherRepository.findOneById(result.insertId);
     return teacherSaved;
+  }
+
+  async findTeacherByEmailAndPaswword(teacherDTO) {
+    const condition = where().equal("email", teacherDTO.email).and().equal("password", teacherDTO.password).build();
+    try{
+      const teacher = await this.teacherRepository.findOne({ conditions: condition });
+      return teacher;
+    }catch(error){
+      throw new Error(`Error al buscar el profesor por email y contraseña: ${error.message}`);
+    }
   }
 }

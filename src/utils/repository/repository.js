@@ -93,7 +93,7 @@ export class Repository {
 
     try {
       const [result] = await this.connection.execute(query.build().toString());
-      return result;
+      return result[0];
     } catch (error) {
       throw new RepositoryException(
         "Error al ejecutar la consulta de 'findOne'",
@@ -221,6 +221,4 @@ export const RepositoryTable = Object.freeze({
     ENROLLMENT_APPOINTMENT: 'enrollment_appoinment',
     COURSEMAP: 'courses_map',
     CLASS: 'classes',
-    ENROLLMENT_APPOINTMENT: 'enrollment_appoinment'
-
 });
