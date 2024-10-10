@@ -57,6 +57,7 @@ CREATE TABLE IF NOT EXISTS `subjects` (
     `name` VARCHAR(255) NOT NULL,
     `hours_per_week` INT NOT NULL,
     `semester` INT NOT NULL,
+    `course_map_id` INT NOT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );

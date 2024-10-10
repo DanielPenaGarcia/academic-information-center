@@ -4,14 +4,13 @@ import { QueryBuilder } from "../../query-builder/query.builder.js";
 import { RepositoryException } from "../exceptions/repository.exception.js";
 
 /**
- * Clase Repository
+ * Repository class
  *
- * Proporciona métodos de alto nivel para realizar operaciones CRUD y consultas en la base de datos.
+ * Provides high-level methods to perform CRUD operations and database queries.
  */
 export class Repository {
-
   /**
-   * @param {string} table - El nombre de la tabla en la base de datos.
+   * @param {string} table - The name of the table in the database.
    */
   constructor(table) {
     this.table = table;
@@ -19,11 +18,11 @@ export class Repository {
   }
 
   /**
-   * Encuentra múltiples registros según los criterios de búsqueda proporcionados.
+   * Finds multiple records based on the provided search criteria.
    *
-   * @param {Object} object - Objeto que contiene campos, condiciones, joins, límite y desplazamiento.
-   * @returns {Promise<Array>} - Resultados de la consulta.
-   * @throws {RepositoryException} - Si ocurre un error al ejecutar la consulta.
+   * @param {Object} object - Object containing fields, conditions, joins, limit, and offset.
+   * @returns {Promise<Array>} - Query results.
+   * @throws {RepositoryException} - If an error occurs while executing the query.
    */
   async find(object) {
     let query = QueryBuilder().select(this.table);
@@ -57,18 +56,18 @@ export class Repository {
       return result;
     } catch (error) {
       throw new RepositoryException(
-        "Error al ejecutar la consulta de 'find'",
+        "Error occurred while executing the 'find' query.",
         error
       );
     }
   }
 
   /**
-   * Encuentra un solo registro según los criterios de búsqueda.
+   * Finds a single record based on the provided search criteria.
    *
-   * @param {Object} object - Objeto que contiene campos, condiciones y joins.
-   * @returns {Promise<Object>} - El primer registro encontrado.
-   * @throws {RepositoryException} - Si ocurre un error al ejecutar la consulta.
+   * @param {Object} object - Object containing fields, conditions, and joins.
+   * @returns {Promise<Object>} - The first found record.
+   * @throws {RepositoryException} - If an error occurs while executing the query.
    */
   async findOne(object) {
     let query = QueryBuilder().select(this.table);
@@ -96,19 +95,19 @@ export class Repository {
       return result[0];
     } catch (error) {
       throw new RepositoryException(
-        "Error al ejecutar la consulta de 'findOne'",
+        "Error occurred while executing the 'findOne' query.",
         error
       );
     }
   }
 
   /**
-   * Encuentra un registro por su ID.
+   * Finds a record by its ID.
    *
-   * @param {number|string} id - El ID del registro.
-   * @param {Object} object - Objeto que contiene campos, condiciones y joins.
-   * @returns {Promise<Object>} - El registro encontrado.
-   * @throws {RepositoryException} - Si ocurre un error al ejecutar la consulta.
+   * @param {number|string} id - The ID of the record.
+   * @param {Object} object - Object containing fields, conditions, and joins.
+   * @returns {Promise<Object>} - The found record.
+   * @throws {RepositoryException} - If an error occurs while executing the query.
    */
   async findOneById(id, object = {}) {
     let condition = where().equal(`${this.table}.id`, id).build();
@@ -137,18 +136,18 @@ export class Repository {
       return result[0];
     } catch (error) {
       throw new RepositoryException(
-        "Error al ejecutar la consulta de 'findOneById'",
+        `Error occurred while finding ${this.table} by ID: ${error.message}`,
         error
       );
     }
   }
 
   /**
-   * Crea un nuevo registro en la base de datos.
+   * Creates a new record in the database.
    *
-   * @param {Object} object - Objeto que contiene campos y valores.
-   * @returns {Promise<Object>} - Resultado de la inserción.
-   * @throws {RepositoryException} - Si ocurre un error al ejecutar la consulta.
+   * @param {Object} object - Object containing fields and values.
+   * @returns {Promise<Object>} - Insert result.
+   * @throws {RepositoryException} - If an error occurs while executing the query.
    */
   async create(object) {
     let query = QueryBuilder().insert(this.table);
@@ -162,16 +161,19 @@ export class Repository {
       const [result] = await this.connection.execute(query.build().toString());
       return result;
     } catch (error) {
-      throw new RepositoryException("Error al crear un nuevo registro", error);
+      throw new RepositoryException(
+        `Error occurred while creating in ${this.table}: ${error.message}`,
+        error
+      );
     }
   }
 
   /**
-   * Actualiza registros en la base de datos según las condiciones proporcionadas.
+   * Updates records in the database based on the provided conditions.
    *
-   * @param {Object} object - Objeto que contiene valores a actualizar y condiciones.
-   * @returns {Promise<Object>} - Resultado de la actualización.
-   * @throws {RepositoryException} - Si ocurre un error al ejecutar la consulta.
+   * @param {Object} object - Object containing values to update and conditions.
+   * @returns {Promise<Object>} - Update result.
+   * @throws {RepositoryException} - If an error occurs while executing the query.
    */
   async update(object) {
     let query = QueryBuilder().update(this.table);
@@ -186,16 +188,19 @@ export class Repository {
       const [result] = await this.connection.execute(query.build().toString());
       return result;
     } catch (error) {
-      throw new RepositoryException("Error al actualizar registros", error);
+      throw new RepositoryException(
+        "Error occurred while updating records.",
+        error
+      );
     }
   }
 
   /**
-   * Elimina registros de la base de datos según las condiciones proporcionadas.
+   * Deletes records from the database based on the provided conditions.
    *
-   * @param {Object} object - Objeto que contiene condiciones de eliminación.
-   * @returns {Promise<Object>} - Resultado de la eliminación.
-   * @throws {RepositoryException} - Si ocurre un error al ejecutar la consulta.
+   * @param {Object} object - Object containing deletion conditions.
+   * @returns {Promise<Object>} - Deletion result.
+   * @throws {RepositoryException} - If an error occurs while executing the query.
    */
   async delete(object) {
     let query = QueryBuilder().delete(this.table);
@@ -207,18 +212,21 @@ export class Repository {
       const [result] = await this.connection.execute(query.build().toString());
       return result;
     } catch (error) {
-      throw new RepositoryException("Error al eliminar registros", error);
+      throw new RepositoryException(
+        "Error occurred while deleting records.",
+        error
+      );
     }
   }
 }
 
 export const RepositoryTable = Object.freeze({
-    TEACHER: 'teachers',
-    REVIEW: 'reviews',
-    SUBJECT: 'subjects',
-    STUDENT: 'students',
-    ENROLLMENT_PERIOD: 'enrollment_period',
-    ENROLLMENT_APPOINTMENT: 'enrollment_appoinment',
-    COURSEMAP: 'courses_map',
-    CLASS: 'classes',
+  TEACHER: "teachers",
+  REVIEW: "reviews",
+  SUBJECT: "subjects",
+  STUDENT: "students",
+  ENROLLMENT_PERIOD: "enrollment_period",
+  ENROLLMENT_APPOINTMENT: "enrollment_appointment",
+  COURSEMAP: "courses_map",
+  CLASS: "classes",
 });
