@@ -34,6 +34,7 @@ export class SubjectsService {
       const subjectSaved = await this.subjectRepository.findOneById(
         result.insertId
       );
+      subjectSaved.courseMap = courseMap;
       return subjectSaved;
     } catch (error) {
       throw new Error(
