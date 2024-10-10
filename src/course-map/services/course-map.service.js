@@ -45,7 +45,7 @@ export class CourseMapService {
       return courseMap;
     } catch (error) {
       throw new Error(
-        `Error al buscar el mapa curricular por año: ${error.message}`
+        `Error occurred while finding course map by year: ${error.message}`
       );
     }
   }
