@@ -1,8 +1,6 @@
-import {
-  Repository,
-  RepositoryTable,
-} from "../../utils/repository/repository.js";
-import { BusinessException } from "../../utils/exceptions/business.exception.js";
+
+import { BusinessException } from "../utils/exceptions/business.exception.js";
+import { Repository, RepositoryTable } from "../utils/repository/repository.js";
 
 export class SubjectsService {
   constructor() {
