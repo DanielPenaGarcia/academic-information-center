@@ -1,7 +1,6 @@
-import { Teacher } from "../../entities/Teacher.js";
-import { where } from "../../query-builder/condition.builder.js";
-import { BusinessException } from "../../utils/exceptions/business.exception.js";
-import { Repository, RepositoryTable } from "../../utils/repository/repository.js";
+import { where } from "../query-builder/condition.builder.js";
+import { createAcademicEmail, createPassword } from "../utils/functions/create-academic-email.function.js";
+import { Repository, RepositoryTable } from "../utils/repository/repository.js";
 
 export class TeacherService {
   constructor() {
@@ -13,18 +12,23 @@ export class TeacherService {
       "email",
       "password",
       "academic_id",
-      "photo",
       "names",
       "father_last_name",
       "mother_last_name",
       "curp",
     ];
+
+    let userInformation ={
+      names:createTeacherDTO.names,
+      fatherLastName: createTeacherDTO.father_last_name,
+      academicId: createTeacherDTO.academic_id
+    };
+
     let values = [
       [
-        createTeacherDTO.email,
-        createTeacherDTO.password,
+        createAcademicEmail(userInformation),
+        createPassword(userInformation),
         createTeacherDTO.academic_id,
-        createTeacherDTO.photo,
         createTeacherDTO.names,
         createTeacherDTO.father_last_name,
         createTeacherDTO.mother_last_name,

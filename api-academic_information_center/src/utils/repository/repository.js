@@ -158,6 +158,7 @@ export class Repository {
       query.values(object.values);
     }
     try {
+      console.log(query.build().toString())
       const [result] = await this.connection.execute(query.build().toString());
       return result;
     } catch (error) {
@@ -222,6 +223,7 @@ export class Repository {
 
 export const RepositoryTable = Object.freeze({
   TEACHER: "teachers",
+  ADMINISTRATOR: "administrators",
   REVIEW: "reviews",
   SUBJECT: "subjects",
   STUDENT: "students",
