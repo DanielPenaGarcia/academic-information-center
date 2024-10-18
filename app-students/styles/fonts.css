@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'Freshman'; /* Nombre que usarás para referenciar la fuente */
+    src: url('../fonts/Freshman.ttf') format('truetype'); /* Ruta a la fuente */
+    font-weight: normal; /* Peso normal */
+    font-style: normal; /* Estilo normal */
+  }
+
+  @font-face {
+    font-family: 'Inter';
+    src: url('../fonts/Inter-VariableFont_opsz\,wght.ttf') format('truetype');
+    font-weight: normal, 700, 900;
+    font-style: normal, italic, oblique;
+  }

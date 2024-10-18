@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Página de Login</title>
     <link rel="stylesheet" href="login.css" />
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body class="login-page">
     <main class="content">
@@ -17,23 +18,21 @@
             <div class="logo-system">
                 <img src="../../assets/images/CIA.png" alt="itson cia" />
             </div>
-            <form>
+            <form class="login-form">
                 <div class="form-title">
-                    <h2>Iniciar Sesión</h2>
+                    <h2>Iniciar Sesion</h2>
                 </div>
                 <div class="form-group">
                     <input type="text" id="username" name="username" placeholder="Usuario" />
-                    <div class="errors"></div>
                 </div>
                 <div class="form-group">
                     <input type="password" id="password" name="password" placeholder="Contraseña" />
-                    <div class="errors"></div>
                 </div>
                 <div class="form-actions">
                     <button type="submit" class="btn-login">Iniciar Sesión</button>
                 </div>
                 <div class="form-actions">
-                    <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+                    <a href="#" class="forgot-password">¿Has olvidado tu usuario/contraseña?</a>
                 </div>
             </form>
         </div>
