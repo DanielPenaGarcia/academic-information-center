@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS students (
 CREATE TABLE IF NOT EXISTS teachers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255),
-    password VARCHAR(255) NOT NULL,
+    password VARCHAR(255),
     academic_id VARCHAR(255) NOT NULL,
     photo BLOB,
     names VARCHAR(255) NOT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS teachers (
 CREATE TABLE IF NOT EXISTS administrators (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255),
-    password VARCHAR(255) NOT NULL,
+    password VARCHAR(255),
     academic_id VARCHAR(255) NOT NULL,
     photo BLOB,
     names VARCHAR(255) NOT NULL,

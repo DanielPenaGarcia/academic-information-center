@@ -12,6 +12,8 @@
   "license": "ISC",
   "description": "Academic system for students and teachers to enroll in courses and manage their academic information.",
   "dependencies": {
+    "express": "^4.21.1",
+    "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.11.3"
   }
 }
