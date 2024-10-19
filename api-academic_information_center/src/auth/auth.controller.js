@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 export class AuthController {
   constructor() {
     this.authService = new AuthService();
-    this.sessionTimeout = 3600;
+    this.sessionTimeout = 60;
     this.secretKey = "secret";
   }
 
@@ -22,9 +22,9 @@ export class AuthController {
       userId: teacher.id,
       role,
       secretKey: this.secretKey,
+      expiresIn: this.sessionTimeout,
     });
     res.cookie(TOKEN_COOKIE, token, {
-      maxAge: this.sessionTimeout * 1000,
       httpOnly: true,
     });
     return res.status(200).send(teacher);
@@ -42,6 +42,7 @@ export class AuthController {
       userId: student.id,
       role,
       secretKey: this.secretKey,
+      expiresIn: this.sessionTimeout,
     });
     res.cookie(TOKEN_COOKIE, token, {
       maxAge: this.sessionTimeout * 1000,
@@ -73,7 +74,8 @@ export class AuthController {
     return res.status(200).send(administrator);
   }
 
-  #generateToken({ userId, role, secretKey }) {
-    return jwt.sign({ userId, role }, secretKey);
-  }
+  #generateToken({ userId, role, secretKey, expiresIn }) {
+    return jwt.sign({ userId, role }, secretKey, { expiresIn });
+}
+
 }
