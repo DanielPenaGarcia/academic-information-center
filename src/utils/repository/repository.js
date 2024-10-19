@@ -15,7 +15,6 @@ export class Repository {
    */
   constructor(table) {
     this.table = table;
-    this.connection = connection;
   }
 
   /**
@@ -53,7 +52,7 @@ export class Repository {
     }
 
     try {
-      const [result] = await this.connection.execute(query.build().toString());
+      const [result] = await connection.query(query.build().toString());
       return result;
     } catch (error) {
       throw new RepositoryException(
@@ -92,7 +91,7 @@ export class Repository {
     }
 
     try {
-      const [result] = await this.connection.execute(query.build().toString());
+      const [result] = await connection.query(query.build().toString());
       return result[0];
     } catch (error) {
       throw new RepositoryException(
@@ -133,7 +132,7 @@ export class Repository {
     }
 
     try {
-      const [result] = await this.connection.execute(query.build().toString());
+      const [result] = await connection.query(query.build().toString());
       return result[0];
     } catch (error) {
       throw new RepositoryException(
@@ -159,7 +158,7 @@ export class Repository {
       query.values(object.values);
     }
     try {
-      const [result] = await this.connection.execute(query.build().toString());
+      const [result] = await connection.query(query.build().toString());
       return result;
     } catch (error) {
       throw new RepositoryException("Error al crear un nuevo registro", error);
@@ -183,7 +182,7 @@ export class Repository {
     }
 
     try {
-      const [result] = await this.connection.execute(query.build().toString());
+      const [result] = await connection.query(query.build().toString());
       return result;
     } catch (error) {
       throw new RepositoryException("Error al actualizar registros", error);
@@ -204,7 +203,7 @@ export class Repository {
     }
 
     try {
-      const [result] = await this.connection.execute(query.build().toString());
+      const [result] = await connection.query(query.build().toString());
       return result;
     } catch (error) {
       throw new RepositoryException("Error al eliminar registros", error);
