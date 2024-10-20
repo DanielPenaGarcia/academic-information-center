@@ -1,3 +1,4 @@
+import { UserRole } from "../entities/enums/roles.enum.js";
 import { StudentClassService } from "./student-class.service.js";
 
 export class StudentClassController{
@@ -8,18 +9,33 @@ export class StudentClassController{
 
     async dropClass(req,res){
         try{
-        const {academic_id,class_id} = req.body;
 
-        const reviewClassCreated = await this.studentClassService.dropClass({academic_id,class_id});
+            this.#validateDropClassUser(req,res);
+        const {academic_id,classId} = req.body;
 
-        if(!reviewClassCreated){
-            return res.status(401).send(`Error creating class review`);
+        const classDroped = await this.studentClassService.dropClass({academic_id,classId});
+
+        if(!classDroped){
+            return res.status(500).send(`Error droping class`);
         }
 
-        return res.status(200).send(reviewClassCreated);
-    }catch(err){
-        return res.status(401).send(err);
+        return res.status(200).send(`Class Droped succesfully`);
+    }catch(error){
+        if (error.message === "Forbidden") {
+            return res.status(403).json({ error: "Forbidden" });
+          }
+          res.status(500).json({ error: error.message });
+        }
     }
-    }
+
+    #validateDropClassUser(req,res){
+        const userRequesting = req.user;
+        if(userRequesting.role !== UserRole.STUDENT && userRequesting.role !== UserRole.ADMINISTRATOR){
+          throw new Error("Forbidden");
+        }
+        if (userRequesting.academicId !== req.params.academicId) {
+          throw new Error("Forbidden");
+        }
+      }
 
 }

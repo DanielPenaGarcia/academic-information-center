@@ -25,7 +25,7 @@ export class StudentClassService{
 
         const conditionDelete = where().equal('student_id',studet.id).and().equal('class_id',clase.id).build();
 
-        const result = this.repositoryStudentClasses.delete({condition: conditionDelete});
-
+        const result = await this.repositoryStudentClasses.delete({condition: conditionDelete});
+        return result.affectedRows;
     }
 }

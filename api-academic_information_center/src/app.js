@@ -1,6 +1,6 @@
 
 import express from 'express';
-import {router as ClassRoute} from './classes/class.module.js';
+import {router as ClassRoute} from './classes/classes.module.js';
 import {router as StudentClassRoute} from './student-class/student-class.module.js' 
 const app = express();
 
@@ -17,7 +17,7 @@ app.use(express.json());
 // // Usar el enrutador para las rutas de autenticación
 // app.use(cookieParser());
 // app.use(guard);
-app.use('/api', StudentClassRoute);  // Prefijo '/api' para todas las rutas de auth
+app.use('/api', ClassRoute);  // Prefijo '/api' para todas las rutas de auth
 // Puerto de la aplicación
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

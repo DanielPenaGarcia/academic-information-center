@@ -14,3 +14,7 @@ router.get(
   "/classes/schedule/teachers/:academicId",
   classesController.findScheduleByTeacherAcademicId.bind(classesController)
 );
+
+router.post(
+  "/class/review",
+  classesController.generateReviewClass.bind(classesController));

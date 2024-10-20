@@ -6,6 +6,37 @@ export class ClassesController {
     this.classesService = new ClassesService();
   }
 
+  
+  async generateReviewClass(req,res){
+    try{
+    this.#validateGenerateReview(req,res);
+    const {academicId,classId,comment} = req.body;
+
+    const reviewClassCreated = await this.classesService.generateClassReview({comment,academicId,classId});
+
+    if(!reviewClassCreated){
+        return res.status(500).send(`Error creating class review`);
+    }
+
+    return res.status(200).json(reviewClassCreated);
+}catch(error){
+  if (error.message === "Forbidden") {
+    return res.status(403).json({ error: "Forbidden" });
+  }
+    return res.status(500).json({error:error.message});
+}
+}
+
+#validateGenerateReview(req,res){
+  const userRequesting = req.user;
+  if(userRequesting.role !== UserRole.STUDENT){
+    throw new Error("Forbidden");
+  }
+  if (userRequesting.academicId !== req.params.academicId) {
+    throw new Error("Forbidden");
+  }
+}
+
   async findScheduleByStudentAcademicId(req, res) {
     try {
       this.#validateFindScheduleByStudentByAcademicId(req, res);

@@ -5,5 +5,7 @@ export const router = express.Router();
 
 const studentClassController = new StudentClassController();
 
-router.delete("/studentClass",studentClassController.dropClass.bind(studentClassController));
+router.delete(
+    "/student/drop/class",
+    studentClassController.dropClass.bind(studentClassController));
 
