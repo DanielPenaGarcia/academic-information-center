@@ -4,7 +4,8 @@ import {router as ClassRoute} from './classes/class.module.js';
 import {router as StudentClassRoute} from './student-class/student-class.module.js' 
 const app = express();
 
-import { StudentsService } from "./students/students.service.js";
+// Middleware para parsear JSON en las peticiones
+app.use(express.json());
 
 // // Middleware para parsear JSON en las peticiones
 app.use(express.json());

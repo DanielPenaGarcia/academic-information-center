@@ -24,7 +24,7 @@ export class AuthController {
     }
     const role = getUserRole(teacher);
     const token = this.#generateToken({
-      userId: teacher.id,
+      academicId: teacher.academicId,
       role,
       secretKey: environment.secretTokenKey,
       expiresIn: this.sessionTimeout,
@@ -44,13 +44,12 @@ export class AuthController {
     }
     const role = getUserRole(student);
     const token = this.#generateToken({
-      userId: student.id,
+      academicId: student.academicId,
       role,
-      secretKey: this.secretKey,
+      secretKey: environment.secretTokenKey,
       expiresIn: this.sessionTimeout,
     });
     res.cookie(TOKEN_COOKIE, token, {
-      maxAge: this.sessionTimeout * 1000,
       httpOnly: true,
     });
     return res.status(200).send(student);
@@ -68,19 +67,19 @@ export class AuthController {
     }
     const role = getUserRole(administrator);
     const token = this.#generateToken({
-      userId: administrator.id,
+      academicId: administrator.academicId,
       role,
-      secretKey: this.secretKey,
+      secretKey: environment.secretTokenKey,
+      expiresIn: this.sessionTimeout,
     });
     res.cookie(TOKEN_COOKIE, token, {
-      maxAge: this.sessionTimeout * 1000,
       httpOnly: true,
     });
     return res.status(200).send(administrator);
   }
 
-  #generateToken({ userId, role, secretKey, expiresIn }) {
-    return jwt.sign({ userId, role }, secretKey, { expiresIn });
+  #generateToken({ academicId, role, secretKey, expiresIn }) {
+    return jwt.sign({ academicId, role }, secretKey, { expiresIn });
 }
 
 }
