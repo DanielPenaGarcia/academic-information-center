@@ -1,3 +1,5 @@
+import { User } from "./user.entity.js";
+
 export class Administrator extends User {
   constructor({
     names,

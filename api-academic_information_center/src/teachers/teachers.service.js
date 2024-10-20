@@ -1,6 +1,7 @@
 import { createAcademicEmail } from "../utils/functions/create-academic-email.function.js";
 import { createAcademicPassword } from "../utils/functions/create-academic-password.function.js";
 import { teacherDtoToEntityMapper } from "../utils/mappers/teacher-dto-to-entity.mapper.js";
+import { where } from "../utils/query-builder/condition.builder.js";
 import { Repository, RepositoryTable } from "../utils/repository/repository.js";
 
 export class TeachersService {
