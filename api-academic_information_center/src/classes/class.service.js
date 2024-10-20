@@ -1,32 +1,35 @@
-import { Repository, RepositoryTable } from "../utils/repository/repository";
+import { Repository, RepositoryTable } from "../utils/repository/repository.js";
 import { classReviewDtoToEntityMapper } from "../utils/mappers/class-review-dto-to-entity.mapper.js";
+import { where } from "../utils/query-builder/condition.builder.js";
 
 
 export class ClassService{
     constructor(){
         this.repositoryStudent = new Repository(RepositoryTable.STUDENT);
         this.repositoryClass = new Repository(RepositoryTable.CLASS);
-        this.repositoryStudentReview = new Repository(RepositoryTable.STUDENT_REVIEW);
+        this.repositoryClassReview = new Repository(RepositoryTable.CLASS_REVIEW);
     }
 
     
-  async generateClassReview({commnet,student_id,student_id}){
+  async generateClassReview({comment,academic_id,class_id}){
 
-    const fields = ["student_id", "comment", "class_id"];
-    const values = [[student_id,commnet,student_id]];
+    const condition = where().equal('academic_id',academic_id).build();
 
-    const studet = await this.repositoryStudent.findOneById(student_id);
+    const studet = await this.repositoryStudent.findOne({condition: condition});
     if(!studet){
-      throw new Error(`Student with Id ${student_id} not found`);
+      throw new Error(`Student with academic id ${academic_id} not found`);
     }
 
-    const clase = await this.repositoryClass.findOneById(student_id);
+    const clase = await this.repositoryClass.findOneById(class_id);
     
     if(!clase){
-      throw new Error(`Class with id ${student_id} not found`);
+      throw new Error(`Class with id ${class_id} not found`);
     }
 
-    const result = this.repositoryStudentReview.create({
+    const fields = ["student_id", "comment", "class_id"];
+    const values = [[studet.id,comment,class_id]];
+
+    const result = await this.repositoryClassReview.create({
       fields : fields,
       values : values
     });
@@ -35,12 +38,10 @@ export class ClassService{
       throw new Error("Error creating class review");
     }
 
-    const classReview = this.repositoryStudentReview.findOneById(result.insertId);
+    const classReview = await this.repositoryClassReview.findOneById(result.insertId);
     const classReviewDTO = classReviewDtoToEntityMapper(classReview);
-    if(classReview){
-      throw new Error(`Error class review with id ${cla}`);
-    }
-
+    classReviewDTO.classRef = clase;
+    classReviewDTO.student = studet;
     return classReviewDTO;
   }
 }
