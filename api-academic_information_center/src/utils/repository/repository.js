@@ -224,4 +224,5 @@ export const RepositoryTable = Object.freeze({
   ENROLLMENT_APPOINTMENT: "enrollment_appointment",
   COURSEMAP: "course_maps",
   CLASS: "classes",
+  STUDENT_REVIEW: "student_review"
 });
