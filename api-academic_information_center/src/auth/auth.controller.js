@@ -1,3 +1,4 @@
+import { environment } from "../environments/environment.js";
 import { TOKEN_COOKIE } from "../utils/constanst/token-cokie.constant.js";
 import { getUserRole } from "../utils/functions/get-user-role.function.js";
 import { AuthService } from "./auth.service.js";
@@ -7,7 +8,11 @@ export class AuthController {
   constructor() {
     this.authService = new AuthService();
     this.sessionTimeout = 60;
-    this.secretKey = "secret";
+  }
+
+  async logout(req, res) {
+    res.clearCookie(TOKEN_COOKIE);
+    return res.status(200).send({});
   }
 
   async teacherLogin(req, res) {
@@ -21,7 +26,7 @@ export class AuthController {
     const token = this.#generateToken({
       userId: teacher.id,
       role,
-      secretKey: this.secretKey,
+      secretKey: environment.secretTokenKey,
       expiresIn: this.sessionTimeout,
     });
     res.cookie(TOKEN_COOKIE, token, {

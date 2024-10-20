@@ -2,25 +2,31 @@ import { createAcademicEmail } from "../utils/functions/create-academic-email.fu
 import { createAcademicPassword } from "../utils/functions/create-academic-password.function.js";
 import { studentDtoToEntityMapper } from "../utils/mappers/student-dto-to-entity.mapper.js";
 import { where } from "../utils/query-builder/condition.builder.js";
+import { JoinTypes } from "../utils/query-builder/query.js";
 import { Repository, RepositoryTable } from "../utils/repository/repository.js";
 
 export class StudentsService {
   constructor() {
-    this.repository = new Repository(RepositoryTable.STUDENT);
+    this.studentsRepository = new Repository(RepositoryTable.STUDENT);
+    this.studentsClasesRepository = new Repository(
+      RepositoryTable.STUDENTS_CLASSES
+    );
   }
 
   async createStudent({ names, fatherLastName, motherLastName, curp, photo }) {
     //TODO: Agregar photo a los values cuando se reciba de la petición
     const fields = ["names", "father_last_name", "mother_last_name", "curp"];
     const values = [[names, fatherLastName, motherLastName, curp]];
-    const result = await this.repository.create({
+    const result = await this.studentsRepository.create({
       fields: fields,
       values: values,
     });
     if (result.affectedRows === 0) {
       throw new Error("Error creating student");
     }
-    const studentDTO = await this.repository.findOneById(result.insertId);
+    const studentDTO = await this.studentsRepository.findOneById(
+      result.insertId
+    );
     let student = studentDtoToEntityMapper(studentDTO);
     const email = createAcademicEmail({
       name: student.names,
@@ -32,7 +38,7 @@ export class StudentsService {
       fatherLastName: student.fatherLastName,
       academicId: student.academicId,
     });
-    await this.repository.update({
+    await this.studentsRepository.update({
       setValues: [
         { column: "email", value: email },
         { column: "password", value: password },
@@ -45,5 +51,25 @@ export class StudentsService {
     student.email = email;
     student.password = password;
     return student;
+  }
+
+  async findScheduleByStudentId({ studentId }) {
+    const conditions = where().equal("student_id", studentId).build();
+    const fields = ["id"];
+    const joins = [
+      {
+        table: "classes",
+        type: JoinTypes.INNER,
+        field: "id",
+        fields: ["id", "duration", "days", "start_time"],
+        fieldNameReference: "id",
+      },
+    ];
+    const schedules = await this.studentsClasesRepository.find({
+      fields,
+      conditions,
+      joins,
+    });
+    return schedules;
   }
 }
