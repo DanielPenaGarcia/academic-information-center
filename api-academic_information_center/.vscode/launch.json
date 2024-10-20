@@ -8,7 +8,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/src/main.js",  // Ruta directa al archivo main.js
+            "program": "${workspaceFolder}/src/app.js",  // Ruta directa al archivo main.js
             "console": "internalConsole",              // Usar la terminal integrada para la salida
             "cwd": "${workspaceFolder}"                  // Usar el directorio base del proyecto
         }

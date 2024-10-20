@@ -39,7 +39,6 @@ export class Repository {
           join.type,
           join.field,
           join.fields,
-          join.fields,
           join.fieldNameReference
         );
       });
@@ -224,5 +223,6 @@ export const RepositoryTable = Object.freeze({
   ENROLLMENT_APPOINTMENT: "enrollment_appointment",
   COURSEMAP: "course_maps",
   CLASS: "classes",
-  STUDENT_REVIEW: "student_review"
+  STUDENT_REVIEW: "student_review",
+  STUDENTS_CLASSES: "students_classes",
 });
