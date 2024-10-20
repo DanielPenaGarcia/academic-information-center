@@ -1,5 +1,7 @@
 import { createAcademicEmail } from "../utils/functions/create-academic-email.function.js";
 import { createAcademicPassword } from "../utils/functions/create-academic-password.function.js";
+import { classDtoToEntityMapper } from "../utils/mappers/class-dto-to-entity.mapper.js";
+import { studentClassDtoToEntityMapper } from "../utils/mappers/student-class-dto-to-entity.mapper.js";
 import { studentDtoToEntityMapper } from "../utils/mappers/student-dto-to-entity.mapper.js";
 import { where } from "../utils/query-builder/condition.builder.js";
 import { JoinTypes } from "../utils/query-builder/query.js";
@@ -8,9 +10,10 @@ import { Repository, RepositoryTable } from "../utils/repository/repository.js";
 export class StudentsService {
   constructor() {
     this.studentsRepository = new Repository(RepositoryTable.STUDENT);
-    this.studentsClasesRepository = new Repository(
+    this.studentsClassesRepository = new Repository(
       RepositoryTable.STUDENTS_CLASSES
     );
+    this.classesRepository = new Repository(RepositoryTable.CLASS);
   }
 
   async createStudent({ names, fatherLastName, motherLastName, curp, photo }) {
@@ -52,24 +55,5 @@ export class StudentsService {
     student.password = password;
     return student;
   }
-
-  async findScheduleByStudentId({ studentId }) {
-    const conditions = where().equal("student_id", studentId).build();
-    const fields = ["id"];
-    const joins = [
-      {
-        table: "classes",
-        type: JoinTypes.INNER,
-        field: "id",
-        fields: ["id", "duration", "days", "start_time"],
-        fieldNameReference: "id",
-      },
-    ];
-    const schedules = await this.studentsClasesRepository.find({
-      fields,
-      conditions,
-      joins,
-    });
-    return schedules;
-  }
+  
 }

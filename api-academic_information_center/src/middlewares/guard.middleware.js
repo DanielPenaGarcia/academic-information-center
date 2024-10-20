@@ -3,9 +3,9 @@ import { TOKEN_COOKIE } from "../utils/constanst/token-cokie.constant.js";
 import jwt from "jsonwebtoken";
 
 const publicPaths = [
-  "auth/login/teacher",
-  "auth/login/student",
-  "auth/login/administrator",
+  "auth/login/teachers",
+  "auth/login/students",
+  "auth/login/administrators",
   "auth/logout",
 ].map((path) => `/api/${path}`);
 

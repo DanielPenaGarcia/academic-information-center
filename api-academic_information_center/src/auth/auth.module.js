@@ -7,17 +7,17 @@ export const router = express.Router();
 const authController = new AuthController();
 
 router.post(
-  "/auth/login/teacher",
+  "/auth/login/teachers",
   serializable,
   authController.teacherLogin.bind(authController)
 );
 router.post(
-  "/auth/login/student",
+  "/auth/login/students",
   serializable,
   authController.studentLogin.bind(authController)
 );
 router.post(
-  "/auth/login/administrator",
+  "/auth/login/administrators",
   serializable,
   authController.administratorLogin.bind(authController)
 );
