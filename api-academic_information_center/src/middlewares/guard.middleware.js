@@ -1,27 +1,31 @@
 import { environment } from "../environments/environment.js";
-import { TOKEN_COOKIE } from "../utils/constanst/token-cokie.constant.js";
 import jwt from "jsonwebtoken";
-
-const publicPaths = [
-  "auth/login/teachers",
-  "auth/login/students",
-  "auth/login/administrators",
-  "auth/logout",
-].map((path) => `/api/${path}`);
+import { TOKEN_COOKIE } from "../utils/constanst/token-cokie.constant.js";
+import { API_NAME } from "../utils/constanst/api-name.constant.js";
+import { byPass } from "../utils/functions/bypass.function.js";
 
 export const guard = (req, res, next) => {
-  if (publicPaths.includes(req.path)) {
-    return next();
-  }
-  const token = req.cookies[TOKEN_COOKIE];
-  if (!token) {
-    return res.status(401).send("Unauthorized");
-  }
   try {
-    const decoded = jwt.verify(token, environment.secretTokenKey);
-    req.user = decoded;
+    const isPass = byPass(req);
+    if (isPass) {
+      return next();
+    }
+    const token = tokenFromCookie(req);
+    if (!token) {
+      return res.status(401).send("Unauthorized");
+    }
+    jwt.verify(token, environment.secretTokenKey, (error, decoded) => {
+      if (error) {
+        return res.status(401).send("Unauthorized");
+      }
+      req.user = decoded;
+    });
     next();
   } catch (error) {
     return res.status(401).send("Unauthorized");
   }
+};
+
+const tokenFromCookie = (req) => {
+  return req.cookies[TOKEN_COOKIE];
 };
