@@ -1,9 +1,9 @@
 import { API_NAME } from "../constanst/api-name.constant.js";
 
 const publicPaths = [
-  `/${API_NAME}/auth/login/teachers`,
-  `/${API_NAME}/auth/login/students`,
-  `/${API_NAME}/auth/login/administrators`,
+  `/${API_NAME}/auth/login/teacher`,
+  `/${API_NAME}/auth/login/student`,
+  `/${API_NAME}/auth/login/administrator`,
   `/${API_NAME}/auth/logout`,
 ];
 

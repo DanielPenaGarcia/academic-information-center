@@ -12,19 +12,19 @@ const middlewares = (req, res, next) => {
 };
 
 router.post(
-  `${authPath}/login/teachers`,
+  `${authPath}/login/teacher`,
   middlewares,
   authController.postLoginTeacher.bind(authController)
 );
 
 router.post(
-  `${authPath}/login/students`,
+  `${authPath}/login/student`,
   middlewares,
   authController.postLoginStudent.bind(authController)
 );
 
 router.post(
-  `${authPath}/login/administrators`,
+  `${authPath}/login/administrator`,
   middlewares,
   authController.postLoginAdministrator.bind(authController)
 );
