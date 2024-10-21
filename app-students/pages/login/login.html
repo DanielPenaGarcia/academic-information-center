@@ -1,42 +1,38 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Página de Login</title>
+    <title>ITSON CIA</title>
     <link rel="stylesheet" href="login.css" />
-</head>
-<body class="login-page">
-    <main class="content">
+  </head>
+  <body>
+    <div class="page">
         <div class="presentation">
-            <div class="photo-girl">
-                <img src="../../assets/images/girl.png" alt="itson-girl" />
+            <div class="girl-photo">
+                <img src="../../assets/images/chica.png" alt="Chica Itson">
             </div>
         </div>
         <div class="login">
-            <div class="logo-system">
-                <img src="../../assets/images/CIA.png" alt="itson cia" />
+            <div class="cia-logo">
+              <img src="../../assets/images/cia.png" alt="ITSON CIA" />
             </div>
-            <form>
-                <div class="form-title">
-                    <h2>Iniciar Sesión</h2>
-                </div>
-                <div class="form-group">
-                    <input type="text" id="username" name="username" placeholder="Usuario" />
-                    <div class="errors"></div>
-                </div>
-                <div class="form-group">
-                    <input type="password" id="password" name="password" placeholder="Contraseña" />
-                    <div class="errors"></div>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn-login">Iniciar Sesión</button>
-                </div>
-                <div class="form-actions">
-                    <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
-                </div>
+            <form class="login-data">
+              <div class="form-title">
+                <h2>Iniciar Sesión</h1>
+              </div>
+              <div class="form-group">
+                <input type="text" placeholder="Correo / ID Institucional" />
+              </div>
+              <div class="form-group">
+                <input type="password" placeholder="Contraseña" />
+              </div>
             </form>
+            <div class="form-actions">
+              <button class="login-btn btn">Iniciar Sesión</button>
+            </div>
+            <a href="#" class="forget-password">¿Has olvidado tu usuario/contraseña?</a>
         </div>
-    </main>
-</body>
+    </div>
+  </body>
 </html>
