@@ -1,5 +1,10 @@
 import { environment } from "../environments/environment.js";
+import { REFRESH_TOKEN_COOKIE } from "../utils/constanst/refresh-token-cookie.constant.js";
 import { TOKEN_COOKIE } from "../utils/constanst/token-cokie.constant.js";
+import { TOKEN_EXPIRES } from "../utils/constanst/token-expires.constant.js";
+import { TOKEN_REFRESH_EXPIRES } from "../utils/constanst/token-refresh-expires.js";
+import { generateRefreshToken } from "../utils/functions/generate-refresh-token.function.js";
+import { generateToken } from "../utils/functions/generate-token.function.js";
 import { getUserRole } from "../utils/functions/get-user-role.function.js";
 import { AuthService } from "./auth.service.js";
 import jwt from "jsonwebtoken";
@@ -7,7 +12,6 @@ import jwt from "jsonwebtoken";
 export class AuthController {
   constructor() {
     this.authService = new AuthService();
-    this.sessionTimeout = 60;
   }
 
   async getUser(req, res) {
@@ -23,6 +27,7 @@ export class AuthController {
 
   async deleteLogout(req, res) {
     res.clearCookie(TOKEN_COOKIE);
+    res.clearCookie(REFRESH_TOKEN_COOKIE);
     return res.status(200).send({});
   }
 
@@ -32,12 +37,16 @@ export class AuthController {
     if (!teacher) {
       return res.status(404).send("Teacher not found");
     }
-    const token = this.#generateToken({
+    const role = getUserRole(teacher);
+    const token = generateToken({ academicId: teacher.academicId, role });
+    res.cookie(TOKEN_COOKIE, token);
+    const refreshToken = generateRefreshToken({
       academicId: teacher.academicId,
-      role: getUserRole(teacher),
+      role,
     });
-    const data = { token: token, user: teacher };
-    return res.status(200).send(data);
+    res.cookie(REFRESH_TOKEN_COOKIE, refreshToken);
+    teacher.role = role;
+    return res.status(200).send(teacher);
   }
 
   async postLoginStudent(req, res) {
@@ -46,11 +55,15 @@ export class AuthController {
     if (!student) {
       return res.status(404).send("Student not found");
     }
-    const token = this.#generateToken({
+    const role = getUserRole(student);
+    const token = generateToken({ academicId: student.academicId, role });
+    res.cookie(TOKEN_COOKIE, token);
+    const refreshToken = generateRefreshToken({
       academicId: student.academicId,
-      role: getUserRole(student),
+      role,
     });
-    const data = { token: token, user: student };
+    res.cookie(REFRESH_TOKEN_COOKIE, refreshToken);
+    student.role = role;
     return res.status(200).send(data);
   }
 
@@ -63,15 +76,15 @@ export class AuthController {
     if (!administrator) {
       return res.status(404).send("Administrator not found");
     }
-    const token = this.#generateToken({
+    const role = getUserRole(administrator);
+    const token = generateToken({ academicId: administrator.academicId, role });
+    res.cookie(TOKEN_COOKIE, token);
+    const refreshToken = generateRefreshToken({
       academicId: administrator.academicId,
-      role: getUserRole(administrator),
+      role,
     });
-    const data = { token: token, user: administrator };
-    return res.status(200).send(data);
-  }
-
-  #generateToken({ academicId, role, secretKey = environment.secretTokenKey, expiresIn = this.sessionTimeout }) {
-    return jwt.sign({ academicId, role }, secretKey, { expiresIn: expiresIn });
+    res.cookie(REFRESH_TOKEN_COOKIE, refreshToken);
+    administrator.role = role;
+    return res.status(200).send(administrator);
   }
 }
