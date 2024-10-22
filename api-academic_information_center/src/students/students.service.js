@@ -58,7 +58,6 @@ export class StudentsService {
 
   async updateStudentProfile({academicId,names,fatherLastName,motherLastName,curp,photo}){
     //TODO: UPDATE PHOTO
-    const fields = [];
     const values = [];
 
     const condition = where().equal('academic_id',academicId).build();
@@ -69,28 +68,36 @@ export class StudentsService {
     }
 
     if(names){
-      values.push("names");
-      fields.push(names);
+      values.push({
+        column:"names",
+        value:names
+      });
     }
     if(fatherLastName){
-      values.push("fatherLastName");
-      fields.push(fatherLastName);
+      values.push({
+        column:"father_last_name",
+        value:fatherLastName
+      });
     }
     if(motherLastName){
-      values.push("motherLastName");
-      fields.push(motherLastName);
+      values.push({
+        column:"mother_last_name",
+        value:motherLastName
+      });
     }
     if(curp){
-      values.push("curp");
-      fields.push(curp);
+      values.push({
+        column:"curp",
+        value:curp
+      });
     }
-    if(fields.length==0){
+    if(values.length==0){
       throw Error("Error empty values");
     }
 
     const conditionUpdate = where().equal('id',student.id).build();
 
-    const result = await this.studentsRepository.update({setValues: values ,condition:conditionUpdate});
+    const result = await this.studentsRepository.update({setValues: values ,conditions:conditionUpdate});
     return result;
   }
   

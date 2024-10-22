@@ -16,10 +16,10 @@ export class StudentsClassesController{
         const classDroped = await this.studentsClassesService.dropClass({academic_id,classId});
 
         if(!classDroped){
-            return res.status(500).send(`Error droping class`);
+            return res.status(500).json({message: `Error droping class`});
         }
 
-        return res.status(200).send(`Class Droped succesfully`);
+        return res.status(200).json({message: `Class Droped succesfully`});
     }catch(error){
         if (error.message === "Forbidden") {
             return res.status(403).json({ error: "Forbidden" });
