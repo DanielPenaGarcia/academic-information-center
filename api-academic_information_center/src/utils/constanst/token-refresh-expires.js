@@ -1,1 +1,0 @@
-export const TOKEN_REFRESH_EXPIRES = 86400; // 24 hours
