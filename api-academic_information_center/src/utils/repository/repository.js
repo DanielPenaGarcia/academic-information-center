@@ -223,5 +223,8 @@ export const RepositoryTable = Object.freeze({
   ENROLLMENT_APPOINTMENT: "enrollment_appointment",
   COURSEMAP: "course_maps",
   CLASS: "classes",
+  CLASS_REVIEW: "class_review",
   STUDENTS_CLASSES: "students_classes",
+  STUDENT_REVIEW: "student_review",
+  TEACHERS_SUBJECTS: "teachers_subjects"
 });

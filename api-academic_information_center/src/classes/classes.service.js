@@ -2,6 +2,7 @@ import { classDtoToEntityMapper } from "../utils/mappers/class-dto-to-entity.map
 import { studentDtoToEntityMapper } from "../utils/mappers/student-dto-to-entity.mapper.js";
 import { subjectDtoToEntityMapper } from "../utils/mappers/subject-dto-to-entity.mapper.js";
 import { teacherDtoToEntityMapper } from "../utils/mappers/teacher-dto-to-entity.mapper.js";
+import {classReviewDtoToEntityMapper} from "../utils/mappers/class-review-dto-to-entity.mapper.js"
 import { where } from "../utils/query-builder/condition.builder.js";
 import { Repository, RepositoryTable } from "../utils/repository/repository.js";
 
@@ -9,15 +10,12 @@ export class ClassesService {
   constructor() {
     this.classesRepository = new Repository(RepositoryTable.CLASS);
     this.studentsRepository = new Repository(RepositoryTable.STUDENT);
-    this.studentsClassesRepository = new Repository(
-      RepositoryTable.STUDENTS_CLASSES
-    );
+    this.studentsClassesRepository = new Repository(RepositoryTable.STUDENTS_CLASSES);
     this.classesRepository = new Repository(RepositoryTable.CLASS);
     this.subjectsRepository = new Repository(RepositoryTable.SUBJECT);
     this.teachersRepository = new Repository(RepositoryTable.TEACHER);
-    this.teachersClassesRepository = new Repository(
-      RepositoryTable.TEACHERS_CLASSES
-    );
+    this.teachersClassesRepository = new Repository(RepositoryTable.TEACHERS_CLASSES);
+    this.repositoryClassReview = new Repository(RepositoryTable.CLASS_REVIEW);
   }
 
   async findScheduleByStudentAcademicId({ academicId }) {
