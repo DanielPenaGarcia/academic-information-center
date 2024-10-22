@@ -5,23 +5,34 @@ import { serializable } from "./middleware/serializable.middleware.js";
 export const router = express.Router();
 
 const authController = new AuthController();
+const authPath = "/auth";
+
+const middlewares = (req, res, next) => {
+  serializable(req, res, next);
+};
 
 router.post(
-  "/auth/login/teachers",
-  serializable,
-  authController.teacherLogin.bind(authController)
+  `${authPath}/login/teacher`,
+  middlewares,
+  authController.postLoginTeacher.bind(authController)
 );
+
 router.post(
-  "/auth/login/students",
-  serializable,
-  authController.studentLogin.bind(authController)
+  `${authPath}/login/student`,
+  middlewares,
+  authController.postLoginStudent.bind(authController)
 );
+
 router.post(
-  "/auth/login/administrators",
-  serializable,
-  authController.administratorLogin.bind(authController)
+  `${authPath}/login/administrator`,
+  middlewares,
+  authController.postLoginAdministrator.bind(authController)
 );
-router.delete(
-  "/auth/logout",
-  authController.logout.bind(authController)
+
+router.delete(`${authPath}/logout`, authController.deleteLogout.bind(authController));
+
+router.get(
+  `${authPath}/user`,
+  middlewares,
+  authController.getUser.bind(authController)
 );
