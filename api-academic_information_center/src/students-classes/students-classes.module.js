@@ -6,6 +6,6 @@ export const router = express.Router();
 const studentsClassesController = new StudentsClassesController();
 
 router.delete(
-    "/student/drop/class",
+    "/student/class",
     studentsClassesController.dropClass.bind(studentsClassesController));
 

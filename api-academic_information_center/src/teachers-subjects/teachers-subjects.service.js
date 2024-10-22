@@ -25,7 +25,7 @@ export class TeacherSubjectsService{
         const condition2 = where().equal('teacher_id',teacher.id).and().equal("subject_id",subjectId).build();
 
         const teacherSubject = await this.teacherSubjectRepository.find({condition:condition2});
-        if(teacherSubject){
+        if(teacherSubject.length>0){
             throw new Error(`Teacher already is assigned to this subjec`)
         }
 
