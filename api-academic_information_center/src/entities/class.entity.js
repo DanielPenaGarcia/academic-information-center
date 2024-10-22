@@ -8,6 +8,7 @@ export class Class {
     subject,
     createdAt = null,
     updatedAt = null,
+    description,
   }) {
     this.id = id;
     this.startTime = startTime;
@@ -17,5 +18,6 @@ export class Class {
     this.subject = subject;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+    this.description = description;
   }
 }
