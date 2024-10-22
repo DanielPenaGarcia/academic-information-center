@@ -10,7 +10,7 @@ export class StudentController{
     async updateStudent(req,res){
         try {
             this.#validateUser(req, res);
-            const { academicId, names, fatherLastName, motherLastName, curp} = req.params;
+            const { academicId, names, fatherLastName, motherLastName, curp} = req.body;
             const result = await this.studentService.updateStudentProfile({academicId,names,fatherLastName,motherLastName,curp});
             res.status(200).json(result);
           } catch (error) {

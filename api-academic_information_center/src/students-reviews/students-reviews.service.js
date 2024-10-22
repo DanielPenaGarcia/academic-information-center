@@ -43,7 +43,7 @@ export class StudentsReviewsService{
     }
 
     const condition4 = where().equal('teacher_id',teacher.id).and().equal("subject_id",clase.subject_id).build();
-    const teacherSubject = await this.repositoryTeachersSubjects.find({condition: condition4});
+    const teacherSubject = await this.teacherSubjectRepository.find({condition: condition4});
 
     if(!teacherSubject){
         throw new Error(`Teacher with academic id ${teacherAcademicId} does not have assigned the subject class`);
