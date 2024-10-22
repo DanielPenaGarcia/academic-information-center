@@ -1,7 +1,7 @@
 import { where } from "../utils/query-builder/condition.builder.js";
 import { Repository, RepositoryTable } from "../utils/repository/repository.js";
 
-export class StudentClassService{
+export class StudentsClassesService{
     constructor(){
         this.repositoryStudent = new Repository(RepositoryTable.STUDENT);
         this.repositoryClass = new Repository(RepositoryTable.CLASS);

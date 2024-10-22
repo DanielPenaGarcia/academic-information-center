@@ -1,10 +1,10 @@
 import { UserRole } from "../entities/enums/roles.enum.js";
-import { StudentClassService } from "./student-class.service.js";
+import { StudentsClassesService } from "./students-classes.service.js";
 
-export class StudentClassController{
+export class StudentsClassesController{
 
     constructor(){
-        this.studentClassService = new StudentClassService();
+        this.studentsClassesService = new StudentsClassesService();
     }
 
     async dropClass(req,res){
@@ -13,7 +13,7 @@ export class StudentClassController{
             this.#validateDropClassUser(req,res);
         const {academic_id,classId} = req.body;
 
-        const classDroped = await this.studentClassService.dropClass({academic_id,classId});
+        const classDroped = await this.studentsClassesService.dropClass({academic_id,classId});
 
         if(!classDroped){
             return res.status(500).send(`Error droping class`);

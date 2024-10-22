@@ -88,38 +88,4 @@ export class ClassesService {
     );
     return classes;
   }
-
-  async generateClassReview({comment,academicId,classId}){
-
-    const condition = where().equal('academic_id',academicId).build();
-
-    const studet = await this.studentsRepository.findOne({condition: condition});
-    if(!studet){
-      throw new Error(`Student with academic id ${academicId} not found`);
-    }
-
-    const clase = await this.classesRepository.findOneById(classId);
-    
-    if(!clase){
-      throw new Error(`Class with id ${classId} not found`);
-    }
-
-    const fields = ["student_id", "comment", "class_id"];
-    const values = [[studet.id,comment,classId]];
-
-    const result = await this.repositoryClassReview.create({
-      fields : fields,
-      values : values
-    });
-
-    if (result.affectedRows === 0) {
-      throw new Error("Error creating class review");
-    }
-
-    const classReview = await this.repositoryClassReview.findOneById(result.insertId);
-    const classReviewDTO = classReviewDtoToEntityMapper(classReview);
-    classReviewDTO.classRef = clase;
-    classReviewDTO.student = studet;
-    return classReviewDTO;
-  }
 }

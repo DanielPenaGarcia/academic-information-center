@@ -1,17 +1,17 @@
 import { UserRole } from "../entities/enums/roles.enum.js";
-import { StudentsService } from "./students.service.js";
+import { TeachersService } from "./teachers.service.js";
 
-export class StudentController{
+export class TeacherController{
 
     constructor(){
-        this.studentService = new StudentsService();
+        this.teacherService = new TeachersService();
     }
 
-    async updateStudent(req,res){
+    async updateTeacher(req,res){
         try {
             this.#validateUser(req, res);
             const { academicId, names, fatherLastName, motherLastName, curp} = req.params;
-            const result = await this.studentService.updateStudentProfile({academicId,names,fatherLastName,motherLastName,curp});
+            const result = await this.teacherService.updateTeacher({academicId,names,fatherLastName,motherLastName,curp});
             res.status(200).json(result);
           } catch (error) {
             if (error.message === "Forbidden") {
@@ -23,7 +23,7 @@ export class StudentController{
 
     #validateUser(req, res) {
         const userRequesting = req.user;
-        if (userRequesting.role !== UserRole.ADMINISTRATOR || userRequesting.role !== UserRole.STUDENT) {
+        if (userRequesting.role !== UserRole.ADMINISTRATOR || userRequesting.role !== UserRole.TEACHER) {
           throw new Error("Forbidden");
         }
         if (userRequesting.academicId !== req.params.academicId) {
