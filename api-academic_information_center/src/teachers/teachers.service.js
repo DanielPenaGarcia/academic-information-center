@@ -68,13 +68,13 @@ export class TeachersService {
     }
     if(fatherLastName){
       values.push({
-        column:"fatherLastName",
+        column:"father_last_name",
         value:fatherLastName
       });
     }
     if(motherLastName){
       values.push({
-        column:"motherLastName",
+        column:"mother_last_name",
         value:motherLastName
       });
     }
