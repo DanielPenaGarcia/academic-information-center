@@ -48,4 +48,49 @@ export class TeachersService {
     teacher.password = password;
     return teacher;
   }
+
+  async updateTeacher({academicId,names,fatherLastName,motherLastName,curp,photo}){
+    //TODO: UPDATE PHOTO
+    const values = [];
+
+    const condition = where().equal('academic_id',academicId).build();
+
+    const teacher = await this.teachersRepository.findOne({condition: condition});
+    if(!teacher){
+      throw new Error(`Teacher with academic id ${academicId} not found`);
+    }
+
+    if(names){
+      values.push({
+        column:"names",
+        value:names
+      });
+    }
+    if(fatherLastName){
+      values.push({
+        column:"fatherLastName",
+        value:fatherLastName
+      });
+    }
+    if(motherLastName){
+      values.push({
+        column:"motherLastName",
+        value:motherLastName
+      });
+    }
+    if(curp){
+      values.push({
+        column:"curp",
+        value:curp
+      });
+    }
+    if(values.length==0){
+      throw Error("Error empty values");
+    }
+
+    const conditionUpdate = where().equal('id',teacher.id).build();
+
+    const result = await this.teachersRepository.update({setValues: values ,conditions:conditionUpdate});
+    return result;
+  }
 }
