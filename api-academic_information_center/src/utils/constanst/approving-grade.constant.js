@@ -1,0 +1,1 @@
+export const approving_grade = 7;

@@ -7,6 +7,21 @@ export class TeacherController{
         this.teacherService = new TeachersService();
     }
 
+
+    async createTeacher(req,res){
+      try{
+        this.#validateAdmin(req)
+        const {names, fatherLastName, motherLastName, curp, photo} = req.body;
+        const result = await this.teacherService.createTeacher({ names, fatherLastName, motherLastName, curp, photo })
+        res.status(200).json(result);
+      } catch (error) {
+        if (error.message === "Forbidden") {
+          return res.status(403).json({ error: "Forbidden" });
+        }
+        res.status(500).json({ error: error.message });
+      }
+}
+
     async updateTeacher(req,res){
         try {
             //this.#validateUser(req, res);
@@ -31,4 +46,10 @@ export class TeacherController{
         }
       }
 
+      #validateAdmin(req) {
+        const userRequesting = req.user;
+        if (userRequesting.role !== UserRole.ADMINISTRATOR) {
+          throw new Error("Forbidden");
+        }
+      }
 }
