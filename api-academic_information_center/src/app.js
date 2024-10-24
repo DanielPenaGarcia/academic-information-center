@@ -7,8 +7,9 @@ import {router as StudentReviewRouter} from './students-reviews/students-reviews
 import { router as StudentRouter } from './students/student.module.js';
 import { router as ClassesReviewRouter } from './classes-review/classes-review.module.js';
 import {router as StudentClassRouter} from './students-classes/students-classes.module.js';
-
-import cookieParser from 'cookie-parser';
+import {router as CourseMapRouter} from './course-maps/course-map.module.js';
+import{router as SubjectRouter} from './subjects/subjects.module.js';
+// import cookieParser from 'cookie-parser';
 import { guard } from './middlewares/guard.middleware.js';
 import { refreshToken } from './middlewares/refresh-token.middleware.js';
 const app = express();
@@ -19,7 +20,7 @@ app.use(express.json());
 
 // Prefijo '/api' para todas las rutas de auth
 // Usar el enrutador para las rutas de autenticación
-app.use(cookieParser());
+// app.use(cookieParser());
 // app.use(refreshToken);
 // app.use(guard);
 // app.use('/api', authRouter);  // Prefijo '/api' para todas las rutas de auth
@@ -30,6 +31,9 @@ app.use('/api',StudentReviewRouter);
 app.use('/api',StudentRouter);
 app.use('/api',ClassesReviewRouter);
 app.use('/api',StudentClassRouter);
+app.use('/api',CourseMapRouter);
+app.use('/api', SubjectRouter);
+
 // Puerto de la aplicación
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

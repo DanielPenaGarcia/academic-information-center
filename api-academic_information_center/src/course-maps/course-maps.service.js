@@ -13,6 +13,10 @@ export class CourseMapsService {
         if(courseMaps.length > 0){
             throw new BusinessException('Course map already exists for the year');
         }
+
+        if(semesters <= 0){
+            throw new BusinessException('Semesters must be greater than 0');
+        }
         const fields = ['semesters', 'year'];
         const values = [[semesters, year]];
         const result = await this.courseMapsRepository.create({
