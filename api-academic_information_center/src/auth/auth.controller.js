@@ -64,7 +64,7 @@ export class AuthController {
     });
     res.cookie(REFRESH_TOKEN_COOKIE, refreshToken);
     student.role = role;
-    return res.status(200).send(data);
+    return res.status(200).send(student);
   }
 
   async postLoginAdministrator(req, res) {

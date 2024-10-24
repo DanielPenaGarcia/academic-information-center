@@ -12,20 +12,24 @@ import cookieParser from 'cookie-parser';
 
 import { guard } from './middlewares/guard.middleware.js';
 import { refreshToken } from './middlewares/refresh-token.middleware.js';
+import cors from 'cors';
 import { errorLogger } from './middlewares/error-logger.middleware.js';
 import { errorHandler } from './middlewares/error-handleler.middleware.js';
 const app = express();
 
-
+const corsOptions = {
+  origin: 'http://127.0.0.1:5500',  // Especifica el origen de la aplicación frontend
+  credentials: true,  // Permitir envío de cookies y otros encabezados de autenticación
+};
 // Middleware para parsear JSON en las peticiones
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Prefijo '/api' para todas las rutas de auth
 // Usar el enrutador para las rutas de autenticación
 app.use(cookieParser());
 // app.use(refreshToken);
-// app.use(guard);
-// app.use('/api', authRouter);  // Prefijo '/api' para todas las rutas de auth
+app.use(guard);
 // app.use('/api', ClassesRoute);
 app.use('/api',TeacherSubjectRouter);
 app.use('/api',TeacherRouter);
@@ -33,12 +37,13 @@ app.use('/api',StudentReviewRouter);
 app.use('/api',StudentRouter);
 app.use('/api',ClassesReviewRouter);
 app.use('/api',StudentClassRouter);
+app.use('/api', authRouter);  // Prefijo '/api' para todas las rutas de auth
 app.use(errorLogger);
 app.use(errorHandler)
 // Puerto de la aplicación
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(` localhost:${PORT}`);
 });
 
 
