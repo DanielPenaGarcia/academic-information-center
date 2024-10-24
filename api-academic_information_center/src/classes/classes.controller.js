@@ -55,6 +55,30 @@ export class ClassesController {
     }
   }
 
+  async assignTeacher(req, res) {
+    try {
+      this.#validateAssignTeacher(req);
+      const { academicId, classId } = req.body;
+      const result = await this.classesService.assignTeacher({
+        academicId,
+        classId,
+      });
+      if (!result) {
+        return res.status(500).send(`Error assigning the teacher`);
+      }
+      return res.status(200).send(result);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  #validateAssignTeacher(req){
+      const userRequesting = req.user;
+      if (userRequesting.role != UserRole.ADMINISTRATOR) {
+        throw new Error("Forbidden");
+      }
+  }
+
   #validateFindScheduleByTeacherAcademicIdRequest(req, res) {
     const userRequesting = req.user;
     if (userRequesting.role !== UserRole.TEACHER) {

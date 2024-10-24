@@ -52,12 +52,12 @@ export class StudentsClassesService{
       if (!studentDTO){
         throw new Error("Student not found");
       }
-      const student = classDtoToEntityMapper(studentDTO);
+      const student = studentDtoToEntityMapper(studentDTO);
 
       const studentClassCondition = where().equal('student_id',student.id).and().equal('class_id',classId).build();
-      const studentClass = await this.repositoryStudentClasses.findOne({condition: studentClassCondition});
+      const studentClassDTO = await this.repositoryStudentClasses.findOne({condition: studentClassCondition});
       
-      if (studentClass){
+      if (studentClassDTO){
         throw new Error("Class alerady enrolled");
       }
 
@@ -74,7 +74,7 @@ export class StudentsClassesService{
       return {classRef,student}
     }
 
-    async gradeStudent({studentId, classId, grade}){
+    async gradeStudent({academicId, classId, grade}){
       if(!grade){
         throw new Error("Unassigned grade");
       }
@@ -82,8 +82,9 @@ export class StudentsClassesService{
         throw new Error("Invalid grade");
       }
       
-      const classCondition = where().equal("class_id", classId).build();
-      const classDTO = await this.repositoryStudent.findOne({
+      const classCondition = where().equal("id", classId).build();
+      console.log(classCondition)
+      const classDTO = await this.repositoryClass.findOne({
         conditions: classCondition,
       });
       if (!classDTO){
@@ -91,7 +92,8 @@ export class StudentsClassesService{
       }
       const classRef = classDtoToEntityMapper(classDTO);
 
-      const studentCondition = where().equal("id", studentId).build();
+      const studentCondition = where().equal("academic_id", academicId).build();
+      console.log(studentCondition)
       const studentDTO = await this.repositoryStudent.findOne({
         conditions: studentCondition,
       });
@@ -101,6 +103,8 @@ export class StudentsClassesService{
       const student = classDtoToEntityMapper(studentDTO);
 
       const studentClassCondition = where().equal('student_id',student.id).and().equal('class_id',classId).build();
+      console.log(studentClassCondition)
+
       const studentClass = await this.repositoryStudentClasses.findOne({condition: studentClassCondition});
       
       if (!studentClass){
@@ -124,7 +128,7 @@ export class StudentsClassesService{
     }
 
     #getStatusByGrade({grade}){
-      if (grade>approving_grade){
+      if (grade>=approving_grade){
         return StudentClassStatus.APPROVED
       }
       return StudentClassStatus.REJECTED

@@ -88,4 +88,37 @@ export class ClassesService {
     );
     return classes;
   }
+
+  async assignTeacher({academicId, classId}){
+
+    const classCondition = where().equal("id", classId).build();
+    console.log(classCondition)
+    const classDTO = await this.classesRepository.findOne({
+      conditions: classCondition,
+    });
+    if (!classDTO){
+      throw new Error("Class not found");
+    }
+    const classRef = classDtoToEntityMapper(classDTO);
+
+    const teacherCondition = where().equal("academic_id", academicId).build();
+    console.log(teacherCondition) 
+    const teacherDTO = await this.teachersRepository.findOne({
+      conditions: teacherCondition,
+    });
+    if (!teacherDTO){
+      throw new Error("Teacher not found");
+    }
+    const teacher = teacherDtoToEntityMapper(teacherDTO);
+
+    const values = [];
+    values.push({
+      column:"teacher_id",
+      value:teacher.id
+    });
+
+    const conditionUpdate = where().equal("class_id",classId).build();
+    const result = await this.classesRepository.update({setValues: values ,condition:conditionUpdate});
+    return {classRef,teacher}
+  }
 }
