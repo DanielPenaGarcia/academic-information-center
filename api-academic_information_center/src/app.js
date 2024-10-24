@@ -9,8 +9,11 @@ import { router as ClassesReviewRouter } from './classes-review/classes-review.m
 import {router as StudentClassRouter} from './students-classes/students-classes.module.js';
 
 import cookieParser from 'cookie-parser';
+
 import { guard } from './middlewares/guard.middleware.js';
 import { refreshToken } from './middlewares/refresh-token.middleware.js';
+import { errorLogger } from './middlewares/error-logger.middleware.js';
+import { errorHandler } from './middlewares/error-handleler.middleware.js';
 const app = express();
 
 
@@ -30,11 +33,15 @@ app.use('/api',StudentReviewRouter);
 app.use('/api',StudentRouter);
 app.use('/api',ClassesReviewRouter);
 app.use('/api',StudentClassRouter);
+app.use(errorLogger);
+app.use(errorHandler)
 // Puerto de la aplicación
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+
 
 // const studentsService = new StudentsService();
 

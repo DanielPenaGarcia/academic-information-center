@@ -7,6 +7,19 @@ export class StudentController{
         this.studentService = new StudentsService();
     }
 
+    async createStudent(req,res){
+      try{
+        this.#validateAdmin(req)
+        const { names, fatherLastName, motherLastName, curp, photo }=req.params
+        const result = await this.studentService.createStudent({ names, fatherLastName, motherLastName, curp, photo})
+        res.status(200).json(result);
+      } catch(error){
+        if (error.message === "Forbidden") {
+          return res.status(403).json({ error: "Forbidden" });
+        }
+        res.status(500).json({ error: error.message });      }
+    }
+
     async updateStudent(req,res){
         try {
             this.#validateUser(req, res);
@@ -30,5 +43,12 @@ export class StudentController{
           throw new Error("Forbidden");
         }
       }
+
+    #validateAdmin(req){
+      const userRequesting = req.user;
+        if (userRequesting.role !== UserRole.ADMINISTRATOR) {
+          throw new Error("Forbidden");
+        }
+    }
 
 }

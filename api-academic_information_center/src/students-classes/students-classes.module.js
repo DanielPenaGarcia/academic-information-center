@@ -9,3 +9,13 @@ router.delete(
     "/student/class",
     studentsClassesController.dropClass.bind(studentsClassesController));
 
+
+router.post(
+    "/student/class",
+    studentsClassesController.enrollClass.bind(studentsClassesController)
+)
+
+router.patch(
+    "/student/class/",
+    studentsClassesController.gradeStudent.bind(studentsClassesController)
+)
