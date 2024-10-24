@@ -10,8 +10,13 @@ import {router as StudentClassRouter} from './students-classes/students-classes.
 import {router as CourseMapRouter} from './course-maps/course-map.module.js';
 import{router as SubjectRouter} from './subjects/subjects.module.js';
 // import cookieParser from 'cookie-parser';
+
+import cookieParser from 'cookie-parser';
+
 import { guard } from './middlewares/guard.middleware.js';
 import { refreshToken } from './middlewares/refresh-token.middleware.js';
+import { errorLogger } from './middlewares/error-logger.middleware.js';
+import { errorHandler } from './middlewares/error-handleler.middleware.js';
 const app = express();
 
 
@@ -34,11 +39,15 @@ app.use('/api',StudentClassRouter);
 app.use('/api',CourseMapRouter);
 app.use('/api', SubjectRouter);
 
+app.use(errorLogger);
+app.use(errorHandler)
 // Puerto de la aplicación
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+
 
 // const studentsService = new StudentsService();
 
