@@ -28,13 +28,15 @@ export class StudentsClassesService{
 
         const conditionDelete = where().equal('student_id',studet.id).and().equal('class_id',clase.id).build();
 
+        //TODO: Consultar a la clase eliminada
         const result = await this.repositoryStudentClasses.delete({condition: conditionDelete});
+        //TODO: Regresar la clase eliminada
         return result.affectedRows;
     }
 
-    async enrollClass({studentId, classId}){
-      const classCondition = where().equal("class_id", classId).build();
-      const classDTO = await this.repositoryStudent.findOne({
+    async enrollClass({academicId, classId}){
+      const classCondition = where().equal("id", classId).build();
+      const classDTO = await this.repositoryClass.findOne({
         conditions: classCondition,
       });
       if (!classDTO){
@@ -42,7 +44,7 @@ export class StudentsClassesService{
       }
       const classRef = classDtoToEntityMapper(classDTO);
 
-      const studentCondition = where().equal("student", studentId).build();
+      const studentCondition = where().equal("academic_id", academicId).build();
       const studentDTO = await this.repositoryStudent.findOne({
         conditions: studentCondition,
       });
@@ -52,7 +54,7 @@ export class StudentsClassesService{
       const student = classDtoToEntityMapper(studentDTO);
 
       const fields = ["student_id", "class_id","status"];
-      const values = [[studentId,classId,StudentClassStatus.PENDING]];
+      const values = [[academicId,classId,StudentClassStatus.PENDING]];
       const result = await this.repositoryStudentClasses.create({
         fields: fields,
         values: values,

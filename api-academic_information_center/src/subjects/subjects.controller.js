@@ -7,6 +7,7 @@ export class SubjectsController{
     }
 
     async createSubject(req,res){
+      //TODO: Regresar al menos unos datos del course map
         try {
             const {name, hoursPerWeek, semester, courseMapId} = req.body;
             const result = await this.subjectService.createSubject({name, hoursPerWeek, semester, courseMapId});
