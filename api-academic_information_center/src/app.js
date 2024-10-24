@@ -9,9 +9,12 @@ import { router as ClassesReviewRouter } from './classes-review/classes-review.m
 import {router as StudentClassRouter} from './students-classes/students-classes.module.js';
 
 import cookieParser from 'cookie-parser';
+
 import { guard } from './middlewares/guard.middleware.js';
 import { refreshToken } from './middlewares/refresh-token.middleware.js';
 import cors from 'cors';
+import { errorLogger } from './middlewares/error-logger.middleware.js';
+import { errorHandler } from './middlewares/error-handleler.middleware.js';
 const app = express();
 
 const corsOptions = {
@@ -35,11 +38,15 @@ app.use('/api',StudentRouter);
 app.use('/api',ClassesReviewRouter);
 app.use('/api',StudentClassRouter);
 app.use('/api', authRouter);  // Prefijo '/api' para todas las rutas de auth
+app.use(errorLogger);
+app.use(errorHandler)
 // Puerto de la aplicación
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(` localhost:${PORT}`);
 });
+
+
 
 // const studentsService = new StudentsService();
 

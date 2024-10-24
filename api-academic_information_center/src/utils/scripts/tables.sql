@@ -105,6 +105,7 @@ CREATE TABLE IF NOT EXISTS students_classes (
     student_id INT NOT NULL,
     class_id INT NOT NULL,
     grade DECIMAL(5, 2),
+    --//TODO: FAILED instead of REJECTED and set a default value
     status ENUM("PENDING", "APPROVED", "REJECTED") NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
