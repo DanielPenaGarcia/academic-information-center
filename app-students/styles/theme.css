@@ -1,0 +1,8 @@
+:root {
+    --primary: #007CEA;
+    --primary-rgb: 0,124,234;
+	--primary-contrast: #000000;
+	--primary-contrast-rgb: 0,0,0;
+	--primary-shade: #006dce;
+	--primary-tint: #1a89ec;
+}
