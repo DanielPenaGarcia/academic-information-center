@@ -1,6 +1,7 @@
 import { StudentClassStatus } from "../entities/enums/student-class-status.enum.js";
 import { approving_grade } from "../utils/constanst/approving-grade.constant.js";
 import { classDtoToEntityMapper } from "../utils/mappers/class-dto-to-entity.mapper.js";
+import { studentDtoToEntityMapper } from "../utils/mappers/student-dto-to-entity.mapper.js";
 import { where } from "../utils/query-builder/condition.builder.js";
 import { Repository, RepositoryTable } from "../utils/repository/repository.js";
 
@@ -53,8 +54,16 @@ export class StudentsClassesService{
       }
       const student = classDtoToEntityMapper(studentDTO);
 
+      const studentClassCondition = where().equal('student_id',student.id).and().equal('class_id',classId).build();
+      const studentClass = await this.repositoryStudentClasses.findOne({condition: studentClassCondition});
+      
+      if (studentClass){
+        throw new Error("Class alerady enrolled");
+      }
+
+
       const fields = ["student_id", "class_id","status"];
-      const values = [[academicId,classId,StudentClassStatus.PENDING]];
+      const values = [[student.id,classId,StudentClassStatus.PENDING]];
       const result = await this.repositoryStudentClasses.create({
         fields: fields,
         values: values,
@@ -82,7 +91,7 @@ export class StudentsClassesService{
       }
       const classRef = classDtoToEntityMapper(classDTO);
 
-      const studentCondition = where().equal("student", studentId).build();
+      const studentCondition = where().equal("id", studentId).build();
       const studentDTO = await this.repositoryStudent.findOne({
         conditions: studentCondition,
       });
@@ -90,6 +99,13 @@ export class StudentsClassesService{
         throw new Error("Student not found");
       }
       const student = classDtoToEntityMapper(studentDTO);
+
+      const studentClassCondition = where().equal('student_id',student.id).and().equal('class_id',classId).build();
+      const studentClass = await this.repositoryStudentClasses.findOne({condition: studentClassCondition});
+      
+      if (!studentClass){
+        throw new Error("The student is not enrolled in said class");
+      }
 
       const values = [];
       values.push({
@@ -102,7 +118,7 @@ export class StudentsClassesService{
         value:status
       });
 
-      const conditionUpdate = where().equal('academic_id',studentId).and().equal("class_id",classId).build();
+      const conditionUpdate = where().equal('student_id',student.id).and().equal("class_id",classId).build();
       const result = await this.repositoryStudentClasses.update({setValues: values ,condition:conditionUpdate});
       return {classRef,student,grade,status}
     }
