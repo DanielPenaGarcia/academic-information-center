@@ -6,6 +6,7 @@ import { subjectDtoToEntityMapper } from "../utils/mappers/subject-dto-to-entity
 export class SubjectsService {
   constructor() {
     this.subjectsRepository = new Repository(RepositoryTable.SUBJECT);
+    this.courseMapRepository = new Repository(RepositoryTable.COURSEMAP);
   }
 
   async createSubject({ name, hoursPerWeek, semester, courseMapId }) {

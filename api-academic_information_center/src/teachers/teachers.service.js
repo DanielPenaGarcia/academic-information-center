@@ -9,7 +9,7 @@ export class TeachersService {
     this.teachersRepository = new Repository(RepositoryTable.TEACHER);
   }
 
-  async createTeacher({ names, fatherLastName, motherLastName, curp, photo }) {
+  async createTeacher({ names, fatherLastName, motherLastName, curp }) {
     //TODO: Agregar photo a los values cuando se reciba de la petición
     const fields = ["names", "father_last_name", "mother_last_name", "curp"];
     const values = [[names, fatherLastName, motherLastName, curp]];
@@ -17,6 +17,11 @@ export class TeachersService {
       fields: fields,
       values: values,
     });
+
+    if (curp.length !== 18) {
+      throw new Error("CURP must have 18 characters");
+    } 
+    
     if (result.affectedRows === 0) {
       throw new Error("Error creating teacher");
     }
@@ -34,6 +39,7 @@ export class TeachersService {
       fatherLastName: teacher.fatherLastName,
       academicId: teacher.academicId,
     });
+
     await this.teachersRepository.update({
       setValues: [
         { column: "email", value: email },
@@ -49,48 +55,48 @@ export class TeachersService {
     return teacher;
   }
 
-  async updateTeacher({academicId,names,fatherLastName,motherLastName,curp,photo}){
+  async updateTeacher({ academicId, names, fatherLastName, motherLastName, curp, photo }) {
     //TODO: UPDATE PHOTO
     const values = [];
 
-    const condition = where().equal('academic_id',academicId).build();
+    const condition = where().equal('academic_id', academicId).build();
 
-    const teacher = await this.teachersRepository.findOne({condition: condition});
-    if(!teacher){
+    const teacher = await this.teachersRepository.findOne({ condition: condition });
+    if (!teacher) {
       throw new Error(`Teacher with academic id ${academicId} not found`);
     }
 
-    if(names){
+    if (names) {
       values.push({
-        column:"names",
-        value:names
+        column: "names",
+        value: names
       });
     }
-    if(fatherLastName){
+    if (fatherLastName) {
       values.push({
-        column:"father_last_name",
-        value:fatherLastName
+        column: "father_last_name",
+        value: fatherLastName
       });
     }
-    if(motherLastName){
+    if (motherLastName) {
       values.push({
-        column:"mother_last_name",
-        value:motherLastName
+        column: "mother_last_name",
+        value: motherLastName
       });
     }
-    if(curp){
+    if (curp) {
       values.push({
-        column:"curp",
-        value:curp
+        column: "curp",
+        value: curp
       });
     }
-    if(values.length==0){
+    if (values.length == 0) {
       throw Error("Error empty values");
     }
 
-    const conditionUpdate = where().equal('id',teacher.id).build();
+    const conditionUpdate = where().equal('id', teacher.id).build();
 
-    const result = await this.teachersRepository.update({setValues: values ,conditions:conditionUpdate});
+    const result = await this.teachersRepository.update({ setValues: values, conditions: conditionUpdate });
     return result;
   }
 }
