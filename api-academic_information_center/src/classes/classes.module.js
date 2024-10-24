@@ -14,3 +14,9 @@ router.get(
   "/classes/schedule/teachers/:academicId",
   classesController.findScheduleByTeacherAcademicId.bind(classesController)
 );
+
+
+router.patch(
+  "/classes/teacher",
+  classesController.assignTeacher.bind(classesController)
+)

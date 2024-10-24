@@ -45,7 +45,7 @@ export class StudentsClassesController {
           );
       }
       //TODO: Eliminar datos que regresen nulos
-      return res.status(200).send(enrolledClass);
+      return res.status(200).send(enrolledClass.classRef);
     } catch (error) {
       if (error.message === "Forbidden") {
         return res.status(403).json({ error: "Forbidden" });
@@ -66,7 +66,7 @@ export class StudentsClassesController {
       if (!result) {
         return res.status(500).send(`Error grading the student`);
       }
-      return res.status(200).send(`student graded succesfully`);
+      return res.status(200).send(result);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
