@@ -6,6 +6,7 @@ export class Class {
     days,
     student,
     subject,
+    teacher,
     createdAt = null,
     updatedAt = null,
     description,
@@ -16,6 +17,7 @@ export class Class {
     this.days = days;
     this.student = student;
     this.subject = subject;
+    this.teacher = teacher;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.description = description;

@@ -19,9 +19,9 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(cookieParser());
-app.use(refreshToken);
-app.use(guard);
+//app.use(cookieParser());
+//app.use(refreshToken);
+//app.use(guard);
 app.use("/api", ClassesRoute);
 app.use("/api", TeacherSubjectRouter);
 app.use("/api", TeacherRouter);

@@ -21,6 +21,14 @@ export class TeachersService {
     if (curp.length !== 18) {
       throw new Error("CURP must have 18 characters");
     } 
+
+    const curpExists = await this.teachersRepository.findOne({
+      condition: where().equal("curp", curp).build(),
+    });
+    
+    if(curpExists){ 
+      throw new Error("CURP already exists");
+    }
     
     if (result.affectedRows === 0) {
       throw new Error("Error creating teacher");
