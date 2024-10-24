@@ -12,6 +12,8 @@ import cookieParser from 'cookie-parser';
 
 import { guard } from './middlewares/guard.middleware.js';
 import { refreshToken } from './middlewares/refresh-token.middleware.js';
+import { errorLogger } from './middlewares/error-logger.middleware.js';
+import { errorHandler } from './middlewares/error-handleler.middleware.js';
 const app = express();
 
 
@@ -31,6 +33,8 @@ app.use('/api',StudentReviewRouter);
 app.use('/api',StudentRouter);
 app.use('/api',ClassesReviewRouter);
 app.use('/api',StudentClassRouter);
+app.use(errorLogger);
+app.use(errorHandler)
 // Puerto de la aplicación
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
