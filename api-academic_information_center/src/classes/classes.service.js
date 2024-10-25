@@ -39,13 +39,13 @@ export class ClassesService {
     return classEntity;
   }
 
-  async updateClass({id, startTime, description, duration, days, subjectId }) {
+  async updateClass({id, startTime, description, duration, days, subjectId}) {
     const values = [];
 
     if (duration < 0) {
       throw new Error("Duration must be greater than 0");
     }
-
+    
     const classCondition = where().equal("id", id).build();
     const classDTO = await this.classesRepository.findOne({
       conditions: classCondition,
@@ -85,10 +85,8 @@ export class ClassesService {
       });
     }
 
-    const result = await this.classesRepository.update({
-      setValues: values,
-      condition: classCondition,
-    });
+    const conditionUpdate = where().equal("id", classDTO.id).build();
+    const result = await this.classesRepository.update({setValues: values, conditions: conditionUpdate});
     if (result.affectedRows === 0) {
       throw new Error("Error updating class");
     }
