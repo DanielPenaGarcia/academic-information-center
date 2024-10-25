@@ -8,7 +8,7 @@ export class StudentsClassesController {
 
   async dropClass(req, res) {
     try {
-      this.#validateDropStudentClassByStudentOrAdmin(req, res);
+      this.#validateDropStudentClassByStudentOrAdmin(req);
       const { academic_id, classId } = req.body;
 
       const classDroped = await this.studentsClassesService.dropClass({
@@ -28,7 +28,7 @@ export class StudentsClassesController {
     }
   }
 
-  #validateDropStudentClassByStudentOrAdmin(){
+  #validateDropStudentClassByStudentOrAdmin(req){
     const userRequesting = req.user;
     if(userRequesting.role === UserRole.STUDENT){
         if(userRequesting.academicId !== req.body.academicId){

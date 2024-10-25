@@ -9,7 +9,7 @@ export class ClassesReviewController {
   
   async generateReviewClass(req,res){
     try{
-    this.#validateGenerateReview(req,res);
+    this.#validateGenerateReview(req);
     const {academicId,classId,comment} = req.body;
 
     const reviewClassCreated = await this.classesReviewService.generateClassReview({comment,academicId,classId});

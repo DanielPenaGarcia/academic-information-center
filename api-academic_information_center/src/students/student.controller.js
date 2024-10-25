@@ -28,7 +28,7 @@ export class StudentController {
 
   async updateStudent(req, res) {
     try {
-      this.#validateUpdateStudentByStudentOrAdmin(req, res);
+      this.#validateUpdateStudentByStudentOrAdmin(req);
       const { academicId, names, fatherLastName, motherLastName, curp } =
         req.body;
       const result = await this.studentService.updateStudentProfile({
@@ -47,7 +47,7 @@ export class StudentController {
     }
   }
 
-  #validateUpdateStudentByStudentOrAdmin(){
+  #validateUpdateStudentByStudentOrAdmin(req){
     const userRequesting = req.user;
     if(userRequesting.role === UserRole.STUDENT){
         if(userRequesting.academicId !== req.body.academicId){
