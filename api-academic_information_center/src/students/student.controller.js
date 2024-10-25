@@ -19,14 +19,11 @@ export class StudentController {
       });
       res.status(200).json(result);
     } catch (error) {
-      if (error.message === "Forbidden") {
-        return res.status(403).json({ error: "Forbidden" });
-      }
-      res.status(500).json({ error: error.message });
+      next(error);
     }
   }
 
-  async updateStudent(req, res) {
+  async updateStudent(req, res, next) {
     try {
       this.#validateUpdateStudentByStudentOrAdmin(req);
       const { academicId, names, fatherLastName, motherLastName, curp } =
@@ -40,20 +37,17 @@ export class StudentController {
       });
       res.status(200).json(result);
     } catch (error) {
-      if (error.message === "Forbidden") {
-        return res.status(403).json({ error: "Forbidden" });
-      }
-      res.status(500).json({ error: error.message });
+      next(error);
     }
   }
 
-  #validateUpdateStudentByStudentOrAdmin(req){
+  #validateUpdateStudentByStudentOrAdmin(req) {
     const userRequesting = req.user;
-    if(userRequesting.role === UserRole.STUDENT){
-        if(userRequesting.academicId !== req.body.academicId){
-          throw new Error("Forbidden");
-        }
-    }else if(userRequesting.role !== UserRole.ADMINISTRATOR){
+    if (userRequesting.role === UserRole.STUDENT) {
+      if (userRequesting.academicId !== req.body.academicId) {
+        throw new Error("Forbidden");
+      }
+    } else if (userRequesting.role !== UserRole.ADMINISTRATOR) {
       throw new Error("Forbidden");
     }
   }

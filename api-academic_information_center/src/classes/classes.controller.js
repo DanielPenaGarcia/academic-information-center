@@ -6,42 +6,41 @@ export class ClassesController {
     this.classesService = new ClassesService();
   }
 
-  async create(req, res) {
+  async create(req, res, next) {
     try {
-        const { startTime, description ,duration, days, subjectId, teacherId } = req.body;
-        const classId = await this.classesService.createClass({
-          startTime,
-          description,
-          duration,
-          days,
-          subjectId,
-          teacherId,
-        });
-        res.status(201).json({ classId });   
-    }catch (error) {
-      res.status(500).json({ error: error.message });     
-  }
-}
-
-async update(req, res) {
-  try {
-    const { id, startTime, description, duration, days, subjectId} = req.body;    
-    const result = await this.classesService.updateClass({
-      id,
-      startTime,
-      description,
-      duration,
-      days,
-      subjectId,
-    });
-    res.status(201).json(result);
-  } catch (error) {
-    if (error.message === "Forbidden") {
-      return res.status(403).json({ error: "Forbidden" });
+      const { startTime, description, duration, days, subjectId, teacherId } =
+        req.body;
+      const classEntity = await this.classesService.createClass({
+        startTime,
+        description,
+        duration,
+        days,
+        subjectId,
+        teacherId,
+      });
+      res.status(201).json(classEntity);
+    } catch (error) {
+      next(error);
     }
-    res.status(500).json({ error: error.message });
   }
-}
+
+  async update(req, res) {
+    try {
+      const { id, startTime, description, duration, days, subjectId } =
+        req.body;
+      const classUpdated = await this.classesService.updateClass({
+        id,
+        startTime,
+        description,
+        duration,
+        days,
+        subjectId,
+      });
+      res.status(201).json(classUpdated);
+    } catch (error) {
+      next(error);
+    }
+  }
 
   async findScheduleByStudentAcademicId(req, res) {
     try {
@@ -109,11 +108,11 @@ async update(req, res) {
     }
   }
 
-  #validateAssignTeacher(req){
-      const userRequesting = req.user;
-      if (userRequesting.role != UserRole.ADMINISTRATOR) {
-        throw new Error("Forbidden");
-      }
+  #validateAssignTeacher(req) {
+    const userRequesting = req.user;
+    if (userRequesting.role != UserRole.ADMINISTRATOR) {
+      throw new Error("Forbidden");
+    }
   }
 
   #validateFindScheduleByTeacherAcademicIdRequest(req, res) {

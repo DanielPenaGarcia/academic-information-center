@@ -1,3 +1,4 @@
+import { BusinessException } from "../utils/exceptions/business.exception.js";
 import { createAcademicEmail } from "../utils/functions/create-academic-email.function.js";
 import { createAcademicPassword } from "../utils/functions/create-academic-password.function.js";
 import { classDtoToEntityMapper } from "../utils/mappers/class-dto-to-entity.mapper.js";
@@ -25,7 +26,7 @@ export class StudentsService {
       values: values,
     });
     if (result.affectedRows === 0) {
-      throw new Error("Error creating student");
+      throw new BusinessException("Error creating student");
     }
     const studentDTO = await this.studentsRepository.findOneById(
       result.insertId
@@ -49,61 +50,73 @@ export class StudentsService {
       conditions: where().equal("id", student.id).build(),
     });
     if (result.affectedRows === 0) {
-      throw new Error("Error updating student");
+      throw new BusinessException("Error updating student");
     }
     student.email = email;
     student.password = password;
     return student;
   }
 
-  async updateStudentProfile({academicId,names,fatherLastName,motherLastName,curp,photo}){
+  async updateStudentProfile({
+    academicId,
+    names,
+    fatherLastName,
+    motherLastName,
+    curp,
+    photo,
+  }) {
     //TODO: UPDATE PHOTO
     const values = [];
 
-    const condition = where().equal('academic_id',academicId).build();
+    const condition = where().equal("academic_id", academicId).build();
 
-    const student = await this.studentsRepository.findOne({condition: condition});
-    if(!student){
-      throw new Error(`Student with academic id ${academicId} not found`);
+    const student = await this.studentsRepository.findOne({
+      condition: condition,
+    });
+    if (!student) {
+      throw new BusinessException(
+        `Student with academic id ${academicId} not found`
+      );
     }
 
-    if(names){
+    if (names) {
       values.push({
-        column:"names",
-        value:names
+        column: "names",
+        value: names,
       });
     }
-    if(fatherLastName){
+    if (fatherLastName) {
       values.push({
-        column:"father_last_name",
-        value:fatherLastName
+        column: "father_last_name",
+        value: fatherLastName,
       });
     }
-    if(motherLastName){
+    if (motherLastName) {
       values.push({
-        column:"mother_last_name",
-        value:motherLastName
+        column: "mother_last_name",
+        value: motherLastName,
       });
     }
-    if(curp){
+    if (curp) {
       values.push({
-        column:"curp",
-        value:curp
+        column: "curp",
+        value: curp,
       });
     }
-    if(values.length==0){
-      throw Error("Error empty values");
+    if (values.length == 0) {
+      throw BusinessException("Error empty values");
     }
 
-    const conditionUpdate = where().equal('id',student.id).build();
+    const conditionUpdate = where().equal("id", student.id).build();
 
-    const result = await this.studentsRepository.update({setValues: values ,conditions:conditionUpdate});
+    const result = await this.studentsRepository.update({
+      setValues: values,
+      conditions: conditionUpdate,
+    });
 
-    if(result.affectedRows!=1){
-      throw Error("Something went wrong with the update");
+    if (result.affectedRows != 1) {
+      throw BusinessException("Something went wrong with the update");
     }
-    return await this.studentsRepository.findOne({condition: condition});
-  
+    return await this.studentsRepository.findOne({ condition: condition });
   }
-  
 }

@@ -5,6 +5,7 @@ import jwt, { decode } from "jsonwebtoken";
 import { generateToken } from "../utils/functions/generate-token.function.js";
 import { TOKEN_COOKIE } from "../utils/constanst/token-cokie.constant.js";
 import { byPass } from "../utils/functions/bypass.function.js";
+import { UnauthorizedException } from "../utils/exceptions/unauthorized.exception.js";
 
 export const refreshToken = (req, res, next) => {
   try {
@@ -14,14 +15,16 @@ export const refreshToken = (req, res, next) => {
     }
     const refreshToken = req.cookies[REFRESH_TOKEN_COOKIE];
     if (!refreshToken) {
-      return res.status(401).send("Unauthorized");
+      next(new UnauthorizedException("Requiere iniciar sesión"));
     }
     jwt.verify(
       refreshToken,
       environment.secretRefreshTokenKey,
       (error, decoded) => {
         if (error) {
-          return res.status(401).send("Unauthorized");
+          throw new UnauthorizedException(
+            "El token con el que intenta acceder no es válido"
+          );
         }
         const user = decoded;
         const token = generateToken({
@@ -33,6 +36,6 @@ export const refreshToken = (req, res, next) => {
       }
     );
   } catch (error) {
-    return res.status(401).send("Unauthorized");
+    next(error);
   }
 };
