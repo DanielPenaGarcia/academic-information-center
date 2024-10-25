@@ -6,6 +6,43 @@ export class ClassesController {
     this.classesService = new ClassesService();
   }
 
+  async create(req, res) {
+    try {
+        const { startTime, description ,duration, days, subjectId, teacherId } = req.body;
+        const classId = await this.classesService.createClass({
+          startTime,
+          description,
+          duration,
+          days,
+          subjectId,
+          teacherId,
+        });
+        res.status(201).json({ classId });   
+    }catch (error) {
+      res.status(500).json({ error: error.message });     
+  }
+}
+
+async update(req, res) {
+  try {
+    const { id, startTime, description, duration, days, subjectId} = req.body;    
+    const result = await this.classesService.updateClass({
+      id,
+      startTime,
+      description,
+      duration,
+      days,
+      subjectId,
+    });
+    res.status(201).json(result);
+  } catch (error) {
+    if (error.message === "Forbidden") {
+      return res.status(403).json({ error: "Forbidden" });
+    }
+    res.status(500).json({ error: error.message });
+  }
+}
+
   async findScheduleByStudentAcademicId(req, res) {
     try {
       this.#validateFindScheduleByStudentByAcademicId(req, res);

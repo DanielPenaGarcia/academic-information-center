@@ -2,7 +2,7 @@ import { classDtoToEntityMapper } from "../utils/mappers/class-dto-to-entity.map
 import { studentDtoToEntityMapper } from "../utils/mappers/student-dto-to-entity.mapper.js";
 import { subjectDtoToEntityMapper } from "../utils/mappers/subject-dto-to-entity.mapper.js";
 import { teacherDtoToEntityMapper } from "../utils/mappers/teacher-dto-to-entity.mapper.js";
-import {classReviewDtoToEntityMapper} from "../utils/mappers/class-review-dto-to-entity.mapper.js"
+import { classReviewDtoToEntityMapper } from "../utils/mappers/class-review-dto-to-entity.mapper.js"
 import { where } from "../utils/query-builder/condition.builder.js";
 import { Repository, RepositoryTable } from "../utils/repository/repository.js";
 
@@ -16,6 +16,83 @@ export class ClassesService {
     this.teachersRepository = new Repository(RepositoryTable.TEACHER);
     this.teachersClassesRepository = new Repository(RepositoryTable.TEACHERS_CLASSES);
     this.repositoryClassReview = new Repository(RepositoryTable.CLASS_REVIEW);
+  }
+
+  async createClass({ startTime, description, duration, days, subjectId, teacherId }) {
+    const fields = ["start_time", "description", "duration", "days", "subject_id", "teacher_id"];
+    const values = [[startTime, description, duration, days, subjectId, teacherId]];
+
+    if (duration < 0) {
+      throw new Error("Duration must be greater than 0");
+    }
+    const result = await this.classesRepository.create({
+      fields: fields,
+      values: values,
+    });
+    if (result.affectedRows === 0) {
+      throw new Error("Error creating class");
+    }
+    const classDTO = await this.classesRepository.findOneById(
+      result.insertId
+    );
+    let classEntity = classDtoToEntityMapper(classDTO);
+    return classEntity;
+  }
+
+  async updateClass({id, startTime, description, duration, days, subjectId}) {
+    const values = [];
+
+    if (duration < 0) {
+      throw new Error("Duration must be greater than 0");
+    }
+    
+    const classCondition = where().equal("id", id).build();
+    const classDTO = await this.classesRepository.findOne({
+      conditions: classCondition,
+    });
+    if (!classDTO) {
+      throw new Error("Class not found");
+    }
+
+    if (startTime) {
+      values.push({
+        column: "start_time",
+        value: startTime,
+      });
+    }
+    if (description) {
+      values.push({
+        column: "description",
+        value: description,
+      });
+    }
+    if (duration) {
+      values.push({
+        column: "duration",
+        value: duration,
+      });
+    }
+    if (days) {
+      values.push({
+        column: "days",
+        value: days,
+      });
+    }
+    if (subjectId) {
+      values.push({
+        column: "subject_id",
+        value: subjectId,
+      });
+    }
+
+    const conditionUpdate = where().equal("id", classDTO.id).build();
+    const result = await this.classesRepository.update({setValues: values, conditions: conditionUpdate});
+    if (result.affectedRows === 0) {
+      throw new Error("Error updating class");
+    }
+
+    let classEntity = classDtoToEntityMapper(classDTO);
+    return classEntity;
   }
 
   async findScheduleByStudentAcademicId({ academicId }) {
@@ -89,36 +166,36 @@ export class ClassesService {
     return classes;
   }
 
-  async assignTeacher({academicId, classId}){
+  async assignTeacher({ academicId, classId }) {
 
     const classCondition = where().equal("id", classId).build();
     console.log(classCondition)
     const classDTO = await this.classesRepository.findOne({
       conditions: classCondition,
     });
-    if (!classDTO){
+    if (!classDTO) {
       throw new Error("Class not found");
     }
     const classRef = classDtoToEntityMapper(classDTO);
 
     const teacherCondition = where().equal("academic_id", academicId).build();
-    console.log(teacherCondition) 
+    console.log(teacherCondition)
     const teacherDTO = await this.teachersRepository.findOne({
       conditions: teacherCondition,
     });
-    if (!teacherDTO){
+    if (!teacherDTO) {
       throw new Error("Teacher not found");
     }
     const teacher = teacherDtoToEntityMapper(teacherDTO);
 
     const values = [];
     values.push({
-      column:"teacher_id",
-      value:teacher.id
+      column: "teacher_id",
+      value: teacher.id
     });
 
-    const conditionUpdate = where().equal("class_id",classId).build();
-    const result = await this.classesRepository.update({setValues: values ,condition:conditionUpdate});
-    return {classRef,teacher}
+    const conditionUpdate = where().equal("class_id", classId).build();
+    const result = await this.classesRepository.update({ setValues: values, condition: conditionUpdate });
+    return { classRef, teacher }
   }
 }

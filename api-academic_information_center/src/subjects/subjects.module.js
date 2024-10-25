@@ -7,3 +7,5 @@ const subjectsController = new SubjectsController();
 
 router.post('/subject', subjectsController.createSubject.bind(subjectsController));
 
+router.patch('/subject/', subjectsController.updateSubject.bind(subjectsController));
+

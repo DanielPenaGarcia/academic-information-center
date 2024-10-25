@@ -170,7 +170,7 @@ export class Repository {
    * @returns {Promise<Object>} - Update result.
    * @throws {RepositoryException} - If an error occurs while executing the query.
    */
-  async update({ setValues, conditions }) {
+  async update({ setValues, conditions}) {
     let query = QueryBuilder().update(this.table);
     if (setValues) {
       query.setValues(setValues);
