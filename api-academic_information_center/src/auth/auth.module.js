@@ -1,6 +1,6 @@
 import express from "express";
 import { AuthController } from "./auth.controller.js";
-import { serializable } from "./middleware/serializable.middleware.js";
+import { serializable } from "../middlewares/serializable.middleware.js";
 
 export const router = express.Router();
 

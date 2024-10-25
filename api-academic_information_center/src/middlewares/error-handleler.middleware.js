@@ -1,4 +1,4 @@
-import { logger } from "../config/log.config";
+import { logger } from "../config/log.config.js";
 
 export const errorHandler = (err, req, res, next) => {
   if (err) {

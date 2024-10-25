@@ -1,6 +1,8 @@
 import { StudentClassStatus } from "../entities/enums/student-class-status.enum.js";
 import { approving_grade } from "../utils/constanst/approving-grade.constant.js";
 import { classDtoToEntityMapper } from "../utils/mappers/class-dto-to-entity.mapper.js";
+import { studentClassDtoToEntityMapper } from "../utils/mappers/student-class-dto-to-entity.mapper.js";
+import { studentDtoToEntityMapper } from "../utils/mappers/student-dto-to-entity.mapper.js";
 import { where } from "../utils/query-builder/condition.builder.js";
 import { Repository, RepositoryTable } from "../utils/repository/repository.js";
 
@@ -26,15 +28,33 @@ export class StudentsClassesService{
           throw new Error(`Class with id ${classId} not found`);
         }
 
+        const conditionStudentClass = where().equal('student_id',studet.id).and().equal('class_id',clase.id).build();
+
+        const studentClass = await this.repositoryStudentClasses.findOne({condition:conditionStudentClass});
+
+        if(!studentClass){
+          throw Error(`Alumn doesn not have this class assigned`);
+        }
+
+        if(studentClass.status !='PENDING'){
+          throw Error(`Can not drop class if is not PENDING`);
+        }
+
         const conditionDelete = where().equal('student_id',studet.id).and().equal('class_id',clase.id).build();
 
         const result = await this.repositoryStudentClasses.delete({condition: conditionDelete});
-        return result.affectedRows;
+        if(result.affectedRows!=1){
+          throw Error(`Something went wrong droping class`);
+        }
+        const studentClassDTO = studentClassDtoToEntityMapper(studentClass);
+        studentClassDTO.classRef = clase;
+        studentClassDTO.student = studet;
+        return studentClassDTO;
     }
 
-    async enrollClass({studentId, classId}){
-      const classCondition = where().equal("class_id", classId).build();
-      const classDTO = await this.repositoryStudent.findOne({
+    async enrollClass({academicId, classId}){
+      const classCondition = where().equal("id", classId).build();
+      const classDTO = await this.repositoryClass.findOne({
         conditions: classCondition,
       });
       if (!classDTO){
@@ -42,17 +62,25 @@ export class StudentsClassesService{
       }
       const classRef = classDtoToEntityMapper(classDTO);
 
-      const studentCondition = where().equal("student", studentId).build();
+      const studentCondition = where().equal("academic_id", academicId).build();
       const studentDTO = await this.repositoryStudent.findOne({
         conditions: studentCondition,
       });
       if (!studentDTO){
         throw new Error("Student not found");
       }
-      const student = classDtoToEntityMapper(studentDTO);
+      const student = studentDtoToEntityMapper(studentDTO);
+
+      const studentClassCondition = where().equal('student_id',student.id).and().equal('class_id',classId).build();
+      const studentClassDTO = await this.repositoryStudentClasses.findOne({condition: studentClassCondition});
+      
+      if (studentClassDTO){
+        throw new Error("Class alerady enrolled");
+      }
+
 
       const fields = ["student_id", "class_id","status"];
-      const values = [[studentId,classId,StudentClassStatus.PENDING]];
+      const values = [[student.id,classId,StudentClassStatus.PENDING]];
       const result = await this.repositoryStudentClasses.create({
         fields: fields,
         values: values,
@@ -63,7 +91,7 @@ export class StudentsClassesService{
       return {classRef,student}
     }
 
-    async gradeStudent({studentId, classId, grade}){
+    async gradeStudent({academicId, classId, grade}){
       if(!grade){
         throw new Error("Unassigned grade");
       }
@@ -71,8 +99,9 @@ export class StudentsClassesService{
         throw new Error("Invalid grade");
       }
       
-      const classCondition = where().equal("class_id", classId).build();
-      const classDTO = await this.repositoryStudent.findOne({
+      const classCondition = where().equal("id", classId).build();
+      console.log(classCondition)
+      const classDTO = await this.repositoryClass.findOne({
         conditions: classCondition,
       });
       if (!classDTO){
@@ -80,7 +109,8 @@ export class StudentsClassesService{
       }
       const classRef = classDtoToEntityMapper(classDTO);
 
-      const studentCondition = where().equal("student", studentId).build();
+      const studentCondition = where().equal("academic_id", academicId).build();
+      console.log(studentCondition)
       const studentDTO = await this.repositoryStudent.findOne({
         conditions: studentCondition,
       });
@@ -88,6 +118,15 @@ export class StudentsClassesService{
         throw new Error("Student not found");
       }
       const student = classDtoToEntityMapper(studentDTO);
+
+      const studentClassCondition = where().equal('student_id',student.id).and().equal('class_id',classId).build();
+      console.log(studentClassCondition)
+
+      const studentClass = await this.repositoryStudentClasses.findOne({condition: studentClassCondition});
+      
+      if (!studentClass){
+        throw new Error("The student is not enrolled in said class");
+      }
 
       const values = [];
       values.push({
@@ -100,13 +139,13 @@ export class StudentsClassesService{
         value:status
       });
 
-      const conditionUpdate = where().equal('academic_id',studentId).and().equal("class_id",classId).build();
+      const conditionUpdate = where().equal('student_id',student.id).and().equal("class_id",classId).build();
       const result = await this.repositoryStudentClasses.update({setValues: values ,condition:conditionUpdate});
       return {classRef,student,grade,status}
     }
 
     #getStatusByGrade({grade}){
-      if (grade>approving_grade){
+      if (grade>=approving_grade){
         return StudentClassStatus.APPROVED
       }
       return StudentClassStatus.REJECTED

@@ -7,7 +7,7 @@ export class TeacherSubjectsController{
 
     async asignSubjectToTeacher(req,res){
         try {
-            this.#validateUser(req, res);
+            this.#validateAsignSubjectToTeacher(req);
             const { academicId,subjectId} = req.body;
             const result = await this.teacherSubjecstService.create({academicId,subjectId});
             res.status(200).json(result);
@@ -19,13 +19,14 @@ export class TeacherSubjectsController{
           }
     }
 
-    #validateUser(req, res) {
-        const userRequesting = req.user;
-        if (userRequesting.role !== UserRole.ADMINISTRATOR) {
-          throw new Error("Forbidden");
-        }
-        if (userRequesting.academicId !== req.params.academicId) {
-          throw new Error("Forbidden");
-        }
+    #validateAsignSubjectToTeacher(req) {
+      const userRequesting = req.user;
+      if(userRequesting.role === UserRole.TEACHER){
+          if(userRequesting.academicId !== req.body.academicId){
+            throw new Error("Forbidden");
+          }
+      }else if(userRequesting.role !== UserRole.ADMINISTRATOR){
+        throw new Error("Forbidden");
+      }
       }
 }

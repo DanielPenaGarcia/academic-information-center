@@ -12,7 +12,6 @@ export function createAcademicEmail({ name, fatherLastName, academicId }) {
     }
     const domain = 'potros.itson.edu.mx';
     const id = removeFirstDigits(academicId, 5);
-    console.log(id);
     let firstName = hasSpaces(name) ? name.split(' ')[0] : name;
     firstName = latiniseString(firstName).toLowerCase();
     let LastName = hasSpaces(fatherLastName) ? fatherLastName.split(' ')[0] : fatherLastName;

@@ -3,7 +3,6 @@ import { latiniseString } from "./latinise-string.function.js";
 export function createAcademicPassword({ name, fatherLastName, academicId }) {
   const id = removeFirstDigits(academicId, 5);
   let firstName = hasSpaces(name) ? name.split(" ")[0] : name;
-  console.log(firstName);
   firstName = latiniseString(firstName).toLowerCase();
   let LastName = hasSpaces(fatherLastName)
   ? fatherLastName.split(" ")[0]

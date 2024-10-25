@@ -42,9 +42,11 @@ export class TeacherSubjectsService{
           }
         const teacherSubjectCreated = await this.teacherSubjectRepository.findOneById(result.insertId);
         
-        return teacherSubjectCreated;
+        const res = {
+            teacher: teacher.academic_id,
+            subject: subject.name
+          }
 
-
-
+        return res;
     }
 }
