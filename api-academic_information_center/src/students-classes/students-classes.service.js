@@ -1,6 +1,7 @@
 import { StudentClassStatus } from "../entities/enums/student-class-status.enum.js";
 import { approving_grade } from "../utils/constanst/approving-grade.constant.js";
 import { classDtoToEntityMapper } from "../utils/mappers/class-dto-to-entity.mapper.js";
+import { studentClassDtoToEntityMapper } from "../utils/mappers/student-class-dto-to-entity.mapper.js";
 import { studentDtoToEntityMapper } from "../utils/mappers/student-dto-to-entity.mapper.js";
 import { where } from "../utils/query-builder/condition.builder.js";
 import { Repository, RepositoryTable } from "../utils/repository/repository.js";
@@ -27,12 +28,28 @@ export class StudentsClassesService{
           throw new Error(`Class with id ${classId} not found`);
         }
 
+        const conditionStudentClass = where().equal('student_id',studet.id).and().equal('class_id',clase.id).build();
+
+        const studentClass = await this.repositoryStudentClasses.findOne({condition:conditionStudentClass});
+
+        if(!studentClass){
+          throw Error(`Alumn doesn not have this class assigned`);
+        }
+
+        if(studentClass.status !='PENDING'){
+          throw Error(`Can not drop class if is not PENDING`);
+        }
+
         const conditionDelete = where().equal('student_id',studet.id).and().equal('class_id',clase.id).build();
 
-        //TODO: Consultar a la clase eliminada
         const result = await this.repositoryStudentClasses.delete({condition: conditionDelete});
-        //TODO: Regresar la clase eliminada
-        return result.affectedRows;
+        if(result.affectedRows!=1){
+          throw Error(`Something went wrong droping class`);
+        }
+        const studentClassDTO = studentClassDtoToEntityMapper(studentClass);
+        studentClassDTO.classRef = clase;
+        studentClassDTO.student = studet;
+        return studentClassDTO;
     }
 
     async enrollClass({academicId, classId}){
