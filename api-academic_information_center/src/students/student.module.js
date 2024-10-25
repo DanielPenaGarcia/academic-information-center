@@ -1,5 +1,10 @@
 import express from "express";
 import { StudentController } from "./student.controller.js";
+import { serializable } from "../middlewares/serializable.middleware.js";
+
+const middlewares = (req, res, next) => {
+  serializable(req, res, next);
+};
 
 export const router = express.Router();
 
@@ -12,5 +17,6 @@ router.post(
 
 router.patch(
   "/student",
+  middlewares,
   studentsController.updateStudent.bind(studentsController)
 );

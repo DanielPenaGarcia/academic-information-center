@@ -97,6 +97,11 @@ export class TeachersService {
     const conditionUpdate = where().equal('id', teacher.id).build();
 
     const result = await this.teachersRepository.update({ setValues: values, conditions: conditionUpdate });
-    return result;
+
+    if(result.affectedRows!=1){
+      throw Error("Something went wrong with the update");
+    }
+
+    return await this.teachersRepository.findOne({ condition: condition });;
   }
 }

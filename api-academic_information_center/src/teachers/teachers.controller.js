@@ -24,7 +24,7 @@ export class TeacherController{
 
     async updateTeacher(req,res){
         try {
-            //this.#validateUser(req, res);
+            this.#validateUpdateTeacherByTeacherOrAdmin(req);
             const { academicId, names, fatherLastName, motherLastName, curp} = req.body;
             const result = await this.teacherService.updateTeacher({academicId,names,fatherLastName,motherLastName,curp});
             res.status(200).json(result);
@@ -34,6 +34,17 @@ export class TeacherController{
             }
             res.status(500).json({ error: error.message });
           }
+    }
+
+    #validateUpdateTeacherByTeacherOrAdmin(req){
+      const userRequesting = req.user;
+      if(userRequesting.role === UserRole.TEACHER){
+          if(userRequesting.academicId !== req.body.academicId){
+            throw new Error("Forbidden");
+          }
+      }else if(userRequesting.role !== UserRole.ADMINISTRATOR){
+        throw new Error("Forbidden");
+      }
     }
 
     #validateUser(req, res) {

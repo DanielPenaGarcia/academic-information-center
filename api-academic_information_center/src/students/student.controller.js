@@ -28,9 +28,7 @@ export class StudentController {
 
   async updateStudent(req, res) {
     try {
-      //TODO: Cambiar validacion generica por una especifica
-      //TODO: Regresar la entidad cambiada
-      this.#validateUser(req, res);
+      this.#validateUpdateStudentByStudentOrAdmin(req, res);
       const { academicId, names, fatherLastName, motherLastName, curp } =
         req.body;
       const result = await this.studentService.updateStudentProfile({
@@ -49,12 +47,13 @@ export class StudentController {
     }
   }
 
-  #validateUser(req, res) {
+  #validateUpdateStudentByStudentOrAdmin(){
     const userRequesting = req.user;
-    if ((userRequesting.role === UserRole.STUDENT) && (userRequesting.academicId !== req.body.academicId)) {
-      throw new Error("Forbidden");
-    }
-    if (userRequesting.role !== UserRole.ADMINISTRATOR) {
+    if(userRequesting.role === UserRole.STUDENT){
+        if(userRequesting.academicId !== req.body.academicId){
+          throw new Error("Forbidden");
+        }
+    }else if(userRequesting.role !== UserRole.ADMINISTRATOR){
       throw new Error("Forbidden");
     }
   }

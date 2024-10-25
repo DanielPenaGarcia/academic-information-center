@@ -8,7 +8,7 @@ export class StudentsClassesController {
 
   async dropClass(req, res) {
     try {
-      this.#validateUser(req, res);
+      this.#validateDropStudentClassByStudentOrAdmin(req, res);
       const { academic_id, classId } = req.body;
 
       const classDroped = await this.studentsClassesService.dropClass({
@@ -19,7 +19,6 @@ export class StudentsClassesController {
       if (!classDroped) {
         return res.status(500).json({ message: `Error droping class` });
       }
-      //TODO: Regresar el objeto de la clase eliminada
       return res.status(200).json(classDroped);
     } catch (error) {
       if (error.message === "Forbidden") {
@@ -29,6 +28,16 @@ export class StudentsClassesController {
     }
   }
 
+  #validateDropStudentClassByStudentOrAdmin(){
+    const userRequesting = req.user;
+    if(userRequesting.role === UserRole.STUDENT){
+        if(userRequesting.academicId !== req.body.academicId){
+          throw new Error("Forbidden");
+        }
+    }else if(userRequesting.role !== UserRole.ADMINISTRATOR){
+      throw new Error("Forbidden");
+    }
+  }
   async enrollClass(req, res) {
     try {
       this.#validateUser(req, res);

@@ -64,7 +64,7 @@ export class StudentsReviewsService{
     const studentReview = await this.studentsReviewsRespository.findOneById(result.insertId);
     const studentReviewDTO = studentReviewDtoToEntityMapper(studentReview);
     studentReviewDTO.classRef = clase;
-    studentReviewDTO.student = studet;
+    studentReviewDTO.student = studentAcademicId;
     return studentReviewDTO;
     }
 }
