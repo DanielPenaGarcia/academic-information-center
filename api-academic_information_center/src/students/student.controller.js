@@ -8,7 +8,7 @@ export class StudentController {
 
   async createStudent(req, res) {
     try {
-      this.#validateAdmin(req);
+      //this.#validateAdmin(req);
       const { names, fatherLastName, motherLastName, curp, photo } = req.body;
       const result = await this.studentService.createStudent({
         names,
