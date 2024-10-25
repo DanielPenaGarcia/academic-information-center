@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS administrators (
     FOREIGN KEY (academic_id) REFERENCES academic_ids(academic_id)
 );
 
-CREATE TABLE IF NOT EXISTS cours_maps (
+CREATE TABLE IF NOT EXISTS course_maps (
     id INT AUTO_INCREMENT PRIMARY KEY,
     semesters INT NOT NULL,
     year INT NOT NULL,
@@ -91,11 +91,11 @@ CREATE TABLE IF NOT EXISTS teachers_subjects (
 CREATE TABLE IF NOT EXISTS classes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     subject_id INT NOT NULL,
-    teacher_id INT NOT NULL,
+    teacher_id INT,
     start_time VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     duration INT NOT NULL,
-    days VARCHAR(255) NOT NULL,
+    days VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );

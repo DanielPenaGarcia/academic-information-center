@@ -3,5 +3,6 @@ export class BusinessException extends Error {
     super(message);
     this.error = error;
     this.name = 'BusinessException';
+    this.statusCode = 400;
   }
 }

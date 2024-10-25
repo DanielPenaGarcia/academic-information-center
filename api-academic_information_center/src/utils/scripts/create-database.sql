@@ -2,9 +2,7 @@ CREATE DATABASE IF NOT EXISTS academic_information_center;
 
 USE academic_information_center;
 
-CREATE TABLE IF NOT EXISTS academic_ids (
-    academic_id VARCHAR(255) PRIMARY KEY
-);
+CREATE TABLE IF NOT EXISTS academic_ids (academic_id VARCHAR(255) PRIMARY KEY);
 
 CREATE TABLE IF NOT EXISTS students (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -91,11 +89,11 @@ CREATE TABLE IF NOT EXISTS teachers_subjects (
 CREATE TABLE IF NOT EXISTS classes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     subject_id INT NOT NULL,
-    teacher_id INT NOT NULL,
+    teacher_id INT,
     start_time VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     duration INT NOT NULL,
-    days VARCHAR(255) NOT NULL,
+    days VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -105,6 +103,7 @@ CREATE TABLE IF NOT EXISTS students_classes (
     student_id INT NOT NULL,
     class_id INT NOT NULL,
     grade DECIMAL(5, 2),
+    # TODO: FAILED instead of REJECTED and set a default value
     status ENUM("PENDING", "APPROVED", "REJECTED") NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -153,7 +152,6 @@ CREATE TABLE IF NOT EXISTS admins_log (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Crear un TRIGGER para generar academic_id automáticamente al insertar un estudiante
 DELIMITER //
 CREATE TRIGGER before_insert_students
 BEFORE INSERT ON students
