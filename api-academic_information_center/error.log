@@ -1,0 +1,6 @@
+{"level":"error","message":{"method":"POST","name":"Unauthorized","path":"/api/course-map","statusCode":401},"timestamp":"2024-10-25T04:40:52.563Z"}
+{"level":"error","message":{"method":"POST","name":"Unauthorized","path":"/api/course-map","statusCode":401},"timestamp":"2024-10-25T04:56:01.240Z"}
+{"level":"error","message":{"method":"POST","name":"Unauthorized","path":"/api/course-map","statusCode":401},"timestamp":"2024-10-25T05:02:30.129Z"}
+{"level":"error","message":{"method":"POST","name":"Unauthorized","path":"/api/course-map","statusCode":401},"timestamp":"2024-10-25T05:30:00.345Z"}
+{"level":"error","message":{"method":"POST","name":"BusinessException","path":"/api/course-map","statusCode":400},"timestamp":"2024-10-25T05:31:04.014Z"}
+{"level":"error","message":{"method":"POST","name":"Unauthorized","path":"/api/course-map","statusCode":401},"timestamp":"2024-10-25T05:31:45.527Z"}
