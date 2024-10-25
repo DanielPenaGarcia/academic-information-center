@@ -11,7 +11,7 @@ export class CourseMapsService {
     async createCourseMap({ semesters, year }){
         const courseMaps = await this.findCourseMapsByYear({ year });
         if(courseMaps.length > 0){
-            throw new BusinessException('Course map already exists for the year');
+            throw new BusinessException('El mapa curricular ya existe para el año proporcionado');
         }
 
         if(semesters <= 0){

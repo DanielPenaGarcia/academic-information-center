@@ -1,0 +1,10 @@
+{
+  "level": "error",
+  "message": {
+    "method": "POST",
+    "name": "BusinessException",
+    "path": "/api/course-map",
+    "statusCode": 400
+  },
+  "timestamp": "2024-10-25T02:30:06.836Z"
+}
