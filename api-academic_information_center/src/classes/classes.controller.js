@@ -42,7 +42,7 @@ export class ClassesController {
     }
   }
 
-  async findScheduleByStudentAcademicId(req, res) {
+  async findScheduleByStudentAcademicId(req, res, next) {
     try {
       this.#validateFindScheduleByStudentByAcademicId(req, res);
       const { academicId } = req.params;
@@ -53,10 +53,7 @@ export class ClassesController {
       );
       res.json(classes);
     } catch (error) {
-      if (error.message === "Forbidden") {
-        return res.status(403).json({ error: "Forbidden" });
-      }
-      res.status(500).json({ error: error.message });
+      next(error);
     }
   }
 
@@ -73,7 +70,7 @@ export class ClassesController {
     }
   }
 
-  async findScheduleByTeacherAcademicId(req, res) {
+  async findScheduleByTeacherAcademicId(req, res, next) {
     try {
       this.#validateFindScheduleByTeacherAcademicIdRequest(req, res);
       const { academicId } = req.params;
@@ -84,10 +81,7 @@ export class ClassesController {
       );
       res.json(classes);
     } catch (error) {
-      if (error.message === "Forbidden") {
-        return res.status(403).json({ error: "Forbidden" });
-      }
-      res.status(500).json({ error: error.message });
+      next(error);
     }
   }
 
