@@ -5,7 +5,6 @@ import { guard } from "./middlewares/guard.middleware.js";
 import { errorHandler } from "./middlewares/error-handleler.middleware.js";
 import { refreshToken } from "./middlewares/refresh-token.middleware.js";
 import { API_NAME } from "./utils/constanst/api-name.constant.js";
-import { API_VERSION } from "./utils/constanst/api-version.constant.js";
 import { router as AuthRouter } from "./auth/auth.module.js";
 import { router as StudentsRouter } from "./students/student.module.js";
 import { router as TeacherRouter } from "./teachers/teachers.module.js";

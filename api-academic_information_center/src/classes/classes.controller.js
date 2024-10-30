@@ -1,4 +1,5 @@
 import { UserRole } from "../entities/enums/roles.enum.js";
+import { ForbiddenException } from "../utils/exceptions/forbidden.exception.js";
 import { ClassesService } from "./classes.service.js";
 
 export class ClassesController {
@@ -42,7 +43,7 @@ export class ClassesController {
     }
   }
 
-  async findScheduleByStudentAcademicId(req, res) {
+  async findScheduleByStudentAcademicId(req, res, next) {
     try {
       this.#validateFindScheduleByStudentByAcademicId(req, res);
       const { academicId } = req.params;
@@ -53,27 +54,21 @@ export class ClassesController {
       );
       res.json(classes);
     } catch (error) {
-      if (error.message === "Forbidden") {
-        return res.status(403).json({ error: "Forbidden" });
-      }
-      res.status(500).json({ error: error.message });
+      next(error);
     }
   }
 
   #validateFindScheduleByStudentByAcademicId(req, res) {
     const userRequesting = req.user;
-    if (userRequesting.role !== UserRole.STUDENT) {
-      throw new Error("Forbidden");
+    if (userRequesting.role !== UserRole.STUDENT || userRequesting.role !== UserRole.ADMINISTRATOR) {
+      throw new ForbiddenException("No tienes permisos para realizar esta acción");
     }
-    if (userRequesting.academicId !== req.params.academicId) {
-      throw new Error("Forbidden");
-    }
-    if (userRequesting.role === UserRole.TEACHER) {
-      throw new Error("Forbidden");
+    if (userRequesting.role === UserRole.STUDENT && userRequesting.academicId !== req.params.academicId) {
+      throw new ForbiddenException("No tienes permisos para realizar esta acción");
     }
   }
 
-  async findScheduleByTeacherAcademicId(req, res) {
+  async findScheduleByTeacherAcademicId(req, res, next) {
     try {
       this.#validateFindScheduleByTeacherAcademicIdRequest(req, res);
       const { academicId } = req.params;
@@ -84,10 +79,7 @@ export class ClassesController {
       );
       res.json(classes);
     } catch (error) {
-      if (error.message === "Forbidden") {
-        return res.status(403).json({ error: "Forbidden" });
-      }
-      res.status(500).json({ error: error.message });
+      next(error);
     }
   }
 
@@ -111,20 +103,17 @@ export class ClassesController {
   #validateAssignTeacher(req) {
     const userRequesting = req.user;
     if (userRequesting.role != UserRole.ADMINISTRATOR) {
-      throw new Error("Forbidden");
+      throw new ForbiddenException("No tienes permisos para realizar esta acción");
     }
   }
 
   #validateFindScheduleByTeacherAcademicIdRequest(req, res) {
     const userRequesting = req.user;
-    if (userRequesting.role !== UserRole.TEACHER) {
-      throw new Error("Forbidden");
+    if (userRequesting.role !== UserRole.TEACHER || userRequesting.role !== UserRole.ADMINISTRATOR) {
+      throw new ForbiddenException("No tienes permisos para realizar esta acción");
     }
-    if (userRequesting.academicId !== req.params.academicId) {
-      throw new Error("Forbidden");
-    }
-    if (userRequesting.role === UserRole.STUDENT) {
-      throw new Error("Forbidden");
+    if (userRequesting.role === UserRole.TEACHER && userRequesting.academicId !== req.params.academicId) {
+      throw new ForbiddenException("No tienes permisos para realizar esta acción");
     }
   }
 }
