@@ -15,7 +15,7 @@ export class CourseMapsService {
         }
 
         if(semesters <= 0){
-            throw new BusinessException('Semesters must be greater than 0');
+            throw new BusinessException('La cantidad de semestres debe ser mayor a 0');
         }
         const fields = ['semesters', 'year'];
         const values = [[semesters, year]];
@@ -24,7 +24,7 @@ export class CourseMapsService {
             values: values
         });
         if(result.affectedRows === 0){
-            throw new Error('Error creating course map');
+            throw new BusinessException('Error creando el mapa curricular');
         }
         const courseMapDTO = await this.courseMapsRepository.findOneById(result.insertId);
         const courseMap = courseMapDtoToEntityMapper(courseMapDTO);

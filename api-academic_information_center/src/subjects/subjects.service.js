@@ -23,17 +23,17 @@ export class SubjectsService {
         throw new BusinessException(`Subject ${name} already exists in this course map`);
     }
     if(hoursPerWeek <1){
-      throw new BusinessException(`Hours per week must be greater than 0`);
+      throw new BusinessException(`Las horas por semana deben ser mayores a 0`);
     }
     if(semester <1){
-      throw new BusinessException(`Semester must be greater than 0`);
+      throw new BusinessException(`La cantidad de semestres debe ser mayor a 0`);
     }
     const result = await this.subjectsRepository.create({
       fields: fields,
       values: values,
     });
     if (result.affectedRows === 0) {
-      throw new Error("Error creating subject");
+      throw new BusinessException("Error creando la materia");
     }
     const subjectDTO = await this.subjectsRepository.findOneById(result.insertId);
     const subject = subjectDtoToEntityMapper(subjectDTO);
@@ -45,7 +45,7 @@ export class SubjectsService {
     const condition = where().equal("id", id).build();
     const subjectDTO = await this.subjectsRepository.findOneById(id);
     if (!subjectDTO) {
-      throw new BusinessException("Subject not found");
+      throw new BusinessException("No se encontró la materia con el id proporcionado");
     }
     const subjectsRepeated = await this.subjectsRepository.find({
       conditions: where()
@@ -55,13 +55,13 @@ export class SubjectsService {
         .build(),
     });
     if (subjectsRepeated.length > 0) {
-        throw new BusinessException(`Subject ${name} already exists in this course map`);
+        throw new BusinessException(`La materia ${name} ya existe en este mapa curricular`);
     }
     if(hoursPerWeek <1){
-      throw new BusinessException(`Hours per week must be greater than 0`);
+      throw new BusinessException(`Las horas por semana deben ser mayores a 0`);
     }
     if(semester <1){
-      throw new BusinessException(`Semester must be greater than 0`);
+      throw new BusinessException(`La cantidad de semestres debe ser mayor a 0`);
     }
     if(name){
       values.push({

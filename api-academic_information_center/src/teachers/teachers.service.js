@@ -1,3 +1,4 @@
+import { BusinessException } from "../utils/exceptions/business.exception.js";
 import { createAcademicEmail } from "../utils/functions/create-academic-email.function.js";
 import { createAcademicPassword } from "../utils/functions/create-academic-password.function.js";
 import { teacherDtoToEntityMapper } from "../utils/mappers/teacher-dto-to-entity.mapper.js";
@@ -19,7 +20,7 @@ export class TeachersService {
     });
 
     if (curp.length !== 18) {
-      throw new Error("CURP must have 18 characters");
+      throw new BusinessException("La curp debe contener 18 caracteres");
     } 
 
     const curpExists = await this.teachersRepository.findOne({
@@ -27,11 +28,11 @@ export class TeachersService {
     });
     
     if(curpExists){ 
-      throw new Error("CURP already exists");
+      throw new BusinessException("La CURP corresponde a un usuario existente");
     }
     
     if (result.affectedRows === 0) {
-      throw new Error("Error creating teacher");
+      throw new BusinessException("Error creando el maestro");
     }
     const teacherDTO = await this.teachersRepository.findOneById(
       result.insertId
@@ -56,7 +57,7 @@ export class TeachersService {
       conditions: where().equal("id", teacher.id).build(),
     });
     if (result.affectedRows === 0) {
-      throw new Error("Error updating teacher");
+      throw new Error("Error actualizando el maestro");
     }
     teacher.email = email;
     teacher.password = password;
@@ -71,7 +72,7 @@ export class TeachersService {
 
     const teacher = await this.teachersRepository.findOne({ condition: condition });
     if (!teacher) {
-      throw new Error(`Teacher with academic id ${academicId} not found`);
+      throw new BusinessException(`El maestro con el id ${academicId} no existe`);
     }
 
     if (names) {
@@ -99,7 +100,7 @@ export class TeachersService {
       });
     }
     if (values.length == 0) {
-      throw Error("Error empty values");
+      throw BusinessException("Los campos están vacíos");
     }
 
     const conditionUpdate = where().equal('id', teacher.id).build();
@@ -107,7 +108,7 @@ export class TeachersService {
     const result = await this.teachersRepository.update({ setValues: values, conditions: conditionUpdate });
 
     if(result.affectedRows!=1){
-      throw Error("Something went wrong with the update");
+      throw BusinessException("Error al actualizar el maestro");
     }
 
     return await this.teachersRepository.findOne({ condition: condition });;

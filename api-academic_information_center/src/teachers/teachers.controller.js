@@ -15,10 +15,7 @@ export class TeacherController{
         const result = await this.teacherService.createTeacher({ names, fatherLastName, motherLastName, curp, photo })
         res.status(200).json(result);
       } catch (error) {
-        if (error.message === "Forbidden") {
-          return res.status(403).json({ error: "Forbidden" });
-        }
-        res.status(500).json({ error: error.message });
+        next(error);
       }
 }
 
@@ -29,10 +26,7 @@ export class TeacherController{
             const result = await this.teacherService.updateTeacher({academicId,names,fatherLastName,motherLastName,curp});
             res.status(200).json(result);
           } catch (error) {
-            if (error.message === "Forbidden") {
-              return res.status(403).json({ error: "Forbidden" });
-            }
-            res.status(500).json({ error: error.message });
+            next(error);
           }
     }
 

@@ -24,14 +24,14 @@ export class ClassesService {
     const values = [[startTime, description, duration, days, subjectId, teacherId]];
 
     if (duration < 0) {
-      throw new Error("Duration must be greater than 0");
+      throw new BusinessException("La duración de la clase debe ser mayor a 0");
     }
     const result = await this.classesRepository.create({
       fields: fields,
       values: values,
     });
     if (result.affectedRows === 0) {
-      throw new Error("Error creating class");
+      throw new BusinessException("Error creando la clase");
     }
     const classDTO = await this.classesRepository.findOneById(
       result.insertId
@@ -44,7 +44,7 @@ export class ClassesService {
     const values = [];
 
     if (duration < 0) {
-      throw new BusinessException("Duration must be greater than 0");
+      throw new BusinessException("La duración de la clase debe ser mayor a 0");
     }
     
     const classCondition = where().equal("id", id).build();
@@ -52,7 +52,7 @@ export class ClassesService {
       conditions: classCondition,
     });
     if (!classDTO) {
-      throw new BusinessException("Class not found");
+      throw new BusinessException("No se encontró la clase con el id proporcionado");
     }
 
     if (startTime) {
@@ -89,7 +89,7 @@ export class ClassesService {
     const conditionUpdate = where().equal("id", classDTO.id).build();
     const result = await this.classesRepository.update({setValues: values, conditions: conditionUpdate});
     if (result.affectedRows === 0) {
-      throw new Error("Error updating class");
+      throw new BusinessException("No se pudo actualizar la clase");
     }
 
     let classEntity = classDtoToEntityMapper(classDTO);
@@ -102,7 +102,7 @@ export class ClassesService {
       conditions: studentCondition,
     });
     if (!studentDTO) {
-      throw new BusinessException("Student not found");
+      throw new BusinessException("No se encontró el estudiante con el id proporcionado");
     }
     const student = studentDtoToEntityMapper(studentDTO);
     const classesStudentsCondition = where()
@@ -144,7 +144,7 @@ export class ClassesService {
       conditions: teacherCondition,
     });
     if (!teacherDTO) {
-      throw new BusinessException("Teacher not found");
+      throw new BusinessException("No se encontró el maestro con el id proporcionado");
     }
     const teacher = teacherDtoToEntityMapper(teacherDTO);
     const teachersClassesCondition = where()
