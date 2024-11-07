@@ -29,10 +29,22 @@ router.post(
   authController.postLoginAdministrator.bind(authController)
 );
 
-router.delete(`${authPath}/logout`, authController.deleteLogout.bind(authController));
+// router.post(
+//   `${authPath}/login/student`,
+//   middlewares,
+//   authController.postLoginStudent.bind(authController)
+// );
 
-router.get(
-  `${authPath}/user`,
-  middlewares,
-  authController.getUser.bind(authController)
-);
+// router.post(
+//   `${authPath}/login/administrator`,
+//   middlewares,
+//   authController.postLoginAdministrator.bind(authController)
+// );
+
+// router.delete(`${authPath}/logout`, authController.deleteLogout.bind(authController));
+
+// router.get(
+//   `${authPath}/user`,
+//   middlewares,
+//   authController.getUser.bind(authController)
+// );
