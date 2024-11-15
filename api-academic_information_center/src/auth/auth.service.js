@@ -1,78 +1,35 @@
-import { administratorDtoToEntityMapper } from "../utils/mappers/administrator-dto-to-entity.mapper.js";
-import { studentDtoToEntityMapper } from "../utils/mappers/student-dto-to-entity.mapper.js";
-import { teacherDtoToEntityMapper } from "../utils/mappers/teacher-dto-to-entity.mapper.js";
-import { where } from "../utils/query-builder/condition.builder.js";
-import { Repository, RepositoryTable } from "../utils/repository/repository.js";
+import { EntityNotFoundError } from "typeorm";
+import { dataSource } from "../config/orm.config.js";
 
 export class AuthService {
   constructor() {
-    this.teacherRepository = new Repository(RepositoryTable.TEACHER);
-    this.studentRepository = new Repository(RepositoryTable.STUDENT);
-    this.administratorRepository = new Repository(
-      RepositoryTable.ADMINISTRATOR
-    );
+    this.administratorRepository = dataSource.getRepository('Administrator');
   }
 
   async teacherLogin({ email, password }) {
-    const condition = where()
-      .equal("email", email)
-      .and()
-      .equal("password", password)
-      .build();
-    const teacherDTO = await this.teacherRepository.findOne({
-      conditions: condition,
-    });
-    const teacher = teacherDtoToEntityMapper(teacherDTO);
-    return teacher;
   }
 
   async studentLogin({ email, password }) {
-    const condition = where()
-      .equal("email", email)
-      .and()
-      .equal("password", password)
-      .build();
-    const studentDTO = await this.studentRepository.findOne({
-      conditions: condition,
-    });
-    const student = studentDtoToEntityMapper(studentDTO);
-    return student;
   }
 
-  async administratorLogin({ email, password }) {
-    const condition = where()
-      .equal("email", email)
-      .and()
-      .equal("password", password)
-      .build();
-    const administratorDTO = await this.administratorRepository.findOne({
-      conditions: condition,
+  async administratorLogin({ academicId, password }) {
+    const administrator = await this.administratorRepository.findOne({
+      where: {
+        password: password,
+        academic: {
+          academicId: academicId,
+        },
+      },
+      relations: {
+        academic: true,
+      },
     });
-    const administrator = administratorDtoToEntityMapper(administratorDTO);
+    if (!administrator) {
+      throw new EntityNotFoundError('Administrator not found');
+    }
     return administrator;
   }
 
   async findUserByAcademicId({ academicId }) {
-    const teacherDTO = await this.teacherRepository.findOne({
-      conditions: where().equal("academic_id", academicId).build(),
-    });
-    if (teacherDTO) {
-      return teacherDtoToEntityMapper(teacherDTO);
-    }
-
-    const studentDTO = await this.studentRepository.findOne({
-      conditions: where().equal("academic_id", academicId).build(),
-    });
-    if (studentDTO) {
-      return studentDtoToEntityMapper(studentDTO);
-    }
-
-    const administratorDTO = await this.administratorRepository.findOne({
-      conditions: where().equal("academic_id", academicId).build(),
-    });
-    if (administratorDTO) {
-      return administratorDtoToEntityMapper(administratorDTO);
-    }
-    return null;
   }
 }
