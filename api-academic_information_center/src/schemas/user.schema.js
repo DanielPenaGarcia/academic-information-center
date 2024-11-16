@@ -1,6 +1,7 @@
 import { EntitySchema } from "typeorm";
 import { User } from "../entities/user.entity.js";
 import { role } from "../entities/enums/role.enum.js";
+import { createAcademicEmail } from "../utils/functions/create-academic-email.function.js";
 
 export const UserSchema = new EntitySchema({
     name: 'User',
@@ -24,10 +25,14 @@ export const UserSchema = new EntitySchema({
             nullable: false,
         },
         academicId: {
+            name: 'academic_id',
             type: 'varchar',
-            length: 255,
             nullable: true,
             unique: true,
+        },
+        photo: {
+            type: 'blob',
+            nullable: true,
         },
         createdAt: {
             name: 'created_at',

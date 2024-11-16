@@ -26,6 +26,11 @@ export const TeacherSchema = new EntitySchema({
             type: 'varchar',
             length: 100,
             name: 'mother_last_name'
+        },
+        role: {
+            type: 'enum',
+            enum: role,
+            default: role.TEACHER
         }
     },
     discriminatorValue: role.TEACHER

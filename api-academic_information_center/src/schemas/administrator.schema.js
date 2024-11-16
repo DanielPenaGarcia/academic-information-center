@@ -26,6 +26,11 @@ export const AdministratorSchema = new EntitySchema({
             type: 'varchar',
             length: 100,
             name: 'mother_last_name'
+        },
+        role: {
+            type: 'enum',
+            enum: role,
+            default: role.ADMIN
         }
     },
     discriminatorValue: role.ADMIN

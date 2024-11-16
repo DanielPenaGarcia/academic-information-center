@@ -56,6 +56,21 @@ export const SubjectSchema = new EntitySchema({
                     referencedColumnName: 'id'
                 }
             },
+        },
+        SubjectsRequirements: {
+            target: 'Subject',
+            type: 'many-to-many',
+            joinTable: {
+                name: 'subjects_requirements',
+                joinColumn: {
+                    name: 'subject_id',
+                    referencedColumnName: 'id'
+                },
+                inverseJoinColumn: {
+                    name: 'requirement_id',
+                    referencedColumnName: 'id'
+                }
+            },
         }
     }
 })

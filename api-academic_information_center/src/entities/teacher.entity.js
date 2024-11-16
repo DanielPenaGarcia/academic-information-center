@@ -4,4 +4,5 @@ export class Teacher extends User {
     names;
     fatherLastName;
     motherLastName;
+    role;
 }

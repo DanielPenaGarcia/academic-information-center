@@ -4,4 +4,5 @@ export class Administrator extends User {
     names;
     fatherLastName;
     motherLastName;
+    role;
 }

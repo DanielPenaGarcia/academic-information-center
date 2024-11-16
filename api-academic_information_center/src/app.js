@@ -1,54 +1,38 @@
-// import express from "express";
-// import cors from "cors";
-// import cookieParser from "cookie-parser";
-// import { guard } from "./middlewares/guard.middleware.js";
-// import { errorHandler } from "./middlewares/error-handleler.middleware.js";
-// import { refreshToken } from "./middlewares/refresh-token.middleware.js";
-// import { API_NAME } from "./utils/constanst/api-name.constant.js";
-// import { router as AuthRouter } from "./auth/auth.module.js";
-// import { router as StudentsRouter } from "./students/student.module.js";
-// import { router as TeacherRouter } from "./teachers/teachers.module.js";
-// import { router as CourseMapsRouter } from "./course-maps/course-map.module.js";
-// import { router as SubjectsRouter } from "./subjects/subjects.module.js";
-// import { router as ClassesRouter } from "./classes/classes.module.js";
-// import { router as StudentClasses } from "./students-classes/students-classes.module.js";
-// import { router as StudentsReviews } from "./students-reviews/students-reviews.module.js";
-// import { router as ClassesReview } from "./classes-review/classes-review.module.js";
-// import { router as TeachersSubjects } from "./teachers-subjects/teachers-subjects.module.js";
-
-import { AuthService } from "./auth/auth.service.js";
 import { dataSource } from "./config/orm.config.js";
+import { excecuteAllTriggers } from "./utils/functions/excecute-all-triggers.function.js";
+import express from "express";
 
-// const api = `/${API_NAME}`;
+//Constants
+import { API_NAME } from "./utils/constanst/api-name.constant.js";
+import { API_VERSION } from "./utils/constanst/api-version.constant.js";
 
-// const app = express();
+//Routers
+import { router as AuthRouter } from "./auth/auth.module.js";
 
-// app.use(cors());
-// app.use(express.json());
-// app.use(cookieParser());
-// app.use(guard);
-// app.use(refreshToken);
-// app.use(guard);
-// app.use(api, AuthRouter);
-// app.use(api, StudentsRouter);
-// app.use(api, TeacherRouter);
-// app.use(api, CourseMapsRouter);
-// app.use(api, SubjectsRouter);
-// app.use(api, ClassesRouter);
-// app.use(api, StudentClasses);
-// app.use(api, StudentsReviews);
-// app.use(api, ClassesReview);
-// app.use(api, TeachersSubjects);
-// app.use(errorHandler);
-// const PORT = process.env.PORT || 3001;
+//Middlewares
+import { errorHandler } from "./middlewares/error-handleler.middleware.js";
+
+//API
+const API_URL = `/${API_NAME}/${API_VERSION}`
+const PORT = process.env.PORT || 3000;
+
+//App
+const app = express();
+
+//Middlewares
+app.use(express.json());
+
+//Routers
+app.use(API_URL, AuthRouter);
+
+//Error Handler
+app.use(errorHandler);
+
+//Database
 await dataSource.initialize();
-console.log('Database is connected');
-// app.listen(PORT, () => {
-//   console.log(`Server is running in http://localhost:${PORT}`);
-// });
+await excecuteAllTriggers(dataSource);
 
-// const authService = new AuthService();
-
-// const user = await authService.login({academicId: '000000001', password: '1234'});
-
-// console.log(user);
+//Server
+app.listen(PORT, () => {
+  console.log(`http://localhost:${PORT}/${API_NAME}/${API_VERSION}`);
+});
