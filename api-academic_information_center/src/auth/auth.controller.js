@@ -15,94 +15,18 @@ export class AuthController {
     this.authService = new AuthService();
   }
 
-  async getUser(req, res, next) {
+  async postLoging(req, res, next) {
     try {
-      const { academicId, token } = req.user;
-      const user = await this.authService.findUserByAcademicId({ academicId });
-      if (!user) {
-        throw new NotFoundException("User is not logged in");
-      }
-      user.role = getUserRole(user);
-      user.token = token;
-      return res.status(200).send(user);
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  async deleteLogout(req, res) {
-    res.clearCookie(TOKEN_COOKIE);
-    res.clearCookie(REFRESH_TOKEN_COOKIE);
-    return res.status(200).send({});
-  }
-
-  async postLoginTeacher(req, res, next) {
-    try {
-      const { email, password } = req.body;
-      const teacher = await this.authService.teacherLogin({ email, password });
-      if (!teacher) {
-        throw new NotFoundException("Teacher not found");
-      }
-      const role = getUserRole(teacher);
-      const token = generateToken({ academicId: teacher.academicId, role });
-      res.cookie(TOKEN_COOKIE, token);
-      const refreshToken = generateRefreshToken({
-        academicId: teacher.academicId,
-        role,
+      const { academicId, password } = req.body;
+      const administrator = await this.authService.login({
+        academicId: academicId,
+        password: password,
       });
-      res.cookie(REFRESH_TOKEN_COOKIE, refreshToken);
-      teacher.role = role;
-      return res.status(200).send(teacher);
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  async postLoginStudent(req, res, next) {
-    try {
-      const { email, password } = req.body;
-      const student = await this.authService.studentLogin({ email, password });
-      if (!student) {
-        throw new NotFoundException("Student not found");
-      }
-      const role = getUserRole(student);
-      const token = generateToken({ academicId: student.academicId, role });
-      res.cookie(TOKEN_COOKIE, token);
-      const refreshToken = generateRefreshToken({
-        academicId: student.academicId,
-        role,
-      });
-      res.cookie(REFRESH_TOKEN_COOKIE, refreshToken);
-      student.role = role;
-      return res.status(200).send(student);
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  async postLoginAdministrator(req, res, next) {
-    try {
-      const { email, password } = req.body;
-      const administrator = await this.authService.administratorLogin({
-        email,
-        password,
-      });
-      if (!administrator) {
-        throw new NotFoundException("Administrator not found");
-      }
-      const role = getUserRole(administrator);
       const token = generateToken({
-        academicId: administrator.academicId,
-        role,
+        academicId: administrator.academic.academicId,
+        role: "ADMINISTRATOR",
       });
-      res.cookie(TOKEN_COOKIE, token);
-      const refreshToken = generateRefreshToken({
-        academicId: administrator.academicId,
-        role,
-      });
-      res.cookie(REFRESH_TOKEN_COOKIE, refreshToken);
-      administrator.role = role;
-      return res.status(200).send(administrator);
+      return res.status(200).json({ token, ...administrator });
     } catch (error) {
       next(error);
     }

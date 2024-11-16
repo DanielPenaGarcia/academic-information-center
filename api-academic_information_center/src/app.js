@@ -41,14 +41,14 @@ import { dataSource } from "./config/orm.config.js";
 // app.use(api, TeachersSubjects);
 // app.use(errorHandler);
 // const PORT = process.env.PORT || 3001;
+await dataSource.initialize();
+console.log('Database is connected');
 // app.listen(PORT, () => {
 //   console.log(`Server is running in http://localhost:${PORT}`);
 // });
 
-await dataSource.initialize();
+// const authService = new AuthService();
 
-const authService = new AuthService();
+// const user = await authService.login({academicId: '000000001', password: '1234'});
 
-const administrator = await authService.administratorLogin({academicId: '000000001', password: '1234'});
-
-console.log(administrator);
+// console.log(user);

@@ -1,19 +1,15 @@
 import { EntitySchema } from "typeorm";
+import { CourseMap } from "../entities/course-map.entity.js";
 
-export const CourseMaps = new EntitySchema({
-    name: 'CourseMaps',
+export const CourseMapSchema = new EntitySchema({
+    name: 'CourseMap',
     tableName: 'course_maps',
+    target: CourseMap,
     columns: {
         id: {
             type: 'int',
             primary: true,
             generated: true
-        },
-        semesters: {
-            type: 'int',
-        },
-        year: {
-            type: 'int',
         },
         createdAt: {
             name: 'created_at',
@@ -24,6 +20,12 @@ export const CourseMaps = new EntitySchema({
             name: 'updated_at',
             type: 'timestamp',
             updateDate: true
+        },
+        year: {
+            type: 'int'
+        },
+        semesters: {
+            type: 'int',
         }
-    }
+    },
 })
