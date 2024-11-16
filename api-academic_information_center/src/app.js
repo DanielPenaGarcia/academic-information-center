@@ -3,8 +3,6 @@ import { excecuteAllTriggers } from "./utils/functions/excecute-all-triggers.fun
 import express from "express";
 
 //Constants
-import { API_NAME } from "./utils/constanst/api-name.constant.js";
-import { API_VERSION } from "./utils/constanst/api-version.constant.js";
 
 //Routers
 import { router as AuthRouter } from "./auth/auth.module.js";

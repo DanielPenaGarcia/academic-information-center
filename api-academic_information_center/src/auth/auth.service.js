@@ -13,7 +13,7 @@ export class AuthService {
       where: {
         academicId: academicId,
         password: password,
-      }
+      },
     });
     if(!user) {
       throw new NotFoundException("User not found");
