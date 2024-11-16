@@ -6,6 +6,7 @@ import express from "express";
 
 //Routers
 import { router as AuthRouter } from "./auth/auth.module.js";
+import { router as SeedRouter } from "./seed/seed.module.js";
 
 //Middlewares
 import { errorHandler } from "./middlewares/error-handleler.middleware.js";
@@ -26,6 +27,7 @@ app.use(guard);
 
 //Routers
 app.use(API_PATH, AuthRouter);
+app.use(API_PATH, SeedRouter);
 
 //Error Handler
 app.use(errorHandler);
