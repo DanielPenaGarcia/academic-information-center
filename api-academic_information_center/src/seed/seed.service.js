@@ -79,6 +79,65 @@ export class SeedService {
       programmingII,
       universityEnglishA2,
     });
+    const {
+      electiveGeneralTrainingII,
+      computationalNumericalMethods,
+      softwareTesting,
+      webApplications,
+      softwareProjectManagement,
+      requirementsEngineering,
+      softwareArchitecture,
+      universityEnglishB1II,
+    } = await this.#createSubjectsFifthSemester(courseMap, {
+      linearAlgebra,
+      programmingIII,
+      probabilityStatistics,
+      softwareDesign,
+      computerSecurity,
+      advancedDatabases,
+      projectManagement,
+      processModeling,
+      universityEnglishB1,
+    });
+    const {
+      technologicalInnovation,
+      distributedSystems,
+      mobileApplications,
+      embeddedSystems,
+      softwareIntegrationProject,
+      interactiveSystemsDesign,
+      enterpriseArchitectures,
+      universityEnglishB1III,
+    } = await this.#createSubjectsSixthSemester(courseMap, {
+      advancedDatabases,
+      softwareArchitecture,
+      webApplications,
+      softwareProjectManagement,
+      requirementsEngineering,
+      softwareTesting,
+      universityEnglishB1II,
+    });
+    const {
+      prototypeImplementation,
+      generalTrainingTopic,
+      softwareQuality,
+      agileDevelopmentMethods,
+      topicI,
+      topicII,
+      electiveAccentuation
+    } = await this.#createSubjectsSeventhSemester(courseMap, {
+      webApplications,
+      technologicalInnovation
+    });
+    const {
+      titrationSeminar,
+      professionalPractice,
+      softwareEvaluation,
+      informationTechnologiesBusiness
+    } = await this.#createSubjectsEighthSemester(courseMap, {
+      softwareIntegrationProject,
+      softwareQuality
+    });
   }
 
   async #createSubjectsFirstSemester(courseMap) {
@@ -376,7 +435,7 @@ export class SeedService {
       hoursPerWeek: 3,
       semester: 4,
       courseMap: courseMap,
-      subjectsRequirements: [databases],
+      subjectsRequirements: [databases, programmingII, networks],
     });
     await this.subjectRepository.save(advancedDatabases);
     //Administración de proyectos
@@ -424,5 +483,303 @@ export class SeedService {
       softwareDesign,
       universityEnglishB1,
     };
+  }
+
+  async #createSubjectsFifthSemester(
+    courseMap,
+    {
+      linearAlgebra,
+      programmingIII,
+      probabilityStatistics,
+      softwareDesign,
+      computerSecurity,
+      advancedDatabases,
+      projectManagement,
+      processModeling,
+      universityEnglishB1,
+    }
+  ) {
+    //Optativa de formación general II
+    const electiveGeneralTrainingII = this.subjectRepository.create({
+      name: "Optativa de formación general II",
+      hoursPerWeek: 3,
+      semester: 5,
+      courseMap: courseMap,
+    });
+    await this.subjectRepository.save(electiveGeneralTrainingII);
+    //Metodos numéricos computacionales
+    const computationalNumericalMethods = this.subjectRepository.create({
+      name: "Metodos numéricos computacionales",
+      hoursPerWeek: 3,
+      semester: 5,
+      courseMap: courseMap,
+      subjectsRequirements: [linearAlgebra],
+    });
+    await this.subjectRepository.save(computationalNumericalMethods);
+    //Pruebas de software
+    const softwareTesting = this.subjectRepository.create({
+      name: "Pruebas de software",
+      hoursPerWeek: 3,
+      semester: 5,
+      courseMap: courseMap,
+      subjectsRequirements: [probabilityStatistics, softwareDesign, programmingIII],
+    });
+    await this.subjectRepository.save(softwareTesting);
+    //Aplicaciones web
+    const webApplications = this.subjectRepository.create({
+      name: "Aplicaciones web",
+      hoursPerWeek: 3,
+      semester: 5,
+      courseMap: courseMap,
+      subjectsRequirements: [
+        softwareDesign,
+        computerSecurity,
+        advancedDatabases,
+      ],
+    });
+    await this.subjectRepository.save(webApplications);
+    //Administración de proyectos de software
+    const softwareProjectManagement = this.subjectRepository.create({
+      name: "Administración de proyectos de software",
+      hoursPerWeek: 3,
+      semester: 5,
+      courseMap: courseMap,
+      subjectsRequirements: [projectManagement],
+    });
+    await this.subjectRepository.save(softwareProjectManagement);
+    //Ingeniería de requisitos
+    const requirementsEngineering = this.subjectRepository.create({
+      name: "Ingeniería de requisitos",
+      hoursPerWeek: 3,
+      semester: 5,
+      courseMap: courseMap,
+      subjectsRequirements: [processModeling],
+    });
+    await this.subjectRepository.save(requirementsEngineering);
+    //Arquitectura de software
+    const softwareArchitecture = this.subjectRepository.create({
+      name: "Arquitectura de software",
+      hoursPerWeek: 3,
+      semester: 5,
+      courseMap: courseMap,
+      subjectsRequirements: [softwareDesign, computerSecurity],
+    });
+    await this.subjectRepository.save(softwareArchitecture);
+    //Inglés universitario B1 II
+    const universityEnglishB1II = this.subjectRepository.create({
+      name: "Inglés universitario B1 II",
+      hoursPerWeek: 3,
+      semester: 5,
+      courseMap: courseMap,
+      subjectsRequirements: [universityEnglishB1],
+    });
+    await this.subjectRepository.save(universityEnglishB1II);
+    return {
+      electiveGeneralTrainingII,
+      computationalNumericalMethods,
+      softwareTesting,
+      webApplications,
+      softwareProjectManagement,
+      requirementsEngineering,
+      softwareArchitecture,
+      universityEnglishB1II,
+    };
+  }
+
+  async #createSubjectsSixthSemester(courseMap, { advancedDatabases, softwareArchitecture, webApplications, softwareProjectManagement, requirementsEngineering, softwareTesting, universityEnglishB1II }) {
+    //Innovación tecnológica
+    const technologicalInnovation = this.subjectRepository.create({
+      name: "Innovación tecnológica",
+      hoursPerWeek: 3,
+      semester: 6,
+      courseMap: courseMap,
+    });
+    await this.subjectRepository.save(technologicalInnovation);
+    //Sistemas distribuidos
+    const distributedSystems = this.subjectRepository.create({
+      name: "Sistemas distribuidos",
+      hoursPerWeek: 3,
+      semester: 6,
+      courseMap: courseMap,
+      subjectsRequirements: [softwareArchitecture, webApplications],
+    });
+    await this.subjectRepository.save(distributedSystems);
+    //Aplicaciones móviles
+    const mobileApplications = this.subjectRepository.create({
+      name: "Aplicaciones móviles",
+      hoursPerWeek: 3,
+      semester: 6,
+      courseMap: courseMap,
+      subjectsRequirements: [webApplications, softwareArchitecture],
+    });
+    await this.subjectRepository.save(mobileApplications);
+    //Sistemas empotrados
+    const embeddedSystems = this.subjectRepository.create({
+      name: "Sistemas empotrados",
+      hoursPerWeek: 3,
+      semester: 6,
+      courseMap: courseMap,
+    });
+    await this.subjectRepository.save(embeddedSystems);
+    //Proyecto de Software Integrador
+    const softwareIntegrationProject = this.subjectRepository.create({
+      name: "Proyecto de Software Integrador",
+      hoursPerWeek: 3,
+      semester: 6,
+      courseMap: courseMap,
+      subjectsRequirements: [softwareArchitecture, softwareProjectManagement, requirementsEngineering, softwareTesting, advancedDatabases],
+    });
+    await this.subjectRepository.save(softwareIntegrationProject);
+    //Diseño de sistemas Interactivos
+    const interactiveSystemsDesign = this.subjectRepository.create({
+      name: "Diseño de sistemas Interactivos",
+      hoursPerWeek: 3,
+      semester: 6,
+      courseMap: courseMap,
+      subjectsRequirements: [requirementsEngineering]
+    });
+    await this.subjectRepository.save(interactiveSystemsDesign);
+    //Arquitecturas Empresariales
+    const enterpriseArchitectures = this.subjectRepository.create({
+      name: "Arquitecturas Empresariales",
+      hoursPerWeek: 3,
+      semester: 6,
+      courseMap: courseMap,
+      subjectsRequirements: [softwareArchitecture]
+    });
+    await this.subjectRepository.save(enterpriseArchitectures);
+    //Inglés universitario B1 III
+    const universityEnglishB1III = this.subjectRepository.create({
+      name: "Inglés universitario B1 III",
+      hoursPerWeek: 3,
+      semester: 6,
+      courseMap: courseMap,
+      subjectsRequirements: [universityEnglishB1II]
+    });
+    await this.subjectRepository.save(universityEnglishB1III);
+    return {
+      technologicalInnovation,
+      distributedSystems,
+      mobileApplications,
+      embeddedSystems,
+      softwareIntegrationProject,
+      interactiveSystemsDesign,
+      enterpriseArchitectures,
+      universityEnglishB1III,
+    };
+  }
+
+  async #createSubjectsSeventhSemester(courseMap, { webApplications, technologicalInnovation }) {
+    //Implementación de prototipos
+    const prototypeImplementation = this.subjectRepository.create({
+      name: "Implementación de prototipos",
+      hoursPerWeek: 3,
+      semester: 7,
+      courseMap: courseMap,
+      subjectsRequirements: [technologicalInnovation]
+    });
+    await this.subjectRepository.save(prototypeImplementation);
+    //Topico de Formación General
+    const generalTrainingTopic = this.subjectRepository.create({
+      name: "Topico de Formación General",
+      hoursPerWeek: 3,
+      semester: 7,
+      courseMap: courseMap
+    });
+    await this.subjectRepository.save(generalTrainingTopic);
+    //Calidad de Software
+    const softwareQuality = this.subjectRepository.create({
+      name: "Calidad de Software",
+      hoursPerWeek: 3,
+      semester: 7,
+      courseMap: courseMap,
+      subjectsRequirements: [webApplications]
+    });
+    await this.subjectRepository.save(softwareQuality);
+    //Métodos Ágiles de Desarrollo
+    const agileDevelopmentMethods = this.subjectRepository.create({
+      name: "Métodos Ágiles de Desarrollo",
+      hoursPerWeek: 3,
+      semester: 7,
+      courseMap: courseMap,
+      subjectsRequirements: [webApplications]
+    });
+    await this.subjectRepository.save(agileDevelopmentMethods);
+    //Tópico I
+    const topicI = this.subjectRepository.create({
+      name: "Tópico I",
+      hoursPerWeek: 3,
+      semester: 7,
+      courseMap: courseMap
+    });
+    await this.subjectRepository.save(topicI);
+    //Tópico II
+    const topicII = this.subjectRepository.create({
+      name: "Tópico II",
+      hoursPerWeek: 3,
+      semester: 7,
+      courseMap: courseMap
+    });
+    await this.subjectRepository.save(topicII);
+    //Optativa de acentuación
+    const electiveAccentuation = this.subjectRepository.create({
+      name: "Optativa de acentuación",
+      hoursPerWeek: 3,
+      semester: 7,
+      courseMap: courseMap
+    });
+    await this.subjectRepository.save(electiveAccentuation);
+    return {
+      prototypeImplementation,
+      generalTrainingTopic,
+      softwareQuality,
+      agileDevelopmentMethods,
+      topicI,
+      topicII,
+      electiveAccentuation
+    }
+  }
+
+  async #createSubjectsEighthSemester(courseMap, { softwareIntegrationProject, softwareQuality }) {
+    //Seminario de titulación
+    const titrationSeminar = this.subjectRepository.create({
+      name: "Seminario de titulación",
+      hoursPerWeek: 3,
+      semester: 8,
+      courseMap: courseMap,
+    });
+    await this.subjectRepository.save(titrationSeminar);
+    //Práctica Profesional
+    const professionalPractice = this.subjectRepository.create({
+      name: "Práctica Profesional",
+      hoursPerWeek: 3,
+      semester: 8,
+      courseMap: courseMap,
+      subjectsRequirements: [softwareIntegrationProject]
+    });
+    await this.subjectRepository.save(professionalPractice);
+    //Evalución de Software
+    const softwareEvaluation = this.subjectRepository.create({
+      name: "Evalución de Software",
+      hoursPerWeek: 3,
+      semester: 8,
+      courseMap: courseMap,
+      subjectsRequirements: [softwareQuality]
+    });
+    await this.subjectRepository.save(softwareEvaluation);
+    //Tecnologías de Información para Negocios
+    const informationTechnologiesBusiness = this.subjectRepository.create({
+      name: "Tecnologías de Información para Negocios",
+      hoursPerWeek: 3,
+      semester: 8,
+      courseMap: courseMap
+    });
+    await this.subjectRepository.save(informationTechnologiesBusiness);
+    return {
+      titrationSeminar,
+      professionalPractice,
+      softwareEvaluation,
+      informationTechnologiesBusiness
+    }
   }
 }
