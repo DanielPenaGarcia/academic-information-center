@@ -10,6 +10,6 @@ export const dataSource = new typeorm.DataSource({
     synchronize: true,
     logging: false,
     entities: [
-        'src/models/*.entity.js'
+        'src/schemas/*.schema.js'
     ]
 })

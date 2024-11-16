@@ -1,35 +1,23 @@
 import { EntityNotFoundError } from "typeorm";
 import { dataSource } from "../config/orm.config.js";
+import { UserSchema } from "../schemas/user.schema.js";
+import { NotFoundException } from "../utils/exceptions/http/not-found.exception.js";
 
 export class AuthService {
   constructor() {
-    this.administratorRepository = dataSource.getRepository('Administrator');
+    this.userRepository = dataSource.getRepository(UserSchema);
   }
 
-  async teacherLogin({ email, password }) {
-  }
-
-  async studentLogin({ email, password }) {
-  }
-
-  async administratorLogin({ academicId, password }) {
-    const administrator = await this.administratorRepository.findOne({
+  async login({ academicId, password }) {
+    const user = await this.userRepository.findOne({
       where: {
+        academicId: academicId,
         password: password,
-        academic: {
-          academicId: academicId,
-        },
-      },
-      relations: {
-        academic: true,
-      },
+      }
     });
-    if (!administrator) {
-      throw new EntityNotFoundError('Administrator not found');
+    if(!user) {
+      throw new NotFoundException("User not found");
     }
-    return administrator;
-  }
-
-  async findUserByAcademicId({ academicId }) {
+    return user;
   }
 }

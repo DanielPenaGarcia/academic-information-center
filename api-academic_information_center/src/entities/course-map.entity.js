@@ -1,15 +1,6 @@
-export class CourseMap {
-  constructor({
-    id = null,
-    semesters,
-    year,
-    createdAt = null,
-    updatedAt = null,
-  }) {
-    this.id = id;
-    this.semesters = semesters;
-    this.year = year;
-    this.createdAt = createdAt;
-    this.updated = updatedAt;
-  }
+import { BaseEntity } from "./base.entity.js";
+
+export class CourseMap extends BaseEntity {
+    semesters;
+    year;
 }
