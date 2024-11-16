@@ -1,38 +1,20 @@
-const API_URL = "http://localhost:3001/api";
+const API_URL = "http://localhost:3000/api/v1";
 
 document.addEventListener("DOMContentLoaded", function () {
   async function login({ email, password }) {
     try {
-      const response = await fetch(`${API_URL}/auth/login/student`, {
+      const response = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ academicId: email, password }),
       });
       if (!response.ok) {
         throw new Error("Error en la autenticación");
       }
       const data = await response.json();
       console.log("Login exitoso:", data);
-      const user = await getUser();
-      console.log("Usuario:", user);
-    } catch (error) {
-      console.error("Hubo un problema con el login:", error);
-    }
-  }
-
-  async function getUser() {
-    try {
-      const response = await fetch(`${API_URL}/auth/user`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-      return await response.json();
     } catch (error) {
       console.error("Hubo un problema con el login:", error);
     }

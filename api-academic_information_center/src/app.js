@@ -11,6 +11,7 @@ import { router as AuthRouter } from "./auth/auth.module.js";
 import { errorHandler } from "./middlewares/error-handleler.middleware.js";
 import { API_PATH } from "./utils/constanst/api-path.constant.js";
 import { guard } from "./middlewares/guard.middleware.js";
+import cors from "cors";
 
 //API
 const PORT = process.env.PORT || 3000;
@@ -20,6 +21,7 @@ const app = express();
 
 //Middlewares
 app.use(express.json());
+app.use(cors());
 app.use(guard);
 
 //Routers

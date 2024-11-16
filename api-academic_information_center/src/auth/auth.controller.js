@@ -9,7 +9,6 @@ export class AuthController {
 
   async postLoging(req, res, next) {
     try {
-      const userReq = req.user;
       const { academicId, password } = req.body;
       const user = await this.authService.login({ academicId, password });
       const token = generateToken({academicId: user.academicId, role: user.role, expiresIn: TOKEN_EXPIRES});
