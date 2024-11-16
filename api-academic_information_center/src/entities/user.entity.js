@@ -6,4 +6,5 @@ export class User {
     createdAt;
     updatedAt;
     role;
+    photo;
 }
