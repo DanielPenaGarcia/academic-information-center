@@ -21,6 +21,10 @@ export const SubjectSchema = new EntitySchema({
             type: 'int',
             nullable: false
         },
+        semester: {
+            type: 'int',
+            nullable: false
+        },
         createdAt: {
             name: 'created_at',
             type: 'timestamp',
@@ -33,7 +37,7 @@ export const SubjectSchema = new EntitySchema({
         }
     },
     relations: {
-        CourseMap: {
+        courseMap: {
             target: 'CourseMap',
             type: 'many-to-one',
             joinColumn: {
@@ -42,7 +46,7 @@ export const SubjectSchema = new EntitySchema({
             },
             cascade: true,
         },
-        Teachers: {
+        teachers: {
             target: 'Teacher',
             type: 'many-to-many',
             joinTable: {
@@ -57,7 +61,7 @@ export const SubjectSchema = new EntitySchema({
                 }
             },
         },
-        SubjectsRequirements: {
+        subjectsRequirements: {
             target: 'Subject',
             type: 'many-to-many',
             joinTable: {
