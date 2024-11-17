@@ -23,5 +23,38 @@ export class ClassesController {
             next(error);
         }
     }
+
+    async enrollStudent(req,res,next){
+        try{
+            if(!req.body || Object.keys(req.body).length === 0) {
+                throw new BadRequestException("El cuerpo de la petición está vacío");
+            }
+            const { studentId,classId } = req.body;
+            if (!studentId||!classId) {
+                throw new BadRequestException("Faltan campos obligatorios en el cuerpo de la petición");
+            }      
+            const studentClass = await this.classesService.enrollStudent({ studentId,classId });
+            res.status(201).json(studentClass);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getAvailableClassesByStudent(req, res, next) {
+        try{
+            if(!req.body || Object.keys(req.body).length === 0) {
+                throw new BadRequestException("El cuerpo de la petición está vacío");
+            }
+            const { studentId } = req.body;
+            if (!studentId) {
+                throw new BadRequestException("Faltan campos obligatorios en el cuerpo de la petición");
+            }
+            const classes = await this.classesService.getAvailableClassesByStudent({ studentId });
+            res.status(201).json(classes);
+        } catch (error) {
+            next(error);
+        }
+       
+    }
     
 }
