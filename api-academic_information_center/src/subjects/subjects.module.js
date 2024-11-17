@@ -7,4 +7,4 @@ const subjectsController = new SubjectsController();
 
 const path = '/subjects';
 
-router.get(`${path}`, subjectsController.getFindSubjects.bind(subjectsController));
+router.get(`${path}/course-map/year/:year`, subjectsController.getFindSubjects.bind(subjectsController));

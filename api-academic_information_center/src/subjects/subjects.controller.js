@@ -7,8 +7,9 @@ export class SubjectsController{
 
     async getFindSubjects(req, res, next){
         try {
+            const year = req.params.year;
             const query = req.query;
-            const subjects = await this.subjectService.findSubjectsByCourseMapYear(query);
+            const subjects = await this.subjectService.findSubjectsByCourseMapYear(year, query);
             res.status(200).json(subjects);
         } catch (error) {
             next(error);

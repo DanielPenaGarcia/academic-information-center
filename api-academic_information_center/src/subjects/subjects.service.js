@@ -1,3 +1,4 @@
+import { Like } from "typeorm";
 import { dataSource } from "../config/orm.config.js";
 import { SubjectSchema } from "../schemas/subject.schema.js";
 
@@ -7,13 +8,15 @@ export class SubjectsService {
     this.subjectsRepository = dataSource.getRepository(SubjectSchema);
   }
 
-  async findSubjectsByCourseMapYear(query) {
+  async findSubjectsByCourseMapYear(year, query) {
     const subjects = await this.subjectsRepository.find({
       where: {
         courseMap: {
-          year: query.courseMapYear
+          year: year
         },
-        semester: query.semester
+        semester: query.semester? query.semester : undefined,
+        name: Like(`%${query.name.toLowerCase()}%`),
+        hoursPerWeek: query.hours? query.hours : undefined
       },
       select: {
         id: true,
