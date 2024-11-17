@@ -1,0 +1,1 @@
+export const days = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];

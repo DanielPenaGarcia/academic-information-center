@@ -2,7 +2,7 @@ import { EntitySchema } from "typeorm";
 import { Klass } from "../entities/klass.entity.js";
 
 export const ClassSchema = new EntitySchema({
-    name: 'Class',
+    name: 'Klass',
     tableName: 'classes',
     target: Klass,
     columns: {
@@ -37,7 +37,7 @@ export const ClassSchema = new EntitySchema({
         }
     },
     relations: {
-        Subject: {
+        subject: {
             target: 'Subject',
             type: 'many-to-one',
             joinColumn: {
@@ -46,7 +46,7 @@ export const ClassSchema = new EntitySchema({
             },
             cascade: true,
         },
-        Teacher: {
+        teacher: {
             target: 'Teacher',
             type: 'many-to-one',
             joinColumn: {
