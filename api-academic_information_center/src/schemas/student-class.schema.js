@@ -35,5 +35,23 @@ export const StudentClassSchema = new EntitySchema({
             type: 'timestamp',
             updateDate: true
         }
+    },
+    relations: {
+        student: {
+            target: 'User',
+            type: 'many-to-one',
+            joinColumn: {
+                name: 'student_id',
+                referencedColumnName: 'id'
+            }
+        },
+        klass: {
+            target: 'Klass',
+            type: 'many-to-one',
+            joinColumn: {
+                name: 'class_id',
+                referencedColumnName: 'id'
+            }
+        }
     }
 })

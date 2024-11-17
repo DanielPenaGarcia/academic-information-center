@@ -14,8 +14,16 @@ export class AuthService {
         academicId: academicId,
         password: password,
       },
+      select: {
+        id: true,
+        academicId: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
-    if(!user) {
+    if (!user) {
       throw new NotFoundException("User not found");
     }
     return user;

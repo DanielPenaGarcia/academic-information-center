@@ -27,7 +27,7 @@ export const ClassReviewSchema = new EntitySchema({
     },
   },
   relations: {
-    Klass: {
+    klass: {
         target: "Klass",
         type: "many-to-one",
         joinColumn: {
@@ -35,7 +35,7 @@ export const ClassReviewSchema = new EntitySchema({
         },
         cascade: true,
     },
-    Student: {
+    student: {
         target: "Student",
         type: "many-to-one",
         joinColumn: {
