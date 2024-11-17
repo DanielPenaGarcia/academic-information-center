@@ -8,6 +8,7 @@ import express from "express";
 import { router as AuthRouter } from "./auth/auth.module.js";
 import { router as SeedRouter } from "./seed/seed.module.js";
 import {router as TeacherRouter} from "./teachers/teachers.module.js";
+import { router as ClassRouter } from "./classes/classes.module.js";
 
 //Middlewares
 import { errorHandler } from "./middlewares/error-handleler.middleware.js";
@@ -28,6 +29,7 @@ app.use(guard);
 
 //Routers
 app.use(API_PATH, AuthRouter);
+app.use(API_PATH, ClassRouter);
 app.use(API_PATH, SeedRouter);
 app.use(API_PATH,TeacherRouter);
 
@@ -40,5 +42,5 @@ await excecuteAllTriggers(dataSource);
 
 //Server
 app.listen(PORT, () => {
-  console.log(`http://localhost:${API_PATH}`);
+  console.log(`http://localhost:${PORT}${API_PATH}`);
 });
