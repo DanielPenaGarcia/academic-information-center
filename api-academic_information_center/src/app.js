@@ -7,6 +7,7 @@ import express from "express";
 //Routers
 import { router as AuthRouter } from "./auth/auth.module.js";
 import { router as SeedRouter } from "./seed/seed.module.js";
+import {router as TeacherRouter} from "./teachers/teachers.module.js";
 import { router as ClassRouter } from "./classes/classes.module.js";
 import { router as SubjectRouter } from "./subjects/subjects.module.js";
 
@@ -32,6 +33,7 @@ app.use(API_PATH, AuthRouter);
 app.use(API_PATH, ClassRouter);
 app.use(API_PATH, SubjectRouter);
 app.use(API_PATH, SeedRouter);
+app.use(API_PATH,TeacherRouter);
 
 //Error Handler
 app.use(errorHandler);
