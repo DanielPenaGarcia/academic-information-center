@@ -5,7 +5,7 @@ export const roleAdminGuard = async (req, res, next) => {
     try {
         const { role } = req.user;
         if (role !== userRole.ADMIN) {
-            throw new ForbiddenException();
+            throw new ForbiddenException('No tienes permisos para realizar esta acción');
         }
         next();
     } catch (error) {
