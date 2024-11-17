@@ -5,7 +5,6 @@ export const router = express.Router();
 
 const subjectsController = new SubjectsController();
 
-router.post('/subject', subjectsController.createSubject.bind(subjectsController));
+const path = '/subjects';
 
-router.patch('/subject/', subjectsController.updateSubject.bind(subjectsController));
-
+router.get(`${path}`, subjectsController.getFindSubjects.bind(subjectsController));
