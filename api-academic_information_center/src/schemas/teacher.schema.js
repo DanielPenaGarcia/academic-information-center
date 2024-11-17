@@ -33,5 +33,22 @@ export const TeacherSchema = new EntitySchema({
             default: role.TEACHER
         }
     },
-    discriminatorValue: role.TEACHER
+    discriminatorValue: role.TEACHER,
+    relations: {
+        subjects: {
+            target: 'Subject',
+            type: 'many-to-many',
+            joinTable: {
+                name: 'subjects_teachers',
+                joinColumn: {
+                    name: 'teacher_id',
+                    referencedColumnName: 'id'
+                },
+                inverseJoinColumn: {
+                    name: 'subject_id',
+                    referencedColumnName: 'id'
+                }
+            },
+        }
+    }
 });
