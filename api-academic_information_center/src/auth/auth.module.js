@@ -5,14 +5,14 @@ import { userSerializable } from "./middlewares/user-login.middleware.js";
 export const router = express.Router();
 
 const authController = new AuthController();
-const authPath = "/auth";
+const path = "/auth";
 
 const middlewares = (req, res, next) => {
   userSerializable(req, res, next);
 };
 
 router.post(
-  `${authPath}/login`,
+  `${path}/login`,
   middlewares,
   authController.postLoging.bind(authController)
 );

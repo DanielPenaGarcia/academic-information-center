@@ -6,7 +6,7 @@ import { guard } from "../middlewares/guard.middleware.js";
 
 export const router = express.Router();
 
-const authPath = "/classes";
+const path = "/classes";
 
 const classesController = new ClassesController();
 
@@ -14,6 +14,6 @@ const middlewares = (req, res, next) => {
     next();
 };
 
-router.post(`${authPath}`, roleAdminGuard, middlewares, classesController.postCreateClass.bind(classesController));
-router.post(`${authPath}/availableClasses`, guard, middlewares, classesController.getAvailableClassesByStudent.bind(classesController));
-router.post(`${authPath}/enroll`, guard, middlewares, classesController.enrollStudent.bind(classesController));
+router.post(`${path}`, roleAdminGuard, middlewares, classesController.postCreateClass.bind(classesController));
+router.post(`${path}/availableClasses`, guard, middlewares, classesController.getAvailableClassesByStudent.bind(classesController));
+router.post(`${path}/enroll`, guard, middlewares, classesController.enrollStudent.bind(classesController));

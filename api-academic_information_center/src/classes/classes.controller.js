@@ -13,11 +13,11 @@ export class ClassesController {
             if (!req.body || Object.keys(req.body).length === 0) {
                 throw new BadRequestException("El cuerpo de la petición está vacío");
             }
-            const { startTime, duration, days, subjectId, teacherId } = req.body;
-            if (!startTime || !duration || !days || !subjectId || !teacherId) {
+            const { startTime, duration, days, subjectId } = req.body;
+            if (!startTime || !duration || !days || !subjectId) {
                 throw new BadRequestException("Faltan campos obligatorios en el cuerpo de la petición");
             }
-            const klass = await this.classesService.createClass({ startTime, duration, days, subjectId, teacherId });
+            const klass = await this.classesService.createClass({ startTime, duration, days, subjectId });
             res.status(201).json(klass);
         } catch (error) {
             next(error);
