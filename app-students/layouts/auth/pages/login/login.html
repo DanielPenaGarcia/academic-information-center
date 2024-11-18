@@ -10,36 +10,32 @@
     <div class="page">
       <div class="presentation">
         <div class="girl-photo">
-          <img src="../../assets/images/chica.png" alt="Chica Itson" />
+          <img src="../../../../assets/images/chica.png" alt="Chica Itson" />
         </div>
       </div>
       <div class="login">
         <div class="cia-logo">
-          <img src="../../assets/images/cia.png" alt="ITSON CIA" />
+          <img src="../../../../assets/images/cia.png" alt="ITSON CIA" />
         </div>
-        <form class="login-data">
+        <form class="login-data" id="loginForm">
           <div class="form-title">
             <h2>Login</h2>
           </div>
           <div class="form-group">
-            <input
-              type="text"
-              placeholder="Email / Institutional ID"
-              id="email"
-            />
+            <input type="text" placeholder="Email / Institutional ID" id="email" />
           </div>
           <div class="form-group">
             <input type="password" placeholder="Password" id="password" />
           </div>
-        </form>
-        <div class="form-actions">
-          <button class="login-btn btn" id="loginBtn">Login</button>
-        </div>
+          <div class="form-actions">
+            <button class="login-btn btn" id="loginBtn" type="submit">Login</button>
+          </div>
+        </form>        
         <a href="#" class="forget-password"
           >¿Has olvidado tu usuario/contraseña?</a
         >
       </div>
     </div>
-    <script src="login.js"></script>
+    <script type="module" src="login.js"></script>
   </body>
 </html>
