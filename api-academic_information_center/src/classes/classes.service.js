@@ -13,7 +13,7 @@ export class ClassesService {
         this.teacherRepository = dataSource.getRepository(TeacherSchema);
     }
 
-    async createClass({ startTime, duration, days, subjectId, teacherId }) {
+    async createClass({ startTime, duration, days, subjectId }) {
         const subject = await this.subjectRepository.findOne({
             where: {
                 id: subjectId,
@@ -31,32 +31,11 @@ export class ClassesService {
         if (classHours > subject.hoursPerWeek) {
             throw new BadRequestException(`Las horas de la clase superan las horas por semana de la materia`);
         }
-        const teacher = await this.teacherRepository.findOne({
-            where: {
-                id: teacherId,
-                subjects: {
-                    id: subjectId
-                }
-            },
-            select: {
-                id: true,
-                names: true,
-                fatherLastName: true,
-                motherLastName: true
-            },
-            relations: {
-                subjects: true
-            }
-        });
-        if (!teacher) {
-            throw new BadRequestException(`Profesor con id ${teacherId} no encontrado o no tiene la materia ${subject.name}`);
-        }
         const klass = this.classesRepository.create({
             startTime: startTime,
             days: days,
             duration: duration,
             subject: subject,
-            teacher: teacher
         });
         await this.classesRepository.save(klass);
         return klass;
