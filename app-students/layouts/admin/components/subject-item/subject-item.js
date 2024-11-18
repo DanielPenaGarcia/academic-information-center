@@ -1,6 +1,7 @@
 class SubjectItem {
 
-    constructor({name, hours, semester, courseMap: { year }}) {
+    constructor({id, name, hours, semester, courseMap: { year }}) {
+        this.id = id;
         this.name = name;
         this.hours = hours;
         this.semester = semester;
@@ -9,7 +10,7 @@ class SubjectItem {
 
     render() {
         return `
-            <div class="subject-item">
+            <div id=${this.id} class="subject-item ">
                 <div class="subject-item__name">${this.name}</div>
                 <div class="subject-item__hours">${this.hours}</div>
                 <div class="subject-item__semester">${this.semester}</div>
@@ -18,3 +19,5 @@ class SubjectItem {
         `;
     }
 }
+
+export default SubjectItem;

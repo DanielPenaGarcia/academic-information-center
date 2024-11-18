@@ -5,7 +5,12 @@ const localStorageService = {
     },
 
     getItem: (key) => {
-        return JSON.parse(localStorage.getItem(key));
+        const value = localStorage.getItem(key);
+        try {
+            return value ? JSON.parse(value) : null;
+        } catch (error) {
+            return null;
+        }
     },
 
     removeItem: (key) => {

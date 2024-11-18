@@ -18,7 +18,7 @@ const api = {
     });
     const status = response.status;
     const data = await response.json();
-    return { status, ...data };
+    return { status, data };
   },
 
   async post({ endpoint, body }) {
@@ -33,7 +33,7 @@ const api = {
     });
     const status = response.status;
     const data = await response.json();
-    return { status, ...data };
+    return { status, data };
   },
 
   async put({ endpoint, body }) {
@@ -49,7 +49,7 @@ const api = {
     });
     const status = response.status;
     const data = await response.json();
-    return { status, ...data };
+    return { status, data };
   },
 
   async delete({ endpoint }) {
@@ -61,7 +61,7 @@ const api = {
     });
     const status = response.status;
     const data = await response.json();
-    return { status, ...data };
+    return { status, data };
   },
 };
 

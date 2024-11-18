@@ -1,11 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Materias</title>
+    <!-- Agregar estilos y scripts adicionales aquí -->
+    <link rel="stylesheet" href="create-class.css" />
+  </head>
+  <body>
+    <!-- Contenedor principal de la página -->
+    <header>
+      <h1>Gestión de Materias</h1>
+    </header>
+
+    <main class="content">
+      <section id="form-section">
+        <!-- Formulario principal -->
+        <form class="card create-class-form">
+            <h2 class="form-header">Crear Materia</h2>
+
+            <!-- Campo para nombre de la materia -->
+            <input type="text" class="subject-name" placeholder="Nombre de la materia" disabled />
+            
+            <!-- Campo para duración en minutos -->
+            <div class="form-group">
+              <label for="duration">Duración en minutos</label>
+              <input type="number" id="duration" class="subject-name" placeholder="Duración" />
+            </div>
+
+            <!-- Campo para hora de inicio -->
+            <div class="form-group">
+              <label for="start-time">Hora de inicio</label>
+              <input type="time" id="start-time" class="subject-name" />
+            </div>
+
+            <!-- Campo para seleccionar los días -->
+            <div class="form-group days">
+              <label for="subjectName">Días</label>
+              <div class="days-checks" id="days-container">
+                <!-- Aquí se generarán los checkboxes -->
+              </div>
+            </div>
+          </form>
+      </section>
+
+      <section id="table-section">
+        <!-- Contenedor de la tabla -->
+        <aside class="card">
+          <table-subjects year="2016"></table-subjects>
+        </aside>
+      </section>
+    </main>
+
+    <footer>
+      <p>© 2024 Sistema de Gestión de Materias</p>
+    </footer>
+
+    <!-- Agregar el script de creación de la clase al final para asegurar que el DOM esté listo -->
+    <script type="module" src="create-class.js"></script>
+  </body>
 </html>

@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
       if (response.status === 200 || response.status === 201) {
         showToast("Maestro registrado exitosamente", "success");
-        showTeacherInfo(response.teacher);
+        showTeacherInfo(response.data.teacher);
       } else {
         showToast(
           "Algo salio mal al registrar al maestro, intentelo mas tarde",
