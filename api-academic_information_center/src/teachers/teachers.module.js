@@ -12,6 +12,12 @@ const middlewares = (req, res, next) => {
   next();
 };
 
+router.get(
+  PATH,
+  middlewares,
+  teacherController.getTeacherInfoByAcademicId.bind(teacherController)
+)
+
 router.post(
   PATH,
   middlewares,

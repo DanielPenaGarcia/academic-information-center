@@ -51,6 +51,21 @@ const api = {
     const data = await response.json();
     return { status, ...data };
   },
+  async patch({ endpoint, body }) {
+    const headers = {
+      "Content-Type": "application/json",
+      ...this.getAuthHeader(),
+    };
+
+    const response = await fetch(`${this.apiUrl}/${endpoint}`, {
+      method: "PATCH",
+      headers: headers,
+      body: JSON.stringify(body),
+    });
+    const status = response.status;
+    const data = await response.json();
+    return { status, ...data };
+  },
 
   async delete({ endpoint }) {
     const headers = this.getAuthHeader();

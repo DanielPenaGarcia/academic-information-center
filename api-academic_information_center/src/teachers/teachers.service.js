@@ -3,10 +3,22 @@ import {TeacherSchema} from "../schemas/teacher.schema.js";
 import { createAcademicEmail } from "../utils/functions/create-academic-email.function.js";
 import { createAcademicPassword } from "../utils/functions/create-academic-password.function.js";
 import {InternalServerErrorException} from "../utils/exceptions/http/internal-server-error.exception.js"
+import { BadRequestException } from "../utils/exceptions/http/bad-request.exception.js";
+import { UserSchema } from "../schemas/user.schema.js";
+import { NotFoundException } from "../utils/exceptions/http/not-found.exception.js";
 
 export class TeachersService {
   constructor() {
    this.teachersRepository = dataSource.getRepository(TeacherSchema);
+  }
+
+  async getTeacherInfoByAcademicId({academicId}){
+    const teacherFound = await this.teachersRepository.findOneBy({academicId:academicId});
+    if(!teacherFound){
+      throw new NotFoundException("Teacher not found");
+    }
+    delete teacherFound.password;
+    return teacherFound;
   }
 
   async createTeacher({ names, fatherLastName, motherLastName}) {
@@ -48,53 +60,47 @@ export class TeachersService {
     return teacherCreated;
   }
 
-  async updateTeacher({ academicId, names, fatherLastName, motherLastName, curp, photo }) {
+  async updateTeacher({ academicId, names, fatherLastName, motherLastName,password, curp, photo }) {
     //TODO: UPDATE PHOTO
-    // const values = [];
+    const updateData = {};
 
-    // const condition = where().equal('academic_id', academicId).build();
+    if(!academicId){
+      throw new BadRequestException("Invalid academic Id");
+    }
 
-    // const teacher = await this.teachersRepository.findOne({ condition: condition });
-    // if (!teacher) {
-    //   throw new Error(`Teacher with academic id ${academicId} not found`);
-    // }
+    if(names){
+      updateData.names = names;
+    }
 
-    // if (names) {
-    //   values.push({
-    //     column: "names",
-    //     value: names
-    //   });
-    // }
-    // if (fatherLastName) {
-    //   values.push({
-    //     column: "father_last_name",
-    //     value: fatherLastName
-    //   });
-    // }
-    // if (motherLastName) {
-    //   values.push({
-    //     column: "mother_last_name",
-    //     value: motherLastName
-    //   });
-    // }
-    // if (curp) {
-    //   values.push({
-    //     column: "curp",
-    //     value: curp
-    //   });
-    // }
-    // if (values.length == 0) {
-    //   throw Error("Error empty values");
-    // }
+    if(fatherLastName){
+      updateData.fatherLastName = fatherLastName;
+    }
 
-    // const conditionUpdate = where().equal('id', teacher.id).build();
+    if(motherLastName){
+      updateData.motherLastName = motherLastName;
+    }
 
-    // const result = await this.teachersRepository.update({ setValues: values, conditions: conditionUpdate });
+    if(password){
+      updateData.password = password;
+    }
 
-    // if(result.affectedRows!=1){
-    //   throw Error("Something went wrong with the update");
-    // }
+    if(curp){
+      updateData.curp = curp;
+    }
 
-    // return await this.teachersRepository.findOne({ condition: condition });;
+    if(photo){
+      updateData.photo = photo;
+    }
+
+    if(Object.keys(updateData).length == 0){
+      throw new BadRequestException("Empty values, there are no values to update");
+    }
+
+    const response = await this.teachersRepository.update({academicId:academicId},updateData);
+    if(response.affected == 0){
+      throw new NotFoundException("There were no updated teacher");
+    }
+    const teacherUpdated = await this.teachersRepository.findOneBy({academicId:academicId});
+    return teacherUpdated;
   }
 }

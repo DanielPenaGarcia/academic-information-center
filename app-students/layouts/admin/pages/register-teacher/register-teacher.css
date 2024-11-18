@@ -16,8 +16,8 @@ body {
 .page{
     background: linear-gradient(
         135deg,
-        rgba(0, 124, 234, 1) 16%,
-        rgba(94, 193, 255, 1) 90%
+        rgb(111, 182, 243) 16%,
+        rgb(165, 212, 241) 90%
       );
       width: 100%;
       height: 100%;
@@ -114,7 +114,7 @@ body {
   
   /* Efecto al pasar el cursor sobre el botón */
   button:hover {
-    background-color: var(--primary-tint);
+    opacity: 0.9;
   }
 
   .teacher-info {
