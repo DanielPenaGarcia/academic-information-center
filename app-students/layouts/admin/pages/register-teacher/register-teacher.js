@@ -1,5 +1,3 @@
-const API_URL = "http://localhost:3000/api/v1/teacher";
-import localStorageService from "../../../../shared/services/local-storage.service.js";
 import api from "../../../../shared/services/api.service.js";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -19,6 +17,10 @@ document.addEventListener("DOMContentLoaded", function () {
         );
       }
     } catch (error) {
+      showToast(
+        "Hubo un problema con el registro del maestro",
+        "error"
+      );
         console.error("Hubo un problema con el registro del maestro:", error);
     }
   }
