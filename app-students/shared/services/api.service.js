@@ -1,42 +1,67 @@
+import localStorageService from "./local-storage.service.js"; // Suponiendo que tienes un servicio para manejar el localStorage
+
 const api = {
   apiUrl: "http://localhost:3000/api/v1",
-  token: localStorage.getItem("token"),
 
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: token? `Bearer ${token}` : "",
+  getAuthHeader() {
+    const token = localStorageService.getItem('token');
+    return token ? { Authorization: `Bearer ${token}` } : {};
   },
 
   async get({ endpoint, query }) {
     const queryString = new URLSearchParams(query).toString();
-    const response = await fetch(`${this.apiUrl}/${endpoint}?${queryString}`);
-    return response.json();
+    const headers = this.getAuthHeader();
+
+    const response = await fetch(`${this.apiUrl}/${endpoint}?${queryString}`, {
+      method: "GET",
+      headers: headers,
+    });
+    const status = response.status;
+    const data = await response.json();
+    return { status, ...data };
   },
 
   async post({ endpoint, body }) {
+    const headers = {
+      "Content-Type": "application/json",
+      ...this.getAuthHeader(),
+    };
     const response = await fetch(`${this.apiUrl}/${endpoint}`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify(body),
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(body),
     });
-    return response.json();
+    const status = response.status;
+    const data = await response.json();
+    return { status, ...data };
   },
 
   async put({ endpoint, body }) {
+    const headers = {
+      "Content-Type": "application/json",
+      ...this.getAuthHeader(),
+    };
+
     const response = await fetch(`${this.apiUrl}/${endpoint}`, {
       method: "PUT",
-      headers,
+      headers: headers,
       body: JSON.stringify(body),
     });
-    return response.json();
+    const status = response.status;
+    const data = await response.json();
+    return { status, ...data };
   },
 
   async delete({ endpoint }) {
+    const headers = this.getAuthHeader();
+
     const response = await fetch(`${this.apiUrl}/${endpoint}`, {
       method: "DELETE",
-      headers,
+      headers: headers,
     });
-    return response.json();
+    const status = response.status;
+    const data = await response.json();
+    return { status, ...data };
   },
 };
 
