@@ -8,7 +8,8 @@ const PATH = "/teacher"
 const teacherController = new TeacherController();
 
 const middlewares = (req, res, next) => {
-  teacherSerializable(req, res, next);
+  //teacherSerializable(req, res, next);
+  next();
 };
 
 router.post(
