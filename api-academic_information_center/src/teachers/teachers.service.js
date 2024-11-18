@@ -20,6 +20,7 @@ export class TeachersService {
         motherLastName: motherLastName,
         password: ""
     };
+      // transactionalEntityManager.create(TeacherSchema,{}) Para armar el objeto
       teacherCreated = await transactionalEntityManager.save(TeacherSchema,teacher);
 
       teacherCreated = await transactionalEntityManager.findOneBy(TeacherSchema,{id:teacherCreated.id});
@@ -45,57 +46,6 @@ export class TeachersService {
   }
     });
     return teacherCreated;
-
-    // const teacherCreated = await this.teachersRepository.create({
-    //   names,
-    //   fatherLastName,
-    //   motherLastName,
-    // });
-
-    // if(!teacherCreated){
-    //   throw new InternalServerErrorException("Error on create Teacher")
-    // }
-
-
-
-    // const result = this.teachersRepository.update(teacherCreated.id,{
-    //   email:emailCreated,
-    //   password:passwordCreated
-    // });
-
-    // if (result.affected === 0) {
-    //   throw new InternalServerErrorException("Error on create Teacher")
-    // }
-
-
-    // const teacherDTO = await this.teachersRepository.findOneById(
-    //   result.insertId
-    // );
-    // let teacher = teacherDtoToEntityMapper(teacherDTO);
-    // // const email = createAcademicEmail({
-    // //   name: teacher.names,
-    // //   fatherLastName: teacher.fatherLastName,
-    // //   academicId: teacher.academicId,
-    // // });
-    // // const password = createAcademicPassword({
-    // //   name: teacher.names,
-    // //   fatherLastName: teacher.fatherLastName,
-    // //   academicId: teacher.academicId,
-    // // });
-
-    // await this.teachersRepository.update({
-    //   setValues: [
-    //     { column: "email", value: email },
-    //     { column: "password", value: password },
-    //   ],
-    //   conditions: where().equal("id", teacher.id).build(),
-    // });
-    // if (result.affectedRows === 0) {
-    //   throw new Error("Error updating teacher");
-    // }
-    // teacher.email = email;
-    // teacher.password = password;
-    // return teacher;
   }
 
   async updateTeacher({ academicId, names, fatherLastName, motherLastName, curp, photo }) {
