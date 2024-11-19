@@ -1,4 +1,3 @@
-import { UserRole } from "../entities/enums/roles.enum.js";
 import { StudentsService } from "./students.service.js";
 
 export class StudentController {
@@ -6,18 +5,18 @@ export class StudentController {
     this.studentService = new StudentsService();
   }
 
-  async createStudent(req, res) {
+  async createStudent(req, res,next) {
     try {
       //this.#validateAdmin(req);
       const { names, fatherLastName, motherLastName, curp, photo } = req.body;
-      const result = await this.studentService.createStudent({
+      const student = await this.studentService.createStudent({
         names,
         fatherLastName,
         motherLastName,
         curp,
         photo,
       });
-      res.status(200).json(result);
+      res.status(200).json({student});
     } catch (error) {
       next(error);
     }
