@@ -5,13 +5,15 @@ document.addEventListener("DOMContentLoaded", function () {
   const loginForm = document.getElementById("loginForm");
 
   async function login({ email, password }) {
+    email = '00000000001';
+    password = '123456';
     try {
       const response = await authService.login({
         endpoint: "auth/login",
         body: { academicId: email, password },
       });
-      localStorageService.setItem("token", response.token);
-      localStorageService.setItem("user", response.user);
+      localStorageService.setItem("token", response.data.token);
+      localStorageService.setItem("user", response.data.user);
     } catch (error) {
       console.error("Hubo un problema con el login:", error);
       alert("Login fallido. Verifica tus credenciales.");
