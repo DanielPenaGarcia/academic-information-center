@@ -9,14 +9,21 @@ const middlewares = (req, res, next) => {
 export const router = express.Router();
 
 const studentsController = new StudentController();
+const PATH = "/student"
+
+router.get(
+  PATH,
+  middlewares,
+  studentsController.getStudentInfoByAcademicId.bind(studentsController)
+)
 
 router.post(
-  "/student",
+  PATH,
   studentsController.createStudent.bind(studentsController)
 );
 
 router.patch(
-  "/student",
-  middlewares,
+  PATH,
+  //middlewares,
   studentsController.updateStudent.bind(studentsController)
 );
