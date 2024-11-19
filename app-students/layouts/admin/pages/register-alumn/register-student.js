@@ -1,31 +1,31 @@
 import api from "../../../../shared/services/api.service.js";
 
 document.addEventListener("DOMContentLoaded", function () {
-  async function registerTeacher({ names, fatherLastName, motherLastName }) {
+  async function registerStudent({ names, fatherLastName, motherLastName }) {
     try {
       const response = await api.post({
-        endpoint: "teacher",
+        endpoint: "student",
         body: { names, fatherLastName, motherLastName },
       });
       if (response.status === 200 || response.status === 201) {
-        showToast("Maestro registrado exitosamente", "success");
-        showTeacherInfo(response.data.teacher);
+        showToast("Estudiante registrado exitosamente", "success");
+        showStudentInfo(response.student);
       } else {
         showToast(
-          "Algo salio mal al registrar al maestro, intentelo mas tarde",
+          "Algo salio mal al registrar al estudiante, intentelo mas tarde",
           "error"
         );
       }
     } catch (error) {
       showToast(
-        "Hubo un problema con el registro del maestro",
+        "Hubo un problema con el registro del estudiante",
         "error"
       );
-        console.error("Hubo un problema con el registro del maestro:", error);
+        console.error("Hubo un problema con el registro del estudiante:", error);
     }
   }
 
-  function showTeacherInfo({
+  function showStudentInfo({
     email,
     academicId,
     names,
@@ -42,11 +42,11 @@ document.addEventListener("DOMContentLoaded", function () {
       motherLastName;
     document.querySelector("#passwordReturned").textContent = password;
 
-    const teacherInfoDiv = document.querySelector("#teacherInfo");
+    const studentInfoDiv = document.querySelector("#studentInfo");
     const formContainer = document.querySelector(".form-container");
 
     formContainer.style.display = "none";
-    teacherInfoDiv.style.display = "block";
+    studentInfoDiv.style.display = "block";
   }
 
   function showToast(message, type) {
@@ -61,15 +61,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 3000);
   }
 
-  async function onClickRegisterTeacher(event) {
+  async function onClickRegisterStudent(event) {
     event.preventDefault();
     const names = document.getElementById("name").value;
     const fatherLastName = document.getElementById("fatherLastName").value;
     const motherLastName = document.getElementById("motherLastName").value;
 
-    registerTeacher({ names, fatherLastName, motherLastName });
+    registerStudent({ names, fatherLastName, motherLastName });
   }
 
-  const fprm = document.getElementById("teacherForm");
-  fprm.addEventListener("submit", onClickRegisterTeacher);
+  const fprm = document.getElementById("studentForm");
+  fprm.addEventListener("submit", onClickRegisterStudent);
 });

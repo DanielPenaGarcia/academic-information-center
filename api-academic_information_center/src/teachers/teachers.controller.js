@@ -7,6 +7,16 @@ export class TeacherController{
     }
 
 
+    async getTeacherInfoByAcademicId(req,res,next){
+      try{
+        const {academicId} = req.user;
+        const teacher = await this.teacherService.getTeacherInfoByAcademicId({academicId})
+        res.status(200).json({teacher});
+      } catch (error) {
+        next(error);
+      }
+    }
+
     async createTeacher(req,res,next){
       try{
         const {names, fatherLastName, motherLastName, curp, photo} = req.body;
@@ -18,16 +28,14 @@ export class TeacherController{
 }
 
 
-    async updateTeacher(req,res){
+    async updateTeacher(req,res,next){
         try {
-            const { academicId, names, fatherLastName, motherLastName, curp} = req.body;
-            const result = await this.teacherService.updateTeacher({academicId,names,fatherLastName,motherLastName,curp});
-            res.status(200).json(result);
+            const {names, fatherLastName, motherLastName, curp, password} = req.body;
+            const {academicId} = req.user;
+            const teacher = await this.teacherService.updateTeacher({academicId,names,fatherLastName,motherLastName,password,curp});
+            res.status(200).json({teacher});
           } catch (error) {
-            if (error.message === "Forbidden") {
-              return res.status(403).json({ error: "Forbidden" });
-            }
-            res.status(500).json({ error: error.message });
+            next(error);
           }
     }
 }

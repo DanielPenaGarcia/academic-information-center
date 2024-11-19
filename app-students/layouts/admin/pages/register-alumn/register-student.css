@@ -117,7 +117,7 @@ body {
     opacity: 0.9;
   }
 
-  .teacher-info {
+  .student-info {
     background-color: #fff;
     padding: 20px 30px;
     border-radius: 10px;
@@ -127,13 +127,13 @@ body {
     text-align: center;
   }
   
-  .teacher-info h2 {
+  .student-info h2 {
     font-size: 24px;
     margin-bottom: 20px;
     color: var(--primary);
   }
   
-  .teacher-info p {
+  .student-info p {
     font-size: 16px;
     margin: 10px 0;
   }
