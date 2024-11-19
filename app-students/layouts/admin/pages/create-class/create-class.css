@@ -10,6 +10,26 @@
     width: 100%; /* Asegura que el contenido ocupe todo el ancho disponible */
 }
 
+button.block {
+    width: 100%;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button.block:hover {
+    background-color: var(--primary-tint);
+    transition: background-color 0.3s ease;
+}
+
+button.block:active {
+    background-color: var(--primary-shade);
+    transition: background-color 0.3s ease;
+}
+
 section#form-section {
     flex: 1; /* Hace que el formulario ocupe todo el espacio restante */
     width: 100%; /* Asegura que el contenido ocupe todo el ancho disponible */

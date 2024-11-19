@@ -12,7 +12,7 @@
 }
 
 .table-subject__header {
-    background-color: transparent;
+  background-color: transparent;
   color: #333;
   text-align: left;
   font-weight: bold;
@@ -24,10 +24,12 @@
 }
 
 .table-subject__body__row:nth-child(even) {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 .table-subject__body__row:hover {
+  cursor: pointer;
+  user-select: none;
   background-color: #eaf2ff;
   transition: background-color 0.2s ease-in-out;
 }
@@ -43,6 +45,17 @@
   align-items: center;
   padding: 10px 0;
   font-size: 14px;
+}
+
+/* Estilo específico para los items de la tabla */
+.table-item {
+  cursor: pointer;
+  user-select: none;
+}
+
+.table-item:hover {
+  background-color: #eaf2ff;
+  transition: background-color 0.2s ease-in-out;
 }
 
 #previousPage,
