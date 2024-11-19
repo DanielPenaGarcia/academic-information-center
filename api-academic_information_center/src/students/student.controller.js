@@ -5,6 +5,16 @@ export class StudentController {
     this.studentService = new StudentsService();
   }
 
+  async getStudentInfoByAcademicId(req,res,next){
+    try{
+      const {academicId} = req.user;
+      const student = await this.studentService.getStudentInfoByAcademicId({academicId})
+      res.status(200).json({student});
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async createStudent(req, res,next) {
     try {
       //this.#validateAdmin(req);
@@ -24,17 +34,18 @@ export class StudentController {
 
   async updateStudent(req, res, next) {
     try {
-      this.#validateUpdateStudentByStudentOrAdmin(req);
-      const { academicId, names, fatherLastName, motherLastName, curp } =
-        req.body;
-      const result = await this.studentService.updateStudentProfile({
+      //this.#validateUpdateStudentByStudentOrAdmin(req);
+      const { names, fatherLastName, motherLastName, curp,password,photo } = req.body;
+      const {academicId} = req.user;
+      const student = await this.studentService.updateStudentProfile({
         academicId,
         names,
         fatherLastName,
         motherLastName,
+        password,
         curp,
       });
-      res.status(200).json(result);
+      res.status(200).json({student});
     } catch (error) {
       next(error);
     }

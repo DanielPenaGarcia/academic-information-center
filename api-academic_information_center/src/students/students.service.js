@@ -1,11 +1,24 @@
 import { dataSource } from "../config/orm.config.js";
 import { StudentSchema } from "../schemas/student.schema.js";
 import { InternalServerErrorException } from "../utils/exceptions/http/internal-server-error.exception.js";
+import { BadRequestException } from "../utils/exceptions/http/bad-request.exception.js";
+import { NotFoundException } from "../utils/exceptions/http/not-found.exception.js";
 import { createAcademicEmail } from "../utils/functions/create-academic-email.function.js";
 import { createAcademicPassword } from "../utils/functions/create-academic-password.function.js";
 
 export class StudentsService {
-  constructor() {}
+  constructor() {
+    this.studentRepository = dataSource.getRepository(StudentSchema);
+  }
+
+  async getStudentInfoByAcademicId({academicId}){
+    const studentFound = await this.studentRepository.findOneBy({academicId:academicId});
+    if(!studentFound){
+      throw new NotFoundException("Student not found");
+    }
+    delete studentFound.password;
+    return studentFound;
+  }
 
   async createStudent({ names, fatherLastName, motherLastName, curp, photo }) {
       const studentCreated = await dataSource.transaction(async (transactionalEntityManager)=>{
@@ -44,66 +57,57 @@ export class StudentsService {
       return studentCreated;
   }
 
-  // async updateStudentProfile({
-  //   academicId,
-  //   names,
-  //   fatherLastName,
-  //   motherLastName,
-  //   curp,
-  //   photo,
-  // }) {
-  //   //TODO: UPDATE PHOTO
-  //   const values = [];
+  async updateStudentProfile({
+    academicId,
+    names,
+    fatherLastName,
+    motherLastName,
+    password,
+    curp,
+    photo,
+  }) {
+    //TODO: UPDATE PHOTO
 
-  //   const condition = where().equal("academic_id", academicId).build();
+    const updateData = {};
 
-  //   const student = await this.studentsRepository.findOne({
-  //     condition: condition,
-  //   });
-  //   if (!student) {
-  //     throw new BusinessException(
-  //       `Student with academic id ${academicId} not found`
-  //     );
-  //   }
+    if(!academicId){
+      throw new BadRequestException("Invalid academic Id");
+    }
 
-  //   if (names) {
-  //     values.push({
-  //       column: "names",
-  //       value: names,
-  //     });
-  //   }
-  //   if (fatherLastName) {
-  //     values.push({
-  //       column: "father_last_name",
-  //       value: fatherLastName,
-  //     });
-  //   }
-  //   if (motherLastName) {
-  //     values.push({
-  //       column: "mother_last_name",
-  //       value: motherLastName,
-  //     });
-  //   }
-  //   if (curp) {
-  //     values.push({
-  //       column: "curp",
-  //       value: curp,
-  //     });
-  //   }
-  //   if (values.length == 0) {
-  //     throw BusinessException("Error empty values");
-  //   }
+    if(names){
+      updateData.names = names;
+    }
 
-  //   const conditionUpdate = where().equal("id", student.id).build();
+    if(fatherLastName){
+      updateData.fatherLastName = fatherLastName;
+    }
 
-  //   const result = await this.studentsRepository.update({
-  //     setValues: values,
-  //     conditions: conditionUpdate,
-  //   });
+    if(motherLastName){
+      updateData.motherLastName = motherLastName;
+    }
 
-  //   if (result.affectedRows != 1) {
-  //     throw BusinessException("Something went wrong with the update");
-  //   }
-  //   return await this.studentsRepository.findOne({ condition: condition });
-  // }
+    if(password){
+      updateData.password = password;
+    }
+
+    if(curp){
+      updateData.curp = curp;
+    }
+
+    if(photo){
+      updateData.photo = photo;
+    }
+
+    if(Object.keys(updateData).length == 0){
+      throw new BadRequestException("Empty values, there are no values to update");
+    }
+
+    const response = await this.studentRepository.update({academicId:academicId},updateData);
+    if(response.affected == 0){
+      throw new NotFoundException("There were no updated teacher");
+    }
+    const studentUpdated = await this.studentRepository.findOneBy({academicId:academicId});
+    return studentUpdated;
+
+  }
 }
