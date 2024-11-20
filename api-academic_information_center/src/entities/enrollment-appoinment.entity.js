@@ -1,7 +1,7 @@
-import { BaseEntity } from "./base.entity.js";
+import { BaseEntity } from "typeorm";
 
 export class EnrollmentAppoinment extends BaseEntity {
     startDateTime;
-    student;
     enrollmentPeriod;
+    student;
 }

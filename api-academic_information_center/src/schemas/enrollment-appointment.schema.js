@@ -1,17 +1,17 @@
 import { EntitySchema } from "typeorm";
 import { EnrollmentAppoinment } from "../entities/enrollment-appoinment.entity.js";
 
-export const EnrollmentAppointmentSchema = new EntitySchema({
-    name: 'EnrollmentAppointment',
-    tableName: 'enrollment_appointments',
+export const EnrollmentAppoinmentSchema = new EntitySchema({
+    name: 'EnrollmentAppoinment',
     target: EnrollmentAppoinment,
+    tableName: 'enrollment_appointments',
     columns: {
         id: {
             type: 'int',
             primary: true,
             generated: true
         },
-        startTime: {
+        startDateTime: {
             name: 'start_time',
             type: 'time',
             nullable: false
@@ -28,7 +28,7 @@ export const EnrollmentAppointmentSchema = new EntitySchema({
         }
     },
     relations: {
-        EnrollmentPeriod: {
+        enrollmentPeriod: {
             target: 'EnrollmentPeriod',
             type: 'many-to-one',
             joinColumn: {
@@ -37,7 +37,7 @@ export const EnrollmentAppointmentSchema = new EntitySchema({
             },
             cascade: true,
         },
-        Student: {
+        student: {
             target: 'Student',
             type: 'many-to-one',
             joinColumn: {
