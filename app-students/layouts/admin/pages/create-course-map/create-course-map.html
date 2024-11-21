@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Mapa Curricular</title>
+    <link rel="stylesheet" href="create-course-map.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Crear Mapa Curricular</h1>
+        <form class="curriculum-form">
+            <div class="form-group">
+                <label for="year">Año de inicio:</label>
+                <input type="text" id="year" name="year" placeholder="Ej. 2024" pattern="\d{4}" inputmode="numeric"  required>
+            </div>
+            <div class="form-group">
+                <label for="semesters">Cantidad de semestres:</label>
+                <input type="number" id="semesters" name="semesters" placeholder="Ej. 8" min="1" required>
+            </div>
+            <button type="submit" class="btn">Crear Mapa Curricular</button>
+        </form>
+    </div>
+    <script src="create-course-map.js" type="module"></script>
+</body>
+</html>
