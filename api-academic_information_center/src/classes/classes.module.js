@@ -13,3 +13,5 @@ const middlewares = (req, res, next) => {
 };
 
 router.post(`${path}`, roleAdminGuard, middlewares, classesController.postCreateClass.bind(classesController));
+
+router.patch(`${path}/assign-teacher`, roleAdminGuard, middlewares, classesController.AssignTeacherToClass.bind(classesController));

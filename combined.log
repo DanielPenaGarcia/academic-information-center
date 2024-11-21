@@ -12,3 +12,36 @@
 {"level":"error","message":{"method":"GET","path":"/favicon.ico","status":401},"timestamp":"2024-11-20T12:49:02.069Z"}
 {"level":"error","message":{"method":"GET","path":"/api/v1/post/auth/login","status":401},"timestamp":"2024-11-20T12:49:10.624Z"}
 {"level":"error","message":{"method":"GET","path":"/favicon.ico","status":401},"timestamp":"2024-11-20T12:49:10.957Z"}
+{"level":"error","message":{"method":"GET","path":"/api/v1","status":401},"timestamp":"2024-11-21T04:56:51.306Z"}
+{"level":"error","message":{"method":"GET","path":"/favicon.ico","status":401},"timestamp":"2024-11-21T04:56:51.403Z"}
+{"level":"error","message":"No metadata for \"User\" was found.","method":"POST","path":"/api/v1/auth/login","timestamp":"2024-11-21T04:57:43.409Z"}
+{"level":"error","message":"No metadata for \"User\" was found.","method":"POST","path":"/api/v1/auth/login","timestamp":"2024-11-21T04:58:05.791Z"}
+{"level":"error","message":"No metadata for \"User\" was found.","method":"POST","path":"/api/v1/auth/login","timestamp":"2024-11-21T04:58:06.374Z"}
+{"level":"error","message":"No metadata for \"User\" was found.","method":"POST","path":"/api/v1/auth/login","timestamp":"2024-11-21T04:58:08.288Z"}
+{"level":"error","message":"No metadata for \"User\" was found.","method":"POST","path":"/api/v1/auth/login","timestamp":"2024-11-21T04:58:57.900Z"}
+{"level":"error","message":"No metadata for \"User\" was found.","method":"POST","path":"/api/v1/auth/login","timestamp":"2024-11-21T04:59:12.523Z"}
+{"level":"error","message":"No metadata for \"User\" was found.","method":"POST","path":"/api/v1/auth/login","timestamp":"2024-11-21T04:59:21.427Z"}
+{"level":"error","message":"No metadata for \"User\" was found.","method":"POST","path":"/api/v1/auth/login","timestamp":"2024-11-21T04:59:29.869Z"}
+{"level":"error","message":{"method":"GET","path":"/api/v1","status":401},"timestamp":"2024-11-21T07:55:30.663Z"}
+{"level":"error","message":{"method":"GET","path":"/favicon.ico","status":401},"timestamp":"2024-11-21T07:55:32.863Z"}
+{"level":"error","message":{"method":"GET","path":"/api/v1/auth/login/","status":401},"timestamp":"2024-11-21T07:55:43.158Z"}
+{"level":"error","message":{"method":"GET","path":"/favicon.ico","status":401},"timestamp":"2024-11-21T07:55:43.386Z"}
+{"level":"error","message":{"method":"GET","path":"/api/v1/auth/login/post","status":401},"timestamp":"2024-11-21T07:55:49.666Z"}
+{"level":"error","message":{"method":"GET","path":"/favicon.ico","status":401},"timestamp":"2024-11-21T07:55:49.943Z"}
+{"level":"error","message":{"method":"GET","path":"/api/v1/auth/login/","status":401},"timestamp":"2024-11-21T07:55:51.990Z"}
+{"level":"error","message":{"method":"GET","path":"/favicon.ico","status":401},"timestamp":"2024-11-21T07:55:52.274Z"}
+{"level":"error","message":{"method":"GET","path":"/api/v1","status":401},"timestamp":"2024-11-21T08:23:57.892Z"}
+{"level":"error","message":{"method":"GET","path":"/favicon.ico","status":401},"timestamp":"2024-11-21T08:24:00.214Z"}
+{"level":"error","message":{"method":"GET","path":"/api/v1/auth/login/","status":401},"timestamp":"2024-11-21T08:24:03.779Z"}
+{"level":"error","message":{"method":"GET","path":"/favicon.ico","status":401},"timestamp":"2024-11-21T08:24:04.056Z"}
+{"level":"error","message":{"method":"GET","path":"/api/v1/auth/login/","status":401},"timestamp":"2024-11-21T08:24:13.680Z"}
+{"level":"error","message":{"method":"GET","path":"/favicon.ico","status":401},"timestamp":"2024-11-21T08:24:13.985Z"}
+{"level":"error","message":{"method":"GET","path":"/login.html","status":401},"timestamp":"2024-11-21T08:59:11.028Z"}
+{"level":"error","message":{"method":"GET","path":"/favicon.ico","status":401},"timestamp":"2024-11-21T08:59:13.818Z"}
+{"level":"error","message":{"method":"GET","path":"/api/v1/login.html","status":401},"timestamp":"2024-11-21T08:59:21.590Z"}
+{"level":"error","message":{"method":"GET","path":"/favicon.ico","status":401},"timestamp":"2024-11-21T08:59:21.868Z"}
+{"level":"error","message":{"method":"GET","path":"/api/v1/login.html","status":401},"timestamp":"2024-11-21T08:59:24.032Z"}
+{"level":"error","message":{"method":"GET","path":"/favicon.ico","status":401},"timestamp":"2024-11-21T08:59:24.320Z"}
+{"expiredAt":"2024-11-21T02:37:32.000Z","level":"error","message":"jwt expired","method":"PATCH","name":"TokenExpiredError","path":"/api/v1/classes/assign-teacher","timestamp":"2024-11-21T09:56:53.591Z"}
+{"level":"error","message":"No metadata for \"User\" was found.","method":"POST","path":"/api/v1/auth/login","timestamp":"2024-11-21T09:57:07.228Z"}
+{"level":"error","message":"No metadata for \"User\" was found.","method":"POST","path":"/api/v1/auth/login","timestamp":"2024-11-21T09:57:16.568Z"}

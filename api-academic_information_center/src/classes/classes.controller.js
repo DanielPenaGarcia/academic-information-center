@@ -23,5 +23,21 @@ export class ClassesController {
             next(error);
         }
     }
+
+    async AssignTeacherToClass(req, res, next) {
+        try {
+            if (!req.body || Object.keys(req.body).length === 0) {
+                throw new BadRequestException("El cuerpo de la petición está vacío");
+            }
+            const { classId, teacherId } = req.body;
+            if (!classId || !teacherId) {
+                throw new BadRequestException("Faltan campos obligatorios en el cuerpo de la petición");
+            }
+            await this.classesService.assignTeacherToClass({ classId, teacherId });
+            res.status(201).json({ message: "Profesor asignado correctamente" });
+        } catch (error) {
+            next(error);
+        }
+    }
     
 }

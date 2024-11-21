@@ -1,7 +1,7 @@
 import { dataSource } from "../config/orm.config.js";
 import { ClassSchema } from "../schemas/class.schema.js";
 import { SubjectSchema } from "../schemas/subject.schema.js";
-import { TeacherSchema } from "../schemas/teacher.schema.js";
+import { UserSchema } from "../schemas/user.schema.js";
 import { BadRequestException } from "../utils/exceptions/http/bad-request.exception.js";
 import { days as daysOption } from "../utils/constanst/days.constants.js";
 
@@ -10,7 +10,7 @@ export class ClassesService {
     constructor() {
         this.classesRepository = dataSource.getRepository(ClassSchema);
         this.subjectRepository = dataSource.getRepository(SubjectSchema);
-        this.teacherRepository = dataSource.getRepository(TeacherSchema);
+        this.teacherRepository = dataSource.getRepository(UserSchema);
     }
 
     async createClass({ startTime, duration, days, subjectId }) {
@@ -37,6 +37,37 @@ export class ClassesService {
             duration: duration,
             subject: subject,
         });
+        await this.classesRepository.save(klass);
+        return klass;
+    }
+
+    async assignTeacherToClass({ classId, teacherId }) {
+    
+        const klass = await this.classesRepository.findOne({
+            where: {
+                id: classId,
+            }
+        });
+        if (!klass) {
+            throw new BadRequestException(`Clase con id ${classId} no encontrada`);
+        }
+        const teacher = await this.teacherRepository.findOne({
+            where: {
+                id: teacherId,
+                role: 'TEACHER',
+            }
+        });
+        if (!teacher) {
+            throw new BadRequestException(`Profesor con id ${teacherId} no encontrado`);
+        }
+
+        const teacherExist = klass.teacher === teacher;
+        if (teacherExist) {
+            throw new BadRequestException(`El profesor ya está asignado a la clase`);
+        }
+
+
+        klass.teacher = teacher;
         await this.classesRepository.save(klass);
         return klass;
     }
