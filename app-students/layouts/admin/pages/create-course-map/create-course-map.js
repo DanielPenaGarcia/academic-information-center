@@ -1,4 +1,4 @@
-import api from "../../../../shared/services/api.service";
+import api from "../../../../shared/services/api.service.js";
 
 // Asegurarse de que el DOM esté completamente cargado antes de ejecutar el código
 document.addEventListener("DOMContentLoaded", function () {
@@ -10,11 +10,12 @@ const addListeners = () => {
 };
 
 const addListenerToForm = () => {
-    const form = document.getElementById("curriculum-form");
+    const form = document.getElementById("course-map");
     form.addEventListener("submit", createCourseMap);
 };
 
 const createCourseMap = async (e) => {
+    debugger;
     e.preventDefault();
     const form = e.target;
     const data = {};
@@ -46,6 +47,7 @@ const validateCreateCourseMap = ({ year, semesters }) => {
     return true;
 }
 const submitCreateCourseMap = async ({ year, semesters }) => {
+   debugger;
     if (!validateCreateCourseMap({ year, semesters })) {
         return;
     }
