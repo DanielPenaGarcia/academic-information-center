@@ -11,6 +11,33 @@ export class StudentsService {
     this.studentRepository = dataSource.getRepository(StudentSchema);
   }
 
+  async getAllStudents(pageable,{academicId}){
+    try{
+      const students = await this.studentRepository.findAndCount({
+        where:{
+          academicId: academicId? academicId:undefined
+        },
+        select:{
+          academicId: true,
+          names: true,
+          fatherLastName: true,
+          motherLastName: true
+        },
+        take: pageable.limit,
+        skip: pageable.offset
+      });
+  
+      return {
+        students: students[0],
+        totalElements: students[1],
+        totalPages: Math.ceil(students[1]/pageable.limit),
+        currentPage: pageable.page
+      };
+    }catch(error){
+      throw new InternalServerErrorException("Can not get students")
+    }
+  }
+
   async getStudentInfoByAcademicId({academicId}){
     const studentFound = await this.studentRepository.findOneBy({academicId:academicId});
     if(!studentFound){

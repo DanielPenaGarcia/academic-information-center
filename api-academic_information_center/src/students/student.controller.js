@@ -1,9 +1,23 @@
+import { Pageable } from "../utils/classes/pageable.class.js";
 import { StudentsService } from "./students.service.js";
 
 export class StudentController {
   constructor() {
     this.studentService = new StudentsService();
   }
+
+  async getAllStudents(req,res,next){
+    try{
+      const pageable = new Pageable(req.query.page,req.query.count);
+      const filter = req.body;
+      const students = await this.studentService.getAllStudents(pageable,filter);
+      res.status(200).json(students);
+    }catch(error){
+      next(error);
+    }
+  }
+
+  async (){}
 
   async getStudentInfoByAcademicId(req,res,next){
     try{
