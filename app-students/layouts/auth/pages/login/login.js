@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function login({ email, password }) {
     email = '00000000001';
-    password = '123456';
+    password = 'AnaLover777';
     try {
       const response = await authService.login({
         endpoint: "auth/login",
