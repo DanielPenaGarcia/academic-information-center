@@ -50,7 +50,7 @@ export class ClassesController {
                 throw new BadRequestException("Faltan campos obligatorios en el cuerpo de la petición");
             }
             const classes = await this.classesService.getAvailableClassesByStudent({ studentId });
-            res.status(201).json(classes);
+            res.status(200).json(classes);
         } catch (error) {
             next(error);
         }
