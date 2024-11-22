@@ -12,7 +12,6 @@ import { router as ClassRouter } from "./classes/classes.module.js";
 import { router as SubjectRouter } from "./subjects/subjects.module.js";
 import { router as StudentRouter } from "./students/student.module.js";
 import { router as EnrollmentPeriodRouter } from "./enrollment-periods/enrollment-periods.module.js";
-import { router as EnrollmentAppoinmentRouter } from "./enrollment-appoinments/enrollment-appoinments.module.js";
 
 //Middlewares
 import { errorHandler } from "./middlewares/error-handleler.middleware.js";
@@ -39,7 +38,6 @@ app.use(API_PATH, SeedRouter);
 app.use(API_PATH, TeacherRouter);
 app.use(API_PATH, StudentRouter);
 app.use(API_PATH, EnrollmentPeriodRouter);
-app.use(API_PATH, EnrollmentAppoinmentRouter);
 
 //Error Handler
 app.use(errorHandler);
