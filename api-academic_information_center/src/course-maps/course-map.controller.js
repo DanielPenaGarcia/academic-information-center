@@ -10,7 +10,7 @@ export class CourseMapController {
         try {
             const { semesters, year } = req.body;
             const result = await this.courseMapsService.createCourseMap({ semesters, year });
-            res.status(200).json(result);
+            res.status(201).json(result);
         } catch (error) {
             next(error);
         }
