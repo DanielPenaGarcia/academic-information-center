@@ -1,52 +1,52 @@
-import { where } from "../utils/query-builder/condition.builder.js";
-import { Repository, RepositoryTable } from "../utils/repository/repository.js";
+import { dataSource } from "../config/orm.config.js";
+import { SubjectSchema } from "../schemas/subject.schema.js";
+import { UserSchema } from "../schemas/user.schema.js";
+import { BadRequestException } from "../utils/exceptions/http/bad-request.exception.js";
+
 
 export class TeacherSubjectsService{
     constructor(){
-        this.teacherSubjectRepository = new Repository(RepositoryTable.TEACHERS_SUBJECTS);
-        this.subjectRepository = new Repository(RepositoryTable.SUBJECT);
-        this.teachersRepository = new Repository(RepositoryTable.TEACHER);
+        this.subjectRepository = dataSource.getRepository(SubjectSchema);
+        this.teacherRepository = dataSource.getRepository(UserSchema);    
     }
 
-    async create({academicId,subjectId}){
-
-        const condition = where().equal('academic_id',academicId).build();
-
-        const teacher = await this.teachersRepository.findOne({condition: condition});
-        if(!teacher){
-          throw new Error(`Teacher with academic id ${academicId} not found`);
-        }
-
-        const subject = await this.subjectRepository.findOneById(subjectId);
-        if(!subject){
-          throw new Error(`Subject with id ${subjectId} not found`);
-        }
-
-        const condition2 = where().equal('teacher_id',teacher.id).and().equal("subject_id",subjectId).build();
-
-        const teacherSubject = await this.teacherSubjectRepository.find({condition:condition2});
-        if(teacherSubject.length>0){
-            throw new Error(`Teacher already is assigned to this subjec`)
-        }
-
-        const fields = ["teacher_id", "subject_id"];
-        const values = [[teacher.id,subjectId]];
-
-        const result = await this.teacherSubjectRepository.create({
-            fields: fields,
-            values: values
-        });
-
-        if (result.affectedRows === 0) {
-            throw new Error("Error assigning subject to teacher");
-          }
-        const teacherSubjectCreated = await this.teacherSubjectRepository.findOneById(result.insertId);
-        
-        const res = {
-            teacher: teacher.academic_id,
-            subject: subject.name
-          }
-
-        return res;
+    async asignTeacherToSubject({ academicId, subjectId }) {
+     
+      const teacher = await this.teacherRepository.findOne({
+        where: {
+          academicId: academicId,
+          role: 'TEACHER',
+        },
+      });
+    
+      if (!teacher) {
+        throw new BadRequestException(`Teacher with academic id ${academicId} not found`);
+      }
+    
+ 
+      const subject = await this.subjectRepository.findOne({
+        where: {
+          id: subjectId,
+        },
+        relations: ['teachers'], 
+      });
+    
+      if (!subject) {
+        throw new BadRequestException(`Subject with id ${subjectId} not found`);
+      }
+    
+      
+      const existingRelation = subject.teachers.find(t => t.id === teacher.id);
+    
+      if (existingRelation) {
+        throw new BadRequestException(`Teacher with academic id ${academicId} is already assigned to subject with id ${subjectId}`);
+      }
+    
+      subject.teachers.push(teacher);
+    
+      await this.subjectRepository.save(subject);
+    
+      return subject;
     }
+    
 }
