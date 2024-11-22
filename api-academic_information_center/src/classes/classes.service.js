@@ -123,7 +123,7 @@ export class ClassesService {
             where: {
                 student: { id: studentId },  
                 status: "approved",
-            },
+            }, 
           });
 
           const approvedSubjectIds = approvedSubjects.map((sc) => sc.subject_id);
@@ -145,8 +145,9 @@ for (const subject of subjects) {
     const eligibleClasses = await this.classesRepository.find({
         where: {
           subject:{id: In(eligibleSubjectIds)},
-        },
+        }, relations:["subject", "teacher"]
       });
+      console.log(eligibleClasses)
       return eligibleClasses;    
     }
 }

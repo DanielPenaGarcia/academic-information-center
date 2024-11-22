@@ -1,0 +1,90 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #444;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+#enrolled-classes-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.class-card {
+    background-color: #ffffff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 15px;
+    width: 220px;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.class-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+    border-color: #4CAF50;
+}
+
+.class-card h3 {
+    margin: 0;
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #333;
+    text-align: center;
+}
+
+.class-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.class-item {
+    background-color: #f4f6f9;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-left: 4px solid #4CAF50;
+    width: 200px; 
+}
+
+.class-item .class-info {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+.remove-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.remove-button:hover {
+    background-color: #e53935;
+}
