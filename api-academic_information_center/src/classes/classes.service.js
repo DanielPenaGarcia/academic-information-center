@@ -80,7 +80,7 @@ export class ClassesService {
         klass.teacher = teacher;
         await this.classesRepository.save(klass);
         return klass;
-
+    }
     async enrollStudent({studentId, classId}){
         console.log(classId+"AAAAAAA")
         const student = await this.studentRepository.findOne({
@@ -127,7 +127,7 @@ export class ClassesService {
         }
         const courseMapStudent= await this.studenCourseMapRepository.findOne({
             where:{
-                student: { student_id: studentId },            
+                student: studentId ,            
             },relations: ['courseMap'], 
         })
 

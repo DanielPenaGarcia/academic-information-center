@@ -38,6 +38,7 @@ export class ClassesController {
         } catch (error) {
             next(error);
         }
+    }
 
     async enrollStudent(req,res,next){
         try{
