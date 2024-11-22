@@ -1,6 +1,8 @@
 import express from "express";
 import { ClassesController } from "./classes.controller.js";
 import { roleAdminGuard } from "../middlewares/role-admin.guard.middleware.js";
+import { guard } from "../middlewares/guard.middleware.js";
+
 
 export const router = express.Router();
 
@@ -13,3 +15,5 @@ const middlewares = (req, res, next) => {
 };
 
 router.post(`${path}`, roleAdminGuard, middlewares, classesController.postCreateClass.bind(classesController));
+router.post(`${path}/availableClasses`, guard, middlewares, classesController.getAvailableClassesByStudent.bind(classesController));
+router.post(`${path}/enroll`, guard, middlewares, classesController.enrollStudent.bind(classesController));
