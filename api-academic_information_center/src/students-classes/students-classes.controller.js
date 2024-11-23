@@ -8,10 +8,10 @@ export class StudentsClassesController {
 
   async getStudentClassesByStudentId(req,res,next){
     try{
-      const pageable = new Pageable(req.query.page,req.query.count);
+      const {page,count,subject} = req.query;
+      const pageable = new Pageable(page,count);
       const academicId = req.params.studentId;
-      const filter = req.body;
-      const studentClasses = await  this.studentsClassesService.getStudentClassesByStudentId({academicId},pageable,filter);
+      const studentClasses = await  this.studentsClassesService.getStudentClassesByStudentId({academicId},pageable,{className:subject});
       res.status(200).json(studentClasses);
     }catch(error){
       next(error);
@@ -20,9 +20,8 @@ export class StudentsClassesController {
 
   async dropClass(req, res,next) {
     try {
-      const { studentClassId } = req.body;
-
-      const classDroped = await this.studentsClassesService.dropClass({studentClassId});
+      const { academicId,studentClassId } = req.params;
+      const classDroped = await this.studentsClassesService.dropClass({academicId,studentClassId});
       return res.status(200).json(classDroped);
     } catch (error) {
       next(error);

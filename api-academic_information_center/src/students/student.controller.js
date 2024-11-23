@@ -8,9 +8,9 @@ export class StudentController {
 
   async getAllStudents(req,res,next){
     try{
-      const pageable = new Pageable(req.query.page,req.query.count);
-      const filter = req.body;
-      const students = await this.studentService.getAllStudents(pageable,filter);
+      const {page,count,academicId} = req.query;
+      const pageable = new Pageable(page,count);
+      const students = await this.studentService.getAllStudents(pageable,{academicId});
       res.status(200).json(students);
     }catch(error){
       next(error);

@@ -12,7 +12,7 @@ studentsClassesController.getStudentClassesByStudentId.bind(studentsClassesContr
 );
 
 router.delete(
-    `${PATH}/:studentId/classes`,
+    `${PATH}/:academicId/classes/:studentClassId`,
     studentsClassesController.dropClass.bind(studentsClassesController));
 
 

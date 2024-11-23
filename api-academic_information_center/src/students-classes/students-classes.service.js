@@ -36,9 +36,9 @@ export class StudentsClassesService{
                 subject:{
                   name:true
                 },
+                startTime: true,
                 days: true
               },
-              status: true
             },
             take: pageable.limit,
             skip: pageable.offset
@@ -55,11 +55,14 @@ export class StudentsClassesService{
       }
     }
 
-    async dropClass({studentClassId}){
+    async dropClass({academicId,studentClassId}){
       try{
         const studentClass = await this.studentClasseRepository.findOne({
           where:{
-            id: studentClassId
+            id: studentClassId,
+            student: {
+              academicId: academicId
+            }
           },
           relations:{
             student: true,
