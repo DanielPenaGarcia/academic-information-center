@@ -1,10 +1,10 @@
 import api from "./api.service.js";
 
 const authService = {
-    login: (user, password) => {
+    login: ({academicId, password}) => {
         return api.post({
             endpoint: "auth/login",
-            body: { user, password },
+            body: {academicId, password},
         });
     },
 

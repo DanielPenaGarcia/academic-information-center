@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded",function(){
                     "error"
                   );
             }else{
-            studentInfo = response.student;
+            studentInfo = response.data.student;
             fillStudentForm(studentInfo);
             }
         }catch(error){

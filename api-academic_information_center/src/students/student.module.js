@@ -12,6 +12,12 @@ const studentsController = new StudentController();
 const PATH = "/student"
 
 router.get(
+  `${PATH}/all`,
+  middlewares,
+  studentsController.getAllStudents.bind(studentsController)
+)
+
+router.get(
   PATH,
   middlewares,
   studentsController.getStudentInfoByAcademicId.bind(studentsController)

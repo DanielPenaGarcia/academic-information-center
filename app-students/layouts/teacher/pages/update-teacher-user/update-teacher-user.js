@@ -8,13 +8,14 @@ document.addEventListener("DOMContentLoaded",function(){
             const response = await api.get({
                 endpoint: "teacher"
             });
+            debugger;
             if(response.status < 200 || response.status > 200){
                 showToast(
                     "Hubo un error al consultar la informacion del maestro",
                     "error"
                   );
             }else{
-            teacherInfo = response.teacher;
+            teacherInfo = response.data.teacher;
             fillTeacherForm(teacherInfo);
             }
         }catch(error){

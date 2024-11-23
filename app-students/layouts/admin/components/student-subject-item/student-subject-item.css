@@ -1,0 +1,24 @@
+.subject-item {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.subjectName {
+    font-weight: bold;
+    flex: 1;
+}
+
+.time-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-style: italic;
+    color: #666;
+}
+
+.subject-item:hover {
+    background-color: #f0f0f0;
+}

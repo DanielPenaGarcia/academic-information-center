@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alumnos Cursando</title>
+    <link rel="stylesheet" href="drop-student-from-class.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Selecciona un alumno a dar de baja</h1>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Buscar elementos...">
+            <button id="searchButton">Buscar</button>
+        </div>
+        <ul class="item-list" id="itemList">
+        </ul>
+        <div class="pagination">
+            <button id="prevButton" disabled>Anterior</button>
+            <span id="pageInfo">Página 1</span>
+            <button id="nextButton">Siguiente</button>
+        </div>
+    </div>
+    <div id="toast" class="toast"></div>
+    <script type="module" src="drop-student-from-class.js"></script>
+</body>
+</html>

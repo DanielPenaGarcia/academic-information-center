@@ -1,4 +1,5 @@
 import { dataSource } from "../config/orm.config.js";
+import { AdministratorSchema } from "../schemas/administrator.schema.js";
 import { CourseMapSchema } from "../schemas/course-map.schema.js";
 import { SubjectSchema } from "../schemas/subject.schema.js";
 
@@ -6,11 +7,25 @@ export class SeedService {
   constructor() {
     this.courseMapRepository = dataSource.getRepository(CourseMapSchema);
     this.subjectRepository = dataSource.getRepository(SubjectSchema);
+    this.administratorRepository = dataSource.getRepository(AdministratorSchema);
   }
 
   async seed() {
+    await this.#createAdministrator();
     const courseMap = await this.#createCourseMap();
     await this.#createSubjects(courseMap);
+  }
+
+  async #createAdministrator() {
+    const administrator = this.administratorRepository.create({
+      names: 'Admin admin',
+      fatherLastName: 'Admin',
+      motherLastName: 'Admin',
+      password: '123456',
+      email: 'admin@admin.com'
+    });
+    await this.administratorRepository.save(administrator);
+    return administrator;
   }
 
   async #createCourseMap() {

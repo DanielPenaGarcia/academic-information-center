@@ -4,14 +4,9 @@ import localStorageService from "../../../../shared/services/local-storage.servi
 document.addEventListener("DOMContentLoaded", function () {
   const loginForm = document.getElementById("loginForm");
 
-  async function login({ email, password }) {
-    email = '00000000001';
-    password = 'AnaLover777';
+  async function login({ user, password }) {
     try {
-      const response = await authService.login({
-        endpoint: "auth/login",
-        body: { academicId: email, password },
-      });
+      const response = await authService.login({ academicId: user, password });
       localStorageService.setItem("token", response.data.token);
       localStorageService.setItem("user", response.data.user);
     } catch (error) {
@@ -21,16 +16,16 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   async function onSubmitLogin(event) {
-    event.preventDefault(); // Evita el recargo del formulario
-    const email = document.getElementById("email").value;
+    event.preventDefault();
+    const user = document.getElementById("user").value;
     const password = document.getElementById("password").value;
 
-    if (!email || !password) {
+    if (!user || !password) {
       alert("Por favor llena todos los campos.");
       return;
     }
 
-    await login({ email, password });
+    await login({ user, password });
   }
 
   loginForm.addEventListener("submit", onSubmitLogin);

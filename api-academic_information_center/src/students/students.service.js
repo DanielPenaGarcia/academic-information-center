@@ -5,10 +5,39 @@ import { BadRequestException } from "../utils/exceptions/http/bad-request.except
 import { NotFoundException } from "../utils/exceptions/http/not-found.exception.js";
 import { createAcademicEmail } from "../utils/functions/create-academic-email.function.js";
 import { createAcademicPassword } from "../utils/functions/create-academic-password.function.js";
+import { CourseMapSchema } from "../schemas/course-map.schema.js";
+import { StudentCourseMapSchema } from "../schemas/student-course-map.schema.js";
 
 export class StudentsService {
   constructor() {
     this.studentRepository = dataSource.getRepository(StudentSchema);
+  }
+
+  async getAllStudents(pageable,{academicId}){
+    try{
+      const students = await this.studentRepository.findAndCount({
+        where:{
+          academicId: academicId? academicId:undefined
+        },
+        select:{
+          academicId: true,
+          names: true,
+          fatherLastName: true,
+          motherLastName: true
+        },
+        take: pageable.limit,
+        skip: pageable.offset
+      });
+  
+      return {
+        students: students[0],
+        totalElements: students[1],
+        totalPages: Math.ceil(students[1]/pageable.limit),
+        currentPage: pageable.page
+      };
+    }catch(error){
+      throw new InternalServerErrorException("Can not get students")
+    }
   }
 
   async getStudentInfoByAcademicId({academicId}){
@@ -49,6 +78,24 @@ export class StudentsService {
             studentCreatedFound.password = passwordCreated;
 
             await transactionalEntityManager.save(StudentSchema,studentCreatedFound);
+
+            const lastCourseMap = await transactionalEntityManager.findOne(CourseMapSchema,{
+              where:{},
+              order:{
+                createdAt: 'DESC'
+              }
+            });
+
+            const studentCourseMap = {
+              studentId: studentCreatedFound.id,
+              courseMapId: lastCourseMap.id
+            }
+            const studentCourseMapSaved = await transactionalEntityManager.save(StudentCourseMapSchema,studentCourseMap);
+
+            if(!studentCourseMapSaved){
+              throw new InternalServerErrorException();
+            }
+
             return studentCreatedFound;
         }catch(error){
           throw new InternalServerErrorException("Error on create student")

@@ -1,0 +1,144 @@
+/* Estilo general */
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+    color: #333;
+    line-height: 1.6;
+  }
+  
+  h1 {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 2rem;
+    color: #2c3e50;
+  }
+  
+  /* Contenedor principal */
+  .container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 20px;
+    margin: 20px auto;
+    max-width: 1200px;
+    padding: 10px;
+  }
+  
+  /* Sección del profesor */
+  .professor-section,
+  .subjects-section {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+  
+  .professor-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .search-bar {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .search-bar input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease-in-out;
+  }
+  
+  .search-bar input:focus {
+    border-color: #3498db;
+    outline: none;
+  }
+  
+  .search-bar button {
+    padding: 10px 15px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .search-bar button:hover {
+    background-color: #2980b9;
+  }
+  
+  .search-bar button:focus {
+    outline: 2px solid #3498db;
+  }
+  
+  /* Sección de asignaturas */
+  .subjects-section {
+    overflow-x: auto;
+  }
+  
+  /* Botón de asignar */
+  .assign-button {
+    grid-column: span 2;
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .assign-button button {
+    padding: 15px 25px;
+    background-color: #3498db;
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .assign-button button:hover {
+    background-color: #27ae60;
+  }
+  
+  .assign-button button:focus {
+    outline: 2px solid #2ecc71;
+  }
+  
+  /* Rejilla interna del profesor */
+  .professor-details {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+  }
+  
+  .professor-photo img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .professor-info p {
+    margin: 5px 0;
+    color: #555;
+  }
+  
+  .professor-info strong {
+    color: #2c3e50;
+  }
+  
