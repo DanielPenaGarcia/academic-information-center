@@ -7,9 +7,10 @@ document.addEventListener("DOMContentLoaded", function () {
         endpoint: "student",
         body: { names, fatherLastName, motherLastName },
       });
+      debugger;
       if (response.status === 200 || response.status === 201) {
         showToast("Estudiante registrado exitosamente", "success");
-        showStudentInfo(response.student);
+        showStudentInfo(response.data.student);
       } else {
         showToast(
           "Algo salio mal al registrar al estudiante, intentelo mas tarde",
@@ -33,6 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
     motherLastName,
     password,
   }) {
+    debugger;
     document.querySelector("#emailReturned").textContent = email;
     document.querySelector("#academiIdReturned").textContent = academicId;
     document.querySelector("#namesReturned").textContent = names;
