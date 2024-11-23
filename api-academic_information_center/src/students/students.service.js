@@ -5,6 +5,8 @@ import { BadRequestException } from "../utils/exceptions/http/bad-request.except
 import { NotFoundException } from "../utils/exceptions/http/not-found.exception.js";
 import { createAcademicEmail } from "../utils/functions/create-academic-email.function.js";
 import { createAcademicPassword } from "../utils/functions/create-academic-password.function.js";
+import { CourseMapSchema } from "../schemas/course-map.schema.js";
+import { StudentCourseMapSchema } from "../schemas/student-course-map.schema.js";
 
 export class StudentsService {
   constructor() {
@@ -76,6 +78,24 @@ export class StudentsService {
             studentCreatedFound.password = passwordCreated;
 
             await transactionalEntityManager.save(StudentSchema,studentCreatedFound);
+
+            const lastCourseMap = await transactionalEntityManager.findOne(CourseMapSchema,{
+              where:{},
+              order:{
+                createdAt: 'DESC'
+              }
+            });
+
+            const studentCourseMap = {
+              studentId: studentCreatedFound.id,
+              courseMapId: lastCourseMap.id
+            }
+            const studentCourseMapSaved = await transactionalEntityManager.save(StudentCourseMapSchema,studentCourseMap);
+
+            if(!studentCourseMapSaved){
+              throw new InternalServerErrorException();
+            }
+
             return studentCreatedFound;
         }catch(error){
           throw new InternalServerErrorException("Error on create student")
