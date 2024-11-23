@@ -6,10 +6,14 @@ export const StudentCourseMapSchema = new EntitySchema({
     tableName: 'student_course_map',
     target: StudentCourseMap,
     columns: {
-        student: {
+        studentId: {
             primary: true,
             type: 'int',
             name: 'student_id',
+        },
+        courseMapId: {
+            type: 'int',
+            name: 'course_map_id',
         },
     },
     relations: {

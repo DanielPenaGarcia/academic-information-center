@@ -18,11 +18,11 @@ export class SeedService {
 
   async #createAdministrator() {
     const administrator = this.administratorRepository.create({
-      names: 'Daniel Armando',
-      fatherLastName: 'Peña',
-      motherLastName: 'García',
+      names: 'Admin admin',
+      fatherLastName: 'Admin',
+      motherLastName: 'Admin',
       password: '123456',
-      email: 'dapgpena@gmail.com'
+      email: 'admin@admin.com'
     });
     await this.administratorRepository.save(administrator);
     return administrator;

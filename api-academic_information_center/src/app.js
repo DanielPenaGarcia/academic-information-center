@@ -13,6 +13,7 @@ import { router as SubjectRouter } from "./subjects/subjects.module.js";
 import {router as StudentRouter} from "./students/student.module.js";
 import {router as CourseMapRouter} from "./course-maps/course-map.module.js";
 import {router as SubjectTeacherRouter} from "./teachers-subjects/teachers-subjects.module.js";
+import {router as EnrollmentPeriodRouter} from "./enrollment-periods/enrollment-periods.module.js";
 
 //Middlewares
 import { errorHandler } from "./middlewares/error-handleler.middleware.js";
@@ -40,6 +41,7 @@ app.use(API_PATH,TeacherRouter);
 app.use(API_PATH,StudentRouter);
 app.use(API_PATH, CourseMapRouter);
 app.use(API_PATH, SubjectTeacherRouter);
+app.use(API_PATH, EnrollmentPeriodRouter);
 
 //Error Handler
 app.use(errorHandler);

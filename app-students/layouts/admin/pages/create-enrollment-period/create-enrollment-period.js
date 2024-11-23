@@ -72,7 +72,7 @@ async function submitEnrollmentData(data) {
     const submitButton = form.querySelector('button[type="submit"]');
     submitButton.disabled = true;
     submitButton.textContent = 'Guardando...';
-    const response = await api.post({ endpoint: '/enrollment-periods', body: data});
+    const response = await api.post({ endpoint: 'enrollment-periods', body: data});
     if (response.status === 201) {
         alert('Período de inscripción creado correctamente.');
         submitButton.disabled = false;
