@@ -1,0 +1,78 @@
+@import url("../../../../styles/global.css");
+
+.form-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333;
+  font-family: "Inter", sans-serif;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #555;
+  font-family: "Inter", sans-serif;
+}
+
+.form-input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: "Inter", sans-serif;
+}
+
+.form-input:focus {
+  border-color: var(--primary-shade);
+  outline: none;
+}
+
+.form-button {
+  padding: 10px 15px;
+  font-size: 16px;
+  color: #fff;
+  background-color: var(--primary);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.form-button:hover {
+  background-color: var(--primary-tint);
+}
+
+.error {
+  border-color: red;
+  outline: none;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+  font-family: "Inter", sans-serif;
+}

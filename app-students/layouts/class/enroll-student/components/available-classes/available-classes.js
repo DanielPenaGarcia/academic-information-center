@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", function () {
   let subjects = [];
 
   const getSubjects = async () => {
-    console.log("AS");
     const student = localStorage.getItem('user');
     const studentObject = JSON.parse(student);
 

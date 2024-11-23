@@ -1,8 +1,8 @@
 import api from "../../../../shared/services/api.service.js";
 
 document.addEventListener("DOMContentLoaded", function () {
-  const availableFrame = document.getElementById('available-frame').contentWindow;
-  const enrolledFrame = document.getElementById('enrolled-frame').contentWindow;
+  const availableFrame = document.getElementById('available-frame');
+  const enrolledFrame = document.getElementById('enrolled-frame');
 
   // Store selected classes here
   let enrolledClasses = [];
