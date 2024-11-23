@@ -40,7 +40,7 @@ h2 {
 .subject-card:hover {
     transform: translateY(-5px);
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
-    border-color: #4CAF50;
+    border-color: #2980b9; /* Blue hover border color */
 }
 
 .subject-card h3 {
@@ -66,7 +66,7 @@ h2 {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border-left: 4px solid #4CAF50;
+    border-left: 4px solid #2980b9; /* Blue left border */
 }
 
 .class-info {
@@ -77,7 +77,7 @@ h2 {
 
 .select-button {
     padding: 8px 12px;
-    background-color: #4CAF50;
+    background-color: #2980b9; /* Blue background */
     color: white;
     border: none;
     border-radius: 4px;
@@ -88,5 +88,5 @@ h2 {
 }
 
 .select-button:hover {
-    background-color: #45a049;
+    background-color: #3498db; /* Lighter blue on hover */
 }

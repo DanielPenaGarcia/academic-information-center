@@ -34,6 +34,19 @@ document.addEventListener("DOMContentLoaded", function () {
       }
   });
 
+  function showToast(message, type) {
+    const toast = document.getElementById("responseMessage");
+    toast.textContent = message;
+    toast.className = `toast ${type}`;
+  
+    toast.style.visibility = "visible";
+  
+    setTimeout(function () {
+      toast.style.visibility = "hidden";
+    }, 3000);
+  }
+  
+
   // Handle enrollment button click
   document.getElementById('enroll-button').onclick = async() => {
 
@@ -58,19 +71,20 @@ document.addEventListener("DOMContentLoaded", function () {
             endpoint: `classes/enroll`,
             body
           })
+
+          showToast(
+            `Se ha inscrito en la clase ${enrolledClass.name}`,
+            "success"
+          );
+
         }catch(error){
           console.log(error)
           }
-  
       })
-
-      alert(`You have enrolled in: ${enrolledClasses.join(', ')}`);
       enrolledClasses = []; // Clear the list after enrollment
       enrolledFrame.postMessage({ type: 'UPDATE_ENROLLED_CLASSES', classes: enrolledClasses }, '*');
   } else {
     alert('No classes selected!');
-
   }
-   
   };
 });

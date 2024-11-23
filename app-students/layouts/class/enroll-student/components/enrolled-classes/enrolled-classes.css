@@ -38,7 +38,7 @@ h2 {
 .class-card:hover {
     transform: translateY(-5px);
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
-    border-color: #4CAF50;
+    border-color: #2980b9; /* Blue hover border color */
 }
 
 .class-card h3 {
@@ -64,8 +64,8 @@ h2 {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border-left: 4px solid #4CAF50;
-    width: 200px; 
+    border-left: 4px solid #2980b9; /* Blue left border */
+    width: 200px;
 }
 
 .class-item .class-info {
@@ -75,8 +75,7 @@ h2 {
 }
 
 .remove-button {
-    background-color: #f44336;
-    color: white;
+    background-color: #f44336;    color: white;
     border: none;
     border-radius: 4px;
     padding: 8px 12px;
@@ -86,5 +85,4 @@ h2 {
 }
 
 .remove-button:hover {
-    background-color: #e53935;
-}
+    background-color: #f44336;}

@@ -8,7 +8,7 @@ import { days as daysOption } from "../utils/constanst/days.constants.js";
 import { StudentClassSchema } from "../schemas/student-class.schema.js";
 import { CourseMapSchema } from "../schemas/course-map.schema.js";
 import { StudentCourseMapSchema } from "../schemas/student-course-map.schema.js";
-import { In } from "typeorm";
+import { In, Not } from "typeorm";
 
 export class ClassesService {
 
@@ -69,6 +69,18 @@ export class ClassesService {
             throw new BadRequestException(`No se encontró la clase con el ${subjectId}`);
         }
 
+        let currentClasses= await this.studentClassRepository.find({
+            where: {
+                status: ("PENDING"),
+                student: { id: studentId }
+            },
+            relations: ['klass', 'student']
+        });
+        console.log("CURRENT")
+        console.log(currentClasses)
+
+
+
        const studentClass = this.studentClassRepository.create({
         student: studentId,
         klass: classId
@@ -80,7 +92,6 @@ export class ClassesService {
        console.log(studentClass)
 
        return studentClass
-
 
     }
 
@@ -133,21 +144,41 @@ const eligibleSubjectIds = [];
 for (const subject of subjects) {
     const prerequisites = subject.subjectsRequirements.map((req) => req.id);
 
-    const canEnroll = subject.semester === 1 || prerequisites.length === 0 || prerequisites.every((reqId) => 
+    const canEnroll = subject.semester === 1 ||prerequisites.length === 0 || prerequisites.every((reqId) => 
         approvedSubjectIds.includes(reqId)
     );
     
+
     if (canEnroll) {
         eligibleSubjectIds.push(subject.id);
     }
 }
           
-    const eligibleClasses = await this.classesRepository.find({
+    let eligibleClasses = await this.classesRepository.find({
         where: {
           subject:{id: In(eligibleSubjectIds)},
         }, relations:["subject", "teacher"]
       });
-      console.log(eligibleClasses)
-      return eligibleClasses;    
+
+      let currentClasses= await this.studentClassRepository.find({
+        where: {
+            status: ("PENDING"),
+            student: { id: studentId }
+        },
+        relations: ['klass', 'student']
+    });
+    console.log("CURRENT")
+
+    console.log(currentClasses)
+
+    const currentClassIds = currentClasses.map((currentClass) => currentClass.klass.id);
+
+    // Filter out the eligibleClasses that are already in currentClassIds
+    eligibleClasses = eligibleClasses.filter(
+      (eligibleClass) => !currentClassIds.includes(eligibleClass.id)
+    );
+    
+    console.log(eligibleClasses);
+    return eligibleClasses; 
     }
 }
