@@ -10,6 +10,7 @@ import { CourseMapSchema } from "../schemas/course-map.schema.js";
 import { StudentCourseMapSchema } from "../schemas/student-course-map.schema.js";
 import { In, Not } from "typeorm";
 import { StatusClass } from "../entities/enums/status-class.enum.js";
+import { Klass } from "../entities/klass.entity.js";
 
 export class ClassesService {
   constructor() {
@@ -221,7 +222,10 @@ export class ClassesService {
             where: {
                 status: ("PENDING"),
                 student: { id: studentId }
-            },
+            },                  
+            relations: ['klass', 'klass.subject', 'klass.teacher']
+
+
         });
 
         console.log(enrolledClasses)
