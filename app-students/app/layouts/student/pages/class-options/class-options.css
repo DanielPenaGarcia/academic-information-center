@@ -1,0 +1,16 @@
+@import url('../../../../styles/global.css');
+
+#student-main {
+    padding: 20px;
+    background-color: #f4f4f4;  /* Color de fondo para diferenciar */
+    min-height: 100vh;  /* Para que el main ocupe al menos toda la altura de la pantalla */
+}
+
+/* Contenedor de opciones */
+#options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));  /* Grid flexible con columnas adaptables */
+    gap: 20px;  /* Espacio entre las tarjetas */
+    margin-top: 20px;
+    padding: 0 20px;  /* Añadir espaciado lateral */
+}

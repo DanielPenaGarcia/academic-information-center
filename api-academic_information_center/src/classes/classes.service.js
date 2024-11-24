@@ -9,6 +9,7 @@ import { StudentClassSchema } from "../schemas/student-class.schema.js";
 import { CourseMapSchema } from "../schemas/course-map.schema.js";
 import { StudentCourseMapSchema } from "../schemas/student-course-map.schema.js";
 import { In, Not } from "typeorm";
+import { StatusClass } from "../entities/enums/status-class.enum.js";
 
 export class ClassesService {
   constructor() {
@@ -213,4 +214,68 @@ export class ClassesService {
     console.log(eligibleClasses);
     return eligibleClasses; 
     }
-}
+
+    async getEnrolledClasses({studentId}){
+
+        let enrolledClasses= await this.studentClassRepository.find({
+            where: {
+                status: ("PENDING"),
+                student: { id: studentId }
+            },
+        });
+
+        console.log(enrolledClasses)
+
+        return enrolledClasses;
+    }
+
+    async dropClass({ studentId, classId }) {
+        // Find the student
+        const student = await this.studentRepository.findOne({
+          where: {
+            id: studentId,
+          },
+        });
+        if (!student) {
+          throw new BadRequestException(
+            `No se encontró al alumno con el ID ${studentId}`
+          );
+        }
+      
+        // Find the class
+        const klass = await this.classesRepository.findOne({
+          where: {
+            id: classId,
+          },
+        });
+        if (!klass) {
+          throw new BadRequestException(
+            `No se encontró la clase con el ID ${classId}`
+          );
+        }
+      
+        // Update the student's enrollment status to 'CANCELED'
+        const response = await this.studentClassRepository.update(
+          { student: { id: studentId }, klass: { id: classId } }, // Use relations for student and class
+          { status: StatusClass.CANCELED } // Setting the status to CANCELED
+        );
+      
+        // If no rows were affected, throw an error
+        if (response.affected === 0) {
+          throw new NotFoundException(
+            "The class was NOT dropped, Good luck getting a passing grade :)"
+          );
+        }
+      
+        // Fetch the updated studentClass to return
+        const studentClass = await this.studentClassRepository.findOne({
+          where: {
+            student: { id: studentId },
+            klass: { id: classId },
+          },
+        });
+      
+        return studentClass;
+      }
+
+    }

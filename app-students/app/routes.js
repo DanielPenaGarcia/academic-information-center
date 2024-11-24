@@ -8,9 +8,27 @@ export const routes = [
         page: 'app/layouts/auth/pages/sign-in/sign-in.html',
     },
     //Student routes
-    
+    {
+        path: '/student',
+        page: 'app/layouts/student/student.html',
+        canActivate: [authGuard, roleGuard('STUDENT')],
+    },
+    {
+        path: '/student/classes',
+        page: 'app/layouts/student/pages/class-options/class-options.html',
+        canActivate: [authGuard, roleGuard('STUDENT')],
+    },
+    {
+        path: '/student/enroll',
+        page: 'app/layouts/student/pages/enroll-student/enroll-student.html',
+        canActivate: [authGuard, roleGuard('STUDENT')],
+    },
     //Teacher routes
-
+    {
+        path: '/teacher',
+        page: 'app/layouts/teacher/teacher.html',
+        canActivate: [authGuard, roleGuard('TEACHER')],
+    },
     //Admin routes
     {
         path: '/admin',

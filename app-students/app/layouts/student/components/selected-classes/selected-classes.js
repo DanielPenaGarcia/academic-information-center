@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const selectButton = document.createElement('button');
             selectButton.classList.add('remove-button');
-            selectButton.textContent = 'Remove';
+            selectButton.textContent = 'Eliminar';
             selectButton.onclick = () => removeClass(classInfo);
 
             classItem.appendChild(classDetails);

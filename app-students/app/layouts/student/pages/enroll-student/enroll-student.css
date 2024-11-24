@@ -1,6 +1,9 @@
 /* styles.css */
+@import url('../../../../../styles/global.css');
+@import url('../../components/header/header.css');
 
-body {
+
+.body-div {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
   margin: 0;
@@ -8,7 +11,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 75vh;
 }
 
 .container {

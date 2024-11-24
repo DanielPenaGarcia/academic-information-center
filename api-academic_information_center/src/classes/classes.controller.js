@@ -69,6 +69,27 @@ export class ClassesController {
     }
   }
 
+
+  async getEnrolledClasses(req, res, next){
+    try {
+        if (!req.body || Object.keys(req.body).length === 0) {
+          throw new BadRequestException("El cuerpo de la petición está vacío");
+        }
+        const { studentId } = req.body;
+        if (!studentId) {
+          throw new BadRequestException(
+            "Faltan campos obligatorios en el cuerpo de la petición"
+          );
+        }
+        const classes = await this.classesService.getEnrolledClasses({
+          studentId,
+        });
+        res.status(200).json(classes);
+      } catch (error) {
+        next(error);
+      }
+  }
+
   async getAvailableClassesByStudent(req, res, next) {
     try {
       if (!req.body || Object.keys(req.body).length === 0) {
@@ -88,4 +109,26 @@ export class ClassesController {
       next(error);
     }
   }
+
+  async dropClass(req, res, next){
+    try {
+        if (!req.body || Object.keys(req.body).length === 0) {
+          throw new BadRequestException("El cuerpo de la petición está vacío");
+        }
+        const { studentId, classId } = req.body;
+        if (!studentId||!classId) {
+          throw new BadRequestException(
+            "Faltan campos obligatorios en el cuerpo de la petición"
+          );
+        }
+        const klass = await this.classesService.dropClass({
+          studentId,
+          classId
+        });
+        res.status(200).json(klass);
+      } catch (error) {
+        next(error);
+      }
+  }
+
 }

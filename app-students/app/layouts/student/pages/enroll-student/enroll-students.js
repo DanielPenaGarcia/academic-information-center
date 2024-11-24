@@ -1,6 +1,10 @@
 import api from "../../../../shared/services/api.service.js";
+import Header from "../../components/header/header.js";
+
 
 document.addEventListener("DOMContentLoaded", function () {
+  window.customElements.define("student-header", Header);
+  
   const availableFrame = document.getElementById('available-frame');
   const enrolledFrame = document.getElementById('enrolled-frame');
 
@@ -43,6 +47,8 @@ document.addEventListener("DOMContentLoaded", function () {
       toast.style.visibility = "hidden";
     }, 3000);
   }
+  
+
   
 
   document.getElementById('enroll-button').onclick = async() => {
