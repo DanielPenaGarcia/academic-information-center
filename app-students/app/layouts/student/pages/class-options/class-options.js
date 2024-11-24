@@ -15,7 +15,16 @@ function loadOptions() {
                 {
                     label: 'Inscribirse',
                     action: () => goToOption({ path: '/student/enroll' })
-                }
+                },
+            ]
+        },{
+            title: 'Dar de baja',
+            description: 'Da de baja una materia',
+            actions: [
+                {
+                    label: 'Baja',
+                    action: () => goToOption({ path: '/student/drop-class' })
+                },
             ]
         },
     ];

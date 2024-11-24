@@ -2,7 +2,6 @@
 @import url('../../../../../styles/global.css');
 @import url('../../components/header/header.css');
 
-
 .body-div {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
@@ -10,8 +9,8 @@
   padding: 0;
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 75vh;
+  align-items: flex-start; /* Change to flex-start to align content to top */
+  min-height: 100vh; /* Ensure full height of the viewport */
 }
 
 .container {
@@ -20,7 +19,9 @@
   border-radius: 8px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   max-width: 800px;
-  width: 100%;
+  width: 100%; /* Ensure the container doesn't exceed its parent */
+  height: auto; /* Let it grow naturally */
+  max-height: 80vh; /* Limit the height to 80% of the viewport height */
 }
 
 h1 {
