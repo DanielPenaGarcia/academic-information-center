@@ -1,22 +1,28 @@
 @import url("../../../../styles/global.css");
 
-.form-container {
-  max-width: 400px;
-  margin: 0 auto;
+.content {
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.form-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
+.card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  padding: 30px;
+  width: 100%;
+}
+
+.card-header {
+  font-size: 1.8rem;
+  color: var(--primary);
+  font-weight: 600;
   text-align: center;
-  color: #333;
-  font-family: "Inter", sans-serif;
+  margin-bottom: 20px;
 }
 
 .form {
@@ -28,51 +34,50 @@
 .form-group {
   display: flex;
   flex-direction: column;
+  gap: 5px;
 }
 
 .form-label {
-  font-size: 14px;
-  margin-bottom: 5px;
-  color: #555;
-  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  text-align: start;
+  color: var(--gray-dark);
+  font-weight: bold;
 }
 
 .form-input {
   padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s ease;
 }
 
 .form-input:focus {
-  border-color: var(--primary-shade);
-  outline: none;
+  border-color: var(--primary);
 }
 
-.form-button {
-  padding: 10px 15px;
-  font-size: 16px;
-  color: #fff;
+.card-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.btn {
   background-color: var(--primary);
+  color: var(--primary-contrast);
+  padding: 10px 20px;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
+  font-size: 1rem;
   cursor: pointer;
-  text-align: center;
+  transition: transform 0.2s ease, background-color 0.3s ease;
 }
 
-.form-button:hover {
+.btn:hover {
+  background-color: var(--primary-shade);
+}
+
+.btn:active {
   background-color: var(--primary-tint);
-}
-
-.error {
-  border-color: red;
-  outline: none;
-}
-
-.error-message {
-  color: red;
-  font-size: 12px;
-  margin-top: 5px;
-  font-family: "Inter", sans-serif;
 }

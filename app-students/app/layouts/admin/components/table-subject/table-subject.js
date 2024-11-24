@@ -1,5 +1,4 @@
 import api from "../../../../shared/services/api.service.js";
-import SubjectItem from "../subject-item/subject-item.js";
 
 class TableSubject extends HTMLElement {
   totalElements = 0;
@@ -45,10 +44,13 @@ class TableSubject extends HTMLElement {
       });
 
       if (response.status === 200) {
-        this.subjects = response.data.subjects.map(
-          (subject) =>
-            new SubjectItem({ ...subject, hours: subject.hoursPerWeek })
-        );
+        this.subjects = response.data.subjects.map((subject) => {
+          return {
+            ...subject,
+            hours: subject.hoursPerWeek,
+            year: subject.courseMap.year,
+          };
+        });
         this.totalElements = response.data.totalElements;
         this.totalPages = response.data.totalPages;
         this.currentPage = response.data.currentPage;
@@ -72,7 +74,7 @@ class TableSubject extends HTMLElement {
 
   // Método para manejar cambios en los radio buttons
   handleRadioChange(subjectId) {
-    this.selectedSubject = this.subjects.find(subject => {
+    this.selectedSubject = this.subjects.find((subject) => {
       return subject.id == subjectId;
     });
     this.selectedSubjectEvent(this.selectedSubject);
@@ -95,7 +97,9 @@ class TableSubject extends HTMLElement {
 
     subjectItems.forEach((subjectItem) => {
       // Agregar evento click al contenedor
-      subjectItem.addEventListener("click", (e) => this.onSubjectItemClick(e, subjectItem));
+      subjectItem.addEventListener("click", (e) =>
+        this.onSubjectItemClick(e, subjectItem)
+      );
     });
   }
 
@@ -105,7 +109,7 @@ class TableSubject extends HTMLElement {
     if (radio && !radio.checked) {
       radio.checked = true;
     }
-    
+
     // Emitir el cambio al seleccionar el radio
     if (radio) {
       this.handleRadioChange(radio.getAttribute("data-id"));
@@ -124,9 +128,7 @@ class TableSubject extends HTMLElement {
     }
 
     if (nextPageButton) {
-      nextPageButton.addEventListener("click", () =>
-        this.updatePage("next")
-      );
+      nextPageButton.addEventListener("click", () => this.updatePage("next"));
     }
   }
 
@@ -168,9 +170,15 @@ class TableSubject extends HTMLElement {
           </tbody>
       </table>
       <div class="table-subject__footer">
-        <button id="previousPage" ${this.page <= 1 ? "disabled" : ""}>Anterior</button>
-        <span class="current-page">Página ${this.currentPage} de ${this.totalPages}</span>
-        <button id="nextPage" ${this.page >= this.totalPages ? "disabled" : ""}>Siguiente</button>
+        <button id="previousPage" ${
+          this.page <= 1 ? "disabled" : ""
+        }>Anterior</button>
+        <span class="current-page">Página ${this.currentPage} de ${
+      this.totalPages
+    }</span>
+        <button id="nextPage" ${
+          this.page >= this.totalPages ? "disabled" : ""
+        }>Siguiente</button>
       </div>
     `;
 
@@ -183,7 +191,10 @@ class TableSubject extends HTMLElement {
   attachStyles() {
     const styleLink = document.createElement("link");
     styleLink.setAttribute("rel", "stylesheet");
-    styleLink.setAttribute("href", `../../components/table-subject/table-subject.css`);
+    styleLink.setAttribute(
+      "href",
+      `../../components/table-subject/table-subject.css`
+    );
     this.shadowRoot.appendChild(styleLink);
   }
 }
