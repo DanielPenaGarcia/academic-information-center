@@ -1,6 +1,5 @@
 import api from "../../../../shared/services/api.service.js";
-import { StudentItemComponent } from "../../components/student-item/student-item.js";
-
+import StudentItemComponent from "../../components/subject-item/subject-item.js"
 document.addEventListener("DOMContentLoaded",function(){
 
     let pagination = {

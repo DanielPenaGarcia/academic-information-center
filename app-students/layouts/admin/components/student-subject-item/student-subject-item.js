@@ -1,4 +1,4 @@
-import api from "../../../../shared/services/api.service.js";
+import api from "../../../../app/shared/services/api.service.js"
 
 export class StudentSubjectItemComponent extends HTMLElement {
     id
@@ -57,20 +57,47 @@ export class StudentSubjectItemComponent extends HTMLElement {
         }
     }
 
-    async dropClassToStudent(){
-         debugger;
-        const urlParams = new URLSearchParams(window.location.search);
-        const academicId = urlParams.get('academicId');
-        const endpoint =`/student/${academicId}/classes/${this.id}`;
-        const classDeleted = await api.delete(
-            {
-                endpoint,
-            }
-        );
-        if(classDeleted){
-            this.remove();
-            alert('El elemento ha sido eliminado.');
+
+    async getStudentId(){
+        debugger
+        const body ={
+            academicId: urlParams.get('academicId')
         }
+        const response = await api.get({
+            endpoint: `student`,
+            body
+          });
+
+          const id= (JSON.parse(response)).id
+
+          return id;
+    }
+
+    async dropClassToStudent(){
+
+        const body ={
+            studentId:getStudentId(),
+            classId: this.id
+        }
+        const response = await api.patch({
+            endpoint: `classes/dropClass`,
+            body
+          });
+          return response;
+
+
+        //const urlParams = new URLSearchParams(window.location.search);
+        //const academicId = urlParams.get('academicId');
+        //const endpoint =`/student/${academicId}/classes/${this.id}`;
+        //const classDeleted = await api.delete(
+        //    {
+        //       endpoint,
+        //    }
+        //);
+        //if(classDeleted){
+        //    this.remove();
+        //    alert('El elemento ha sido eliminado.');
+       // }
     }
 }
 

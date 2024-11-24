@@ -1,4 +1,4 @@
-import api from "../../../../../shared/services/api.service.js";
+import api from "../../../../shared/services/api.service.js";
 
 document.addEventListener("DOMContentLoaded", function () {
   let subjects = [];
@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const selectButton = document.createElement('button');
         selectButton.classList.add('select-button');
-        selectButton.textContent = 'Select';
+        selectButton.textContent = 'Escoger';
         selectButton.onclick = () => selectClass(classInfo);
 
         classItem.appendChild(classDetails);

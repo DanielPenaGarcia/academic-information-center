@@ -1,25 +1,27 @@
 import api from "../../../../shared/services/api.service.js";
+import Header from "../../components/header/header.js";
+
 
 document.addEventListener("DOMContentLoaded", function () {
+  window.customElements.define("student-header", Header);
+  
   const availableFrame = document.getElementById('available-frame');
   const enrolledFrame = document.getElementById('enrolled-frame');
 
-  // Store selected classes here
   let enrolledClasses = [];
 
-  // Listen for messages from microfrontends
   window.addEventListener('message', (event) => {
       if (event.data.type === 'SELECT_CLASS') {
 
         if (enrolledClasses.length===0){
           enrolledClasses.push(event.data.classObject);
-          enrolledFrame.postMessage({ type: 'UPDATE_ENROLLED_CLASSES', classes: enrolledClasses }, '*');
+          enrolledFrame.contentWindow.postMessage({ type: 'UPDATE_ENROLLED_CLASSES', classes: enrolledClasses }, '*');
         }
 
         enrolledClasses.forEach(enrolledClass => {
           if (enrolledClass.id!=event.data.classObject.id){
             enrolledClasses.push(event.data.classObject);
-              enrolledFrame.postMessage({ type: 'UPDATE_ENROLLED_CLASSES', classes: enrolledClasses }, '*');
+              enrolledFrame.contentWindow.postMessage({ type: 'UPDATE_ENROLLED_CLASSES', classes: enrolledClasses }, '*');
           }
         })
           
@@ -29,12 +31,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
         enrolledClasses = enrolledClasses.filter(classItem => classItem.id !== event.data.class.id);
         console.log(enrolledClasses)
-          // Send updated classes to the enrolled iframe
-          enrolledFrame.postMessage({ type: 'UPDATE_ENROLLED_CLASSES', classes: enrolledClasses }, '*');
+
+        enrolledFrame.contentWindow.postMessage({ type: 'UPDATE_ENROLLED_CLASSES', classes: enrolledClasses }, '*');
       }
   });
 
-  // Handle enrollment button click
+  function showToast(message, type) {
+    const toast = document.getElementById("responseMessage");
+    toast.textContent = message;
+    toast.className = `toast ${type}`;
+  
+    toast.style.visibility = "visible";
+  
+    setTimeout(function () {
+      toast.style.visibility = "hidden";
+    }, 3000);
+  }
+  
+
+  
+
   document.getElementById('enroll-button').onclick = async() => {
 
     if (enrolledClasses.length > 0) {
@@ -58,19 +74,20 @@ document.addEventListener("DOMContentLoaded", function () {
             endpoint: `classes/enroll`,
             body
           })
+
+          showToast(
+            `Se ha inscrito en la clase ${enrolledClass.name}`,
+            "success"
+          );
+
         }catch(error){
           console.log(error)
           }
-  
       })
-
-      alert(`You have enrolled in: ${enrolledClasses.join(', ')}`);
-      enrolledClasses = []; // Clear the list after enrollment
-      enrolledFrame.postMessage({ type: 'UPDATE_ENROLLED_CLASSES', classes: enrolledClasses }, '*');
+      enrolledClasses = []; 
+      enrolledFrame.contentWindow.postMessage({ type: 'UPDATE_ENROLLED_CLASSES', classes: enrolledClasses }, '*');
   } else {
     alert('No classes selected!');
-
   }
-   
   };
 });

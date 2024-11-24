@@ -18,4 +18,8 @@ router.post(`${path}`, roleAdminGuard, middlewares, classesController.postCreate
 router.patch(`${path}/assign-teacher`, roleAdminGuard, middlewares, classesController.AssignTeacherToClass.bind(classesController));
 router.post(`${path}/availableClasses`, middlewares, classesController.getAvailableClassesByStudent.bind(classesController));
 router.post(`${path}/enroll`, middlewares, classesController.enrollStudent.bind(classesController));
+router.post(`${path}/enrolledClasses`, middlewares, classesController.getEnrolledClasses.bind(classesController));
+router.patch(`${path}/dropClass`, middlewares, classesController.dropClass.bind(classesController));
+
+
 
