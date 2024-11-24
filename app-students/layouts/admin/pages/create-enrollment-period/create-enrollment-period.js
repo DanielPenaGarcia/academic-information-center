@@ -1,4 +1,6 @@
-import api from '../../../../shared/services/api.service.js';
+import api from '../../../../app/shared/services/api.service.js';
+import Header from '../../../../app/layouts/admin/components/header/header.js';
+import { router } from '../../../../app/shared/router.js';
 
 let form;
 
@@ -8,6 +10,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function onInit() {
     initCreateEnrollmentPeriodForm();
+    loadComponents();
+}
+
+function loadComponents() {
+    window.customElements.define("admin-header", Header);
 }
 
 function initCreateEnrollmentPeriodForm() {
@@ -78,6 +85,7 @@ async function submitEnrollmentData(data) {
         submitButton.disabled = false;
         submitButton.textContent = 'Guardar Período';
         form.reset();
+        router.navigate('admin/academic');
     } else {
         alert('Error al crear el período de inscripción.');
     }

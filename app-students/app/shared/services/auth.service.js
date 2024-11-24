@@ -1,4 +1,5 @@
 import api from "./api.service.js";
+import localStorageService from "./local-storage.service.js";
 
 const authService = {
     login: ({academicId, password}) => {
@@ -9,15 +10,12 @@ const authService = {
     },
 
     logout: () => {
-        return api.post({
-            endpoint: "auth/logout",
-        });
+        localStorageService.removeItem("token");
+        localStorageService.removeItem("user");
     },
 
     getUser: () => {
-        return api.get({
-            endpoint: "auth/user",
-        });
+        return localStorageService.getItem("user");
     },
 
     refreshToken: () => {
