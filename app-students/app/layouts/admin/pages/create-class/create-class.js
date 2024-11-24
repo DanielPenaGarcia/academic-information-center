@@ -1,5 +1,7 @@
 import TableSubject from "../../components/table-subject/table-subject.js";
 import api from "../../../../shared/services/api.service.js";
+import Header from "../../components/header/header.js";
+import { router } from "../../../../shared/router.js";
 
 // Variable global para almacenar los días seleccionados
 const selectedDays = [];
@@ -64,10 +66,12 @@ const submitCreateClass = async ({ duration, start, days, subject }) => {
   const response = await api.post({ endpoint: "classes", body: body });
   if (response.status === 201) {
     alert("Clase creada exitosamente");
+    router.navigate("admin/academic");
   }
 };
 
 const loadComponents = () => {
+  window.customElements.define("admin-header", Header);
   window.customElements.define("table-subjects", TableSubject);
   const tableSubjects = document.querySelector("table-subjects");
   tableSubjects.addEventListener("subject-selected", async (e) => {
