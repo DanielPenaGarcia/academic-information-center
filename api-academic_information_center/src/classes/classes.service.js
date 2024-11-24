@@ -206,7 +206,6 @@ export class ClassesService {
 
     const currentClassIds = currentClasses.map((currentClass) => currentClass.klass.id);
 
-    // Filter out the eligibleClasses that are already in currentClassIds
     eligibleClasses = eligibleClasses.filter(
       (eligibleClass) => !currentClassIds.includes(eligibleClass.id)
     );
