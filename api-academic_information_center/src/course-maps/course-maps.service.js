@@ -39,9 +39,6 @@ export class CourseMapsService {
 
   async findAllCourseMaps({ pageable }) {
     const [courseMaps, total] = await this.courseMapsRepository.findAndCount({
-      where: {
-        year: year,
-      },
       select: {
         id: true,
         semesters: true,
