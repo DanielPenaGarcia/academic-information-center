@@ -1,10 +1,42 @@
 import { Like } from "typeorm";
 import { dataSource } from "../config/orm.config.js";
 import { SubjectSchema } from "../schemas/subject.schema.js";
+import { CourseMapSchema } from "../schemas/course-map.schema.js";
+import { BadRequestException } from "../utils/exceptions/http/bad-request.exception.js";
 
 export class SubjectsService {
   constructor() {
     this.subjectsRepository = dataSource.getRepository(SubjectSchema);
+    this.courseMapRepository = dataSource.getRepository(CourseMapSchema);
+  }
+
+  async createSubject({ name, hoursPerWeek, semester, courseMapId }) {
+    const courseMap = await this.courseMapRepository.findOne({
+      where: {
+        id: courseMapId,
+      },
+      select: {
+        id: true,
+        semesters: true,
+      }
+    });
+    if (!courseMap) {
+      throw new BadRequestException(`Course map with id ${courseMapId} not found`);
+    }
+    if (semester > courseMap.semesters) {
+      throw new BadRequestException(`Semester must be less than or equal to ${courseMap.semesters}`);
+    }
+    if (hoursPerWeek <= 0) {
+      throw new BadRequestException("Hours per week must be greater than 0");
+    }
+    const subject = this.subjectsRepository.create({
+      name: name,
+      hoursPerWeek: hoursPerWeek,
+      semester: semester,
+      courseMap: courseMap,
+    });
+    await this.subjectsRepository.save(subject);
+    return subject;
   }
 
   async findSubjectsByCourseMapYear({ year, query, pageable }) {
