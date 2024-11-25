@@ -51,13 +51,18 @@ export const routes = [
         canActivate: [authGuard, roleGuard('ADMIN')],
     },
     {
-        path: 'admin/subjects/register-subject',
+        path: 'admin/classes/register-class',
         page: 'app/layouts/admin/pages/create-class/create-class.html',
         canActivate: [authGuard, roleGuard('ADMIN')],
     },
     {
         path: 'admin/enrollment-period/create',
         page: 'app/layouts/admin/pages/create-enrollment-period/create-enrollment-period.html',
+        canActivate: [authGuard, roleGuard('ADMIN')],
+    },
+    {
+        path: 'admin/subjects/register-subject',
+        page: 'app/layouts/admin/pages/create-subject/create-subject.html',
         canActivate: [authGuard, roleGuard('ADMIN')],
     }
 ]
