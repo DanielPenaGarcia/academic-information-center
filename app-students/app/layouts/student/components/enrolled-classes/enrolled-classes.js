@@ -80,10 +80,10 @@ class EnrolledClasses extends HTMLElement {
                   <li class="class-item">
                       <div class="class-info">
                           <strong>${klass.subjectName}</strong><br>
-                          Professor: ${klass.teacherName}<br>
-                          Start: ${klass.startTime || "N/A"}<br>
-                          Finish: ${klass.finishTime || "N/A"}<br>
-                          Days: ${klass.days || "N/A"}
+                          Profesor: ${klass.teacherName}<br>
+                          Hora inicio: ${klass.startTime || "N/A"}<br>
+                          Hora finalización: ${klass.finishTime || "N/A"}<br>
+                          Días: ${klass.days || "N/A"}
                       </div>
                       <button class="remove-button">Dar de baja</button>
                   </li>
