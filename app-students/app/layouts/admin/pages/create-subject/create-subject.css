@@ -1,0 +1,44 @@
+@import url('../../../../styles/global.css');
+
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+/* Grid Layout for the Form */
+form {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two columns */
+    gap: 15px; /* Space between items */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: 10px;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #555;
+}
+
+.form-group input,
+.form-group select {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+}
+
+/* Full-Width for Specific Fields */
+.form-group:nth-child(1) {
+    grid-column: span 2; /* Name field spans both columns */
+}
+

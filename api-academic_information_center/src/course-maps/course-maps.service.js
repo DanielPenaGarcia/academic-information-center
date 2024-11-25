@@ -1,6 +1,7 @@
 import { dataSource } from "../config/orm.config.js";
 import { CourseMapSchema } from "../schemas/course-map.schema.js";
 import { BadRequestException } from "../utils/exceptions/http/bad-request.exception.js";
+import { NotFoundException } from "../utils/exceptions/http/not-found.exception.js";
 
 export class CourseMapsService {
   constructor() {
@@ -57,10 +58,10 @@ export class CourseMapsService {
     };
   }
 
-  async findCourseMapByYear({ year }) {
+  async findCourseMapById({ id }) {
     const courseMap = await this.courseMapsRepository.findOne({
       where: {
-        year: year,
+        id: id,
       },
       select: {
         id: true,
@@ -71,7 +72,7 @@ export class CourseMapsService {
       }
     });
     if (!courseMap) {
-      throw new BadRequestException(`Mapa curricular no encontrado para el año ${year}`);
+      throw new NotFoundException(`Course map with id ${id} not found`);
     }
     return courseMap;
   }

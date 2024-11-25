@@ -14,7 +14,7 @@ function loadOptions() {
             actions: [
                 {
                     label: 'Registrar',
-                    action: () => goToOption({ path: 'admin/subjects/register-subject' })
+                    action: () => goToOption({ path: 'admin/classes/register-class' })
                 },
             ]
         },
@@ -25,6 +25,16 @@ function loadOptions() {
                 {
                     label: 'Registrar',
                     action: () => goToOption({ path: 'admin/enrollment-period/create' })
+                },
+            ]
+        },
+        {
+            title: 'Registrar materia',
+            description: 'Registra una nueva materia en el sistema',
+            actions: [
+                {
+                    label: 'Registrar',
+                    action: () => goToOption({ path: 'admin/subjects/register-subject' })
                 },
             ]
         }

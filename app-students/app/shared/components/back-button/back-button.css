@@ -1,0 +1,27 @@
+@import url('../../../styles/global.css');
+
+#back-button {
+    position: fixed;
+    top: 110px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    background-color: var(--primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+}
+
+#back-button:hover {
+    transform: scale(1.1);
+    background-color: var(--primary-tint);
+}
+
+#back-button:active {
+    transform: scale(1);
+    background-color: var(--primary-shade);
+}

@@ -38,10 +38,10 @@ export class CourseMapController {
     }
   }
 
-  getCourseMapByYear(req, res, next) {
+  async getCourseMapById(req, res, next) {
     try {
-      const { year } = req.params;
-      const result = this.courseMapsService.findCourseMapByYear(year);
+      const { id } = req.params;
+      const result = await this.courseMapsService.findCourseMapById({ id });
       res.status(200).json(result);
     } catch (error) {
       next(error);

@@ -2,6 +2,7 @@ import TableSubject from "../../components/table-subject/table-subject.js";
 import api from "../../../../shared/services/api.service.js";
 import Header from "../../components/header/header.js";
 import { router } from "../../../../shared/router.js";
+import BackButton from "../../../../shared/components/back-button/back-button.js";
 
 // Variable global para almacenar los días seleccionados
 const selectedDays = [];
@@ -72,6 +73,7 @@ const submitCreateClass = async ({ duration, start, days, subject }) => {
 
 const loadComponents = () => {
   window.customElements.define("admin-header", Header);
+  window.customElements.define('back-button', BackButton);
   window.customElements.define("table-subjects", TableSubject);
   const tableSubjects = document.querySelector("table-subjects");
   tableSubjects.addEventListener("subject-selected", async (e) => {

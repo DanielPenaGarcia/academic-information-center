@@ -23,6 +23,6 @@ router.get(
 );
 
 router.get(
-  `${path}/:year`, middlewares,
-  courseMapController.getCourseMapByYear.bind(courseMapController)
+  `${path}/:id`, middlewares,
+  courseMapController.getCourseMapById.bind(courseMapController)
 )
