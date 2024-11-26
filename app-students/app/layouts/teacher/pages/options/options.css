@@ -1,0 +1,15 @@
+@import url('../../../../styles/global.css');
+
+#teacher-main {
+    padding: 20px;
+    background-color: #f4f4f4; 
+    min-height: 100vh; 
+}
+
+#options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));  
+    gap: 20px;  
+    margin-top: 20px;
+    padding: 0 20px;
+}

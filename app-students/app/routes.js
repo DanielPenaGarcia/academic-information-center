@@ -14,6 +14,16 @@ export const routes = [
         canActivate: [authGuard, roleGuard('STUDENT')],
     },
     {
+        path: '/student/options',
+        page: 'app/layouts/student/pages/options/options.html',
+        canActivate: [authGuard, roleGuard('STUDENT')],
+    },
+    {
+        path: '/student/update',
+        page: 'app/layouts/student/pages/update-student/update-student.html',
+        canActivate: [authGuard, roleGuard('STUDENT')],
+    },
+    {
         path: '/student/classes',
         page: 'app/layouts/student/pages/class-options/class-options.html',
         canActivate: [authGuard, roleGuard('STUDENT')],
@@ -34,6 +44,16 @@ export const routes = [
         page: 'app/layouts/teacher/teacher.html',
         canActivate: [authGuard, roleGuard('TEACHER')],
     },
+    {
+        path: '/teacher/options',
+        page: 'app/layouts/teacher/pages/options/options.html',
+        canActivate: [authGuard, roleGuard('TEACHER')],
+    },
+    {
+        path: '/teacher/update',
+        page: 'app/layouts/teacher/pages/update-teacher-user/update-teacher-user.html',
+        canActivate: [authGuard, roleGuard('TEACHER')],
+    },
     //Admin routes
     {
         path: '/admin',
@@ -43,6 +63,11 @@ export const routes = [
     {
         path: 'admin/students',
         page: 'app/layouts/admin/pages/student-options/student-options.html',
+        canActivate: [authGuard, roleGuard('ADMIN')],
+    },
+    {
+        path: 'admin/teachers',
+        page: 'app/layouts/admin/pages/teacher-options/teacher-options.html',
         canActivate: [authGuard, roleGuard('ADMIN')],
     },
     {
@@ -64,5 +89,25 @@ export const routes = [
         path: 'admin/subjects/register-subject',
         page: 'app/layouts/admin/pages/create-subject/create-subject.html',
         canActivate: [authGuard, roleGuard('ADMIN')],
-    }
+    },
+    {
+        path: 'admin/students/register',
+        page: 'app/layouts/admin/pages/register-student/register-student.html',
+        canActivate: [authGuard, roleGuard('ADMIN')],
+    },
+    {
+        path: 'admin/teacher/register',
+        page: 'app/layouts/admin/pages/register-teacher/register-teacher.html',
+        canActivate: [authGuard, roleGuard('ADMIN')],
+    },
+    {
+        path: 'admin/students/drop-class',
+        page: 'app/layouts/admin/pages/drop-student-from-class/drop-student-from-class.html',
+        canActivate: [authGuard, roleGuard('ADMIN')],
+    },
+    {
+        path: 'admin/students/drop-class/classes',
+        page: 'app/layouts/admin/pages/student-classes/student-classes.html',
+        canActivate: [authGuard, roleGuard('ADMIN')],
+    },
 ]
