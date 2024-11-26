@@ -33,6 +33,7 @@ export class StudentsClassesService{
             select:{
               id:true,
               klass:{
+                id: true,
                 subject:{
                   name:true
                 },

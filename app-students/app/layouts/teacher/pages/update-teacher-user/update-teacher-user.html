@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Actualizar Perfil del Maestro</title>
+  <link rel="stylesheet" href="update-teacher-user.css">
+</head>
+<body>
+  <back-button></back-button>
+  <div class="container">
+    <h1>Actualizar Perfil del Maestro</h1>
+    <form class="update-form">
+      <div class="form-group">
+        <label for="names">Nombres:</label>
+        <input type="text" id="names" name="names" placeholder="Ingresa los nombres" required>
+      </div>
+      <div class="form-group">
+        <label for="fatherLastName">Apellido Paterno:</label>
+        <input type="text" id="fatherLastName" name="fatherLastName" placeholder="Ingresa el apellido paterno" required>
+      </div>
+      <div class="form-group">
+        <label for="motherLastName">Apellido Materno:</label>
+        <input type="text" id="motherLastName" name="motherLastName" placeholder="Ingresa el apellido materno" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Contraseña:</label>
+        <div class="password-wrapper">
+          <input type="password" id="password" name="password" placeholder="Ingresa nueva contraseña" required>
+          <button type="button" class="toggle-password" id="togglePassword">Ver</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Repetir Contraseña:</label>
+        <div class="password-wrapper">
+          <input type="password" id="passwordRepeat" name="password" placeholder="Ingresa nuevamente la contraseña" required>
+          <button type="button" class="toggle-password" id="togglePasswordRepeat">Ver</button>
+        </div>
+      </div>        
+      <div class="form-group">
+        <label for="profilePhoto">Foto de Perfil:</label>
+        <input type="file" id="profilePhoto" name="profilePhoto" accept="image/*">
+      </div>
+      <div class="form-actions">
+        <button id="update" type="submit" class="btn btn-primary">Actualizar</button>
+        <button id="restart" type="reset" class="btn btn-secondary">Restaurar</button>
+      </div>
+    </form>
+  </div>
+  <div id="toast" class="toast"></div>
+  <script type="module" src="./update-teacher-user.js"></script>
+</body>
+</html>

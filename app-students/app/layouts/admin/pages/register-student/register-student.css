@@ -1,0 +1,151 @@
+@import url("../../../../styles/global.css");
+
+
+/* Reset básico */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    display: flex;
+    /* justify-content: center;
+    align-items: center; */
+    height: 100vh;
+  }
+
+.page{
+    background: linear-gradient(
+        135deg,
+        rgb(111, 182, 243) 16%,
+        rgb(165, 212, 241) 90%
+      );
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+}
+  
+  /* Contenedor del formulario */
+  .form-container {
+    background-color: #fff;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* Título */
+  .form-container h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: var(--primary);
+  }
+  
+  /* Grupos del formulario */
+  .form-group {
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  /* Etiquetas */
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 14px;
+  }
+  
+  /* Campos de entrada */
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+  }
+  
+  /* Efecto de enfoque en los campos */
+  .form-group input:focus {
+    border-color: var(--primary-tint);
+    outline: none;
+  }
+  
+  /* Botón de registro */
+  button {
+    width: 100%;
+    padding: 10px 15px;
+    background-color: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .toast {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    font-size: 17px;
+    transition: opacity 0.5s ease-in-out;
+  }
+
+  .toast.success {
+    background-color: #4CAF50;
+  }
+
+  .toast.error {
+    background-color: #f44336;
+  }
+  
+  /* Efecto al pasar el cursor sobre el botón */
+  button:hover {
+    opacity: 0.9;
+  }
+
+  .student-info {
+    background-color: #fff;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .student-info h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: var(--primary);
+  }
+  
+  .student-info p {
+    font-size: 16px;
+    margin: 10px 0;
+  }
+  
+  /* Responsive */
+  @media (max-width: 600px) {
+    .form-container {
+      padding: 15px 20px;
+    }
+  
+    button {
+      font-size: 14px;
+    }
+  }
+  
