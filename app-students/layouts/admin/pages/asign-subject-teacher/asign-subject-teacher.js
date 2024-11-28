@@ -1,64 +1,32 @@
-import api from "../../../../shared/services/api.service.js";
-
+import api from '../../../../app/shared/services/api.service.js';
+import TableSubjects from '../../../../app/layouts/admin/components/table-subject/table-subject.js';
+import Header from '../../../../app/layouts/admin/components/header/header.js';
+import BackButton from '../../../../app/shared/components/back-button/back-button.js';
 let selectedTeacher = null;
-let selectedSubject = null; // Variable para almacenar la materia seleccionada
+let selectedSubject; // Variable para almacenar la materia seleccionada
 
 // Asegurarse de que el DOM esté completamente cargado antes de ejecutar el código
 document.addEventListener("DOMContentLoaded", function () {
   loadComponents();
   addListeners();
+
+  const professorDetails = document.querySelector("professor-details");
+  professorDetails.addEventListener("professor-selected", (e) => {
+    selectedTeacher = e.detail.teacher.teacher;
+  });
 });
 
 // Agregar listeners a los elementos
 const addListeners = () => {
-  addSearchProfessorListener();
   addAssignSubjectListener();
 };
 
-// Listener para el formulario de búsqueda de profesor
-const addSearchProfessorListener = () => {
-  const searchButton = document.getElementById("search-button");
-  searchButton.addEventListener("click", async () => {
-    const query = document.getElementById("search-input").value;
-    if (query.trim() === "") {
-      showAlert("Por favor ingresa el id academico del profesor a buscar");
-      return;
-    }
-    await searchProfessor(query);
-  });
-};
 
-// Buscar profesor en la API
-const searchProfessor = async (query) => {
-  try {
-    const response = await api.get({ endpoint: `users?academicId=${query}` });
-    if (response.data && response.data.length > 0) {
-      displayProfessor(response.data[0]); // Mostrar el primer resultado
-    } else {
-      showAlert("No se encontró un profesor con ese nombre");
-    }
-  } catch (error) {
-    showAlert("Error al buscar el profesor, intenta más tarde");
-    console.error(error);
-  }
-};
 
-// Mostrar información del profesor en la sección correspondiente
-const displayProfessor = (teacher) => {
-  selectedTeacher = teacher; // Almacenar el profesor seleccionado
-
-  const teacherPhoto = document.querySelector(".professor-photo img");
-  const teacherName = document.querySelector(".professor-info .name");
-  const teacherEmail = document.querySelector(".professor-info .email");
-
-  teacherPhoto.src = teacher.photo || "default-photo.png";
-  teacherName.textContent = teacher.name;
-  teacherEmail.textContent = teacher.email;
-};
 
 // Listener para asignar una materia al profesor
 const addAssignSubjectListener = () => {
-  const assignButton = document.getElementById("assign-button");
+  const assignButton = document.getElementById("assignButton");
   assignButton.addEventListener("click", async () => {
     if (!selectedTeacher) {
       showAlert("Por favor selecciona un profesor primero");
@@ -87,6 +55,7 @@ const assignSubjectToProfessor = async () => {
       showAlert("Materia asignada exitosamente");
       selectedSubject = null; 
       clearSubjectSelection();
+      clearTeacherSelection();
     }
   } catch (error) {
     showAlert("Error al asignar la materia, intenta más tarde");
@@ -96,26 +65,33 @@ const assignSubjectToProfessor = async () => {
 
 // Cargar la lista de materias disponibles
 const loadComponents = () => {
+  window.customElements.define("admin-header", Header);
+  window.customElements.define("back-button", BackButton);
+  window.customElements.define("table-subjects", TableSubjects);
   const subjectsTable = document.getElementById("subjects-table");
-  subjectsTable.addEventListener("click", (e) => {
-    const row = e.target.closest("tr");
-    if (row && row.dataset.subjectId) {
-      selectSubject(row.dataset.subjectId, row.dataset.subjectName);
-    }
+  subjectsTable.addEventListener("subject-selected", async (e) => { 
+    debugger;
+    const subject = e.detail;
+    selectedSubject = await getSubject(subject.id); 
   });
+
+  async function getSubject(subjectId) {
+    const subject = (await api.get({ endpoint: `subjects/${subjectId}` })).data;
+
+    return subject;
+  }
 };
 
-// Seleccionar una materia
-const selectSubject = (subjectId, subjectName) => {
-  selectedSubject = { id: subjectId, name: subjectName };
-  const subjectInput = document.getElementById("selected-subject");
-  subjectInput.value = subjectName; // Mostrar la materia seleccionada
-};
 
 // Limpiar la selección de materia
 const clearSubjectSelection = () => {
   const subjectInput = document.getElementById("selected-subject");
   subjectInput.value = ""; // Vaciar el campo de materia seleccionada
+};
+
+const clearTeacherSelection = () => {
+  const teacherInput = document.getElementById("academicIdInput");
+  teacherInput.value = ""; // Vaciar el campo de profesor seleccionado
 };
 
 // Mostrar alerta de error o éxito

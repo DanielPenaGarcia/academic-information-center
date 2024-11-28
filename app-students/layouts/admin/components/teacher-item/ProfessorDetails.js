@@ -1,3 +1,4 @@
+import api from "../../../../app/shared/services/api.service.js";
 class ProfessorDetails extends HTMLElement {
     constructor() {
       super();
@@ -18,12 +19,19 @@ class ProfessorDetails extends HTMLElement {
     // Método para obtener detalles del profesor
     async fetchProfessorDetails(academicId) {
       try {
-        
-        const response = await api.get({ endpoint: "teachers", body });
-        const teacher = await response.json();
-  
-        if (response.ok) {
+        const response = await api.get({ endpoint: "teacher", query: { academicId } });
+        const teacher = response.data;
+        if (response.status === 200) {
           this.updateDetails(teacher);
+    
+          
+          this.dispatchEvent(
+            new CustomEvent("professor-selected", {
+              detail: { teacher },
+              bubbles: true, 
+              composed: true,
+            })
+          );
         } else {
           console.error("Error al obtener los datos del profesor.");
           this.clearDetails();
@@ -33,13 +41,24 @@ class ProfessorDetails extends HTMLElement {
         this.clearDetails();
       }
     }
-  
     
+    
+  
     updateDetails(teacher) {
-      this.shadowRoot.querySelector(".professor-name").textContent = teacher.name || "No disponible";
-      this.shadowRoot.querySelector(".professor-id").textContent = teacher.academicId || "No disponible";
-      this.shadowRoot.querySelector(".professor-email").textContent = teacher.email || "No disponible";
+      const nameElement = this.shadowRoot.querySelector(".professor-name");
+      const idElement = this.shadowRoot.querySelector(".professor-id");
+      const emailElement = this.shadowRoot.querySelector(".professor-email");
+    
+      if (!nameElement || !idElement || !emailElement) {
+        console.error("No se encontraron los elementos en el DOM.");
+        return;
+      }
+    
+      nameElement.textContent = teacher.teacher.names + " " + teacher.teacher.fatherLastName|| "No disponible";
+      idElement.textContent = teacher.teacher.academicId || "No disponible";
+      emailElement.textContent = teacher.teacher.email || "No disponible";
     }
+    
   
     
     clearDetails() {
@@ -53,7 +72,7 @@ class ProfessorDetails extends HTMLElement {
       this.shadowRoot.innerHTML = `
         <div class="professor-details">
           <div class="professor-photo">
-            <img src="default-profile.png" alt="Foto del profesor" />
+           
           </div>
           <div class="professor-info">
             <p><strong>Nombre:</strong> <span class="professor-name">No disponible</span></p>

@@ -5,11 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Asignar maestro a materia</title>
   <link rel="stylesheet" href="./asign-subject-teacher.css">
-  <script type="module" src="./ProfessorDetails.js"></script>
-  <script type="module" src="./TableSubject.js"></script>
-  <script type="module" src="./asign-subject-teacher.js"></script>
+  
+  
 </head>
 <body>
+  <admin-header></admin-header>
+  <back-button></back-button>
   <h1>Asignar maestro a materia</h1>
   <div class="container">
     <div class="professor-section">
@@ -19,8 +20,8 @@
       </div>
       <professor-details></professor-details>
     </div>
-    <div class="subjects-section">
-      <table-subject year="2016" semester="2"></table-subject>
+    <div id="subjects-table" class="subjects-section">
+      <table-subjects year="2016" semester="2"></table-subjects>
     </div>
   </div>
   <div class="assign-button">
@@ -43,5 +44,10 @@
       }
     });
   </script>
+  <script type="module" src="../../components/subject-item/subject-item.js"></script>
+  <script type="module" src="./asign-subject-teacher.js"></script>
+  <script type="module" src="../../components/teacher-item/ProfessorDetails.js"></script>
+  
+
 </body>
 </html>
