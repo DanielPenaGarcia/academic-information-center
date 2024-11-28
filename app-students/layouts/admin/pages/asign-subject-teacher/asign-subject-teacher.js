@@ -1,6 +1,7 @@
 import api from '../../../../app/shared/services/api.service.js';
 import TableSubjects from '../../../../app/layouts/admin/components/table-subject/table-subject.js';
-
+import Header from '../../../../app/layouts/admin/components/header/header.js';
+import BackButton from '../../../../app/shared/components/back-button/back-button.js';
 let selectedTeacher = null;
 let selectedSubject; // Variable para almacenar la materia seleccionada
 
@@ -64,6 +65,8 @@ const assignSubjectToProfessor = async () => {
 
 // Cargar la lista de materias disponibles
 const loadComponents = () => {
+  window.customElements.define("admin-header", Header);
+  window.customElements.define("back-button", BackButton);
   window.customElements.define("table-subjects", TableSubjects);
   const subjectsTable = document.getElementById("subjects-table");
   subjectsTable.addEventListener("subject-selected", async (e) => { 
