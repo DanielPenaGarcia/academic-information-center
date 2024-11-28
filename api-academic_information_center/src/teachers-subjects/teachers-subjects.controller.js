@@ -10,7 +10,7 @@ export class TeacherSubjectsController{
           
             const { academicId,subjectId} = req.body;
             const result = await this.teacherSubjecstService.asignTeacherToSubject({academicId,subjectId});
-            res.status(200).json(result);
+            res.status(201).json(result);
           } catch (error) {
             if (error.message === "Forbidden") {
               return res.status(403).json({ error: "Forbidden" });

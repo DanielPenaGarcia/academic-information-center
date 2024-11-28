@@ -23,6 +23,15 @@ class ProfessorDetails extends HTMLElement {
         const teacher = response.data;
         if (response.status === 200) {
           this.updateDetails(teacher);
+    
+          
+          this.dispatchEvent(
+            new CustomEvent("professor-selected", {
+              detail: { teacher },
+              bubbles: true, 
+              composed: true,
+            })
+          );
         } else {
           console.error("Error al obtener los datos del profesor.");
           this.clearDetails();
@@ -32,6 +41,7 @@ class ProfessorDetails extends HTMLElement {
         this.clearDetails();
       }
     }
+    
     
   
     updateDetails(teacher) {
