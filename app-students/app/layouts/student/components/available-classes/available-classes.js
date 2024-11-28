@@ -1,6 +1,6 @@
 import api from "../../../../shared/services/api.service.js";
 
-let subjects = []; // Moved subjects to a global scope
+let subjects = []; 
 
 const getSubjects = async () => {
   const student = localStorage.getItem('user');
@@ -23,7 +23,6 @@ const getSubjects = async () => {
 
     console.log(response.status === 200 && Array.isArray(response.data));
 
-    // Check if the response is successful and contains the expected data
     if (response.status === 200 && Array.isArray(response.data)) {
       const subjectMap = {};
 
@@ -35,8 +34,7 @@ const getSubjects = async () => {
         const days = klass.days;  
         const id = klass.id;                
 
-        // Check if the necessary fields are available
-        if (subjectName && teacherName && startTime && duration && days) {
+        if (subjectName && startTime && duration && days) {
           if (!subjectMap[subjectName]) {
             subjectMap[subjectName] = [];
           }
@@ -56,7 +54,6 @@ const getSubjects = async () => {
         }
       });
 
-      // Map the subjects to the desired structure
       const mappedSubjects = Object.keys(subjectMap).map(subjectName => ({
         name: subjectName,
         classes: subjectMap[subjectName]
@@ -78,14 +75,12 @@ document.addEventListener("DOMContentLoaded", function () {
   getSubjects();
 });
 
-// Calculate end time for a class
 function calculateEndTime(startTime, duration) {
   const [hours, minutes, seconds] = startTime.split(':').map(Number);
   const endHour = hours + duration;
   return formatTime(`${endHour}:${minutes}:${seconds}`);
 }
 
-// Format time to a 12-hour format
 function formatTime(time) {
   const [hours, minutes] = time.split(':').map(Number);
   const period = hours >= 12 ? 'PM' : 'AM';
@@ -93,7 +88,6 @@ function formatTime(time) {
   return `${formattedHour}:${String(minutes).padStart(2, '0')} ${period}`;
 }
 
-// Render available classes
 function renderAvailableClasses() {
   const availableClassesList = document.getElementById('available-classes-list');
   availableClassesList.innerHTML = ''; 
@@ -136,19 +130,15 @@ function renderAvailableClasses() {
   });
 }
 
-// Function to handle class selection
 function selectClass(classObject) {
   subjects.forEach((subject) => {
-    // Find the index of the class to be removed in the subject's classes array
     const classIndex = subject.classes.findIndex(classItem => classItem.id === classObject.id);
 
-    // If the class is found, remove it
     if (classIndex !== -1) {
       subject.classes.splice(classIndex, 1);
     }
   });
 
-  // Remove subjects that have no classes left
   subjects = subjects.filter(subject => subject.classes.length > 0);
 
   console.log(subjects);
@@ -156,7 +146,6 @@ function selectClass(classObject) {
   renderAvailableClasses();
 }
 
-// Listen for reload messages from the parent window
 window.addEventListener('message', (event) => {
   if (event.data.type === 'RELOAD') {
     getSubjects();

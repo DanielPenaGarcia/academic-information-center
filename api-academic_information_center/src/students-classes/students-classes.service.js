@@ -181,64 +181,63 @@ export class StudentsClassesService{
     //   return {classRef,student}
     // }
 
-    // async gradeStudent({academicId, classId, grade}){
-    //   if(!grade){
-    //     throw new Error("Unassigned grade");
-    //   }
-    //   if (grade<0||grade>10){
-    //     throw new Error("Invalid grade");
-    //   }
+     async gradeStudent({academicId, classId, grade}){
+       if(!grade){
+         throw new Error("Unassigned grade");
+       }
+       if (grade<0||grade>10){
+         throw new Error("Invalid grade");
+       }
       
-    //   const classCondition = where().equal("id", classId).build();
-    //   console.log(classCondition)
-    //   const classDTO = await this.repositoryClass.findOne({
-    //     conditions: classCondition,
-    //   });
-    //   if (!classDTO){
-    //     throw new Error("Class not found");
-    //   }
-    //   const classRef = classDtoToEntityMapper(classDTO);
+       const classCondition = where().equal("id", classId).build();
+       console.log(classCondition)
+       const classDTO = await this.repositoryClass.findOne({
+         conditions: classCondition,
+       });
+       if (!classDTO){
+       throw new Error("Class not found");
+     }
+       const classRef = classDtoToEntityMapper(classDTO);
 
-    //   const studentCondition = where().equal("academic_id", academicId).build();
-    //   console.log(studentCondition)
-    //   const studentDTO = await this.repositoryStudent.findOne({
-    //     conditions: studentCondition,
-    //   });
-    //   if (!studentDTO){
-    //     throw new Error("Student not found");
-    //   }
-    //   const student = classDtoToEntityMapper(studentDTO);
+       const studentCondition = where().equal("academic_id", academicId).build();
+       console.log(studentCondition)
+       const studentDTO = await this.repositoryStudent.findOne({
+         conditions: studentCondition,
+       });
+       if (!studentDTO){
+         throw new Error("Student not found");
+       }
+       const student = classDtoToEntityMapper(studentDTO);
 
-    //   const studentClassCondition = where().equal('student_id',student.id).and().equal('class_id',classId).build();
-    //   console.log(studentClassCondition)
+       const studentClassCondition = where().equal('student_id',student.id).and().equal('class_id',classId).build();
+       console.log(studentClassCondition)
 
-    //   const studentClass = await this.repositoryStudentClasses.findOne({condition: studentClassCondition});
+       const studentClass = await this.repositoryStudentClasses.findOne({condition: studentClassCondition});
       
-    //   if (!studentClass){
-    //     throw new Error("The student is not enrolled in said class");
-    //   }
+       if (!studentClass){
+         throw new Error("The student is not enrolled in said class");
+       }
 
-    //   const values = [];
-    //   values.push({
-    //     column:"grade",
-    //     value:grade
-    //   });
-    //   const status = this.#getStatusByGrade({grade})
-    //   values.push({
-    //     column:"status",
-    //     value:status
-    //   });
+       const values = [];
+       values.push({
+         column:"grade",
+         value:grade
+       });
+       const status = this.#getStatusByGrade({grade})
+       values.push({
+         column:"status",
+         value:status
+       });
 
-    //   const conditionUpdate = where().equal('student_id',student.id).and().equal("class_id",classId).build();
-    //   const result = await this.repositoryStudentClasses.update({setValues: values ,condition:conditionUpdate});
-    //   return {classRef,student,grade,status}
-    // }
+       const conditionUpdate = where().equal('student_id',student.id).and().equal("class_id",classId).build();
+       const result = await this.repositoryStudentClasses.update({setValues: values ,condition:conditionUpdate});
+       return {classRef,student,grade,status}
+     }
 
-    // #getStatusByGrade({grade}){
-    //   if (grade>=approving_grade){
-    //     return StudentClassStatus.APPROVED
-    //   }
-    //   return StudentClassStatus.REJECTED
-    // }
-
+     #getStatusByGrade({grade}){
+       if (grade>=approving_grade){
+         return StudentClassStatus.APPROVED
+       }
+       return StudentClassStatus.REJECTED
+     }
 }
