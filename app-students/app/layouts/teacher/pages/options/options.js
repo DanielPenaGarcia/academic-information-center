@@ -2,52 +2,22 @@ import Header from "../../components/header/header.js";
 import { router } from "../../../../shared/router.js";
 
 document.addEventListener('DOMContentLoaded', () => {
-    window.customElements.define("admin-header", Header);
-    loadOptions();
+    window.customElements.define("teacher-header", Header);
+    loadOptions(); // Cargar las opciones cuando el documento esté listo
 });
 
 function loadOptions() {
     const options = [
         {
-            title: 'Dar de baja a alumno',
-            description: 'Dar de baja de una clase a un alumno',
+            title: 'Actualizar perfil',
+            description: 'Actualizar mi perfil de maestro',
             actions: [
                 {
-                    label: 'Dar de baja',
-                    action: () => goToOption({ path: 'admin/students/drop-class' })
-                },
+                    label: 'Actualizar',
+                    action: () => goToOption({ path: '/teacher/update'})
+                }
             ]
         },
-        {
-            title: 'Registrar clase',
-            description: 'Registra una nueva clase en el sistema',
-            actions: [
-                {
-                    label: 'Registrar',
-                    action: () => goToOption({ path: 'admin/classes/register-class' })
-                },
-            ]
-        },
-        {
-            title: 'Registrar periodo de inscripción',
-            description: 'Registra un nuevo periodo de inscripción en el sistema',
-            actions: [
-                {
-                    label: 'Registrar',
-                    action: () => goToOption({ path: 'admin/enrollment-period/create' })
-                },
-            ]
-        },
-        {
-            title: 'Registrar materia',
-            description: 'Registra una nueva materia en el sistema',
-            actions: [
-                {
-                    label: 'Registrar',
-                    action: () => goToOption({ path: 'admin/subjects/register-subject' })
-                },
-            ]
-        }
     ];
 
     // Mostrar las opciones en el main

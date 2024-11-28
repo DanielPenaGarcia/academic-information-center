@@ -3,51 +3,21 @@ import { router } from "../../../../shared/router.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     window.customElements.define("admin-header", Header);
-    loadOptions();
+    loadOptions(); // Cargar las opciones cuando el documento esté listo
 });
 
 function loadOptions() {
     const options = [
         {
-            title: 'Dar de baja a alumno',
-            description: 'Dar de baja de una clase a un alumno',
-            actions: [
-                {
-                    label: 'Dar de baja',
-                    action: () => goToOption({ path: 'admin/students/drop-class' })
-                },
-            ]
-        },
-        {
-            title: 'Registrar clase',
-            description: 'Registra una nueva clase en el sistema',
+            title: 'Registrar maestro',
+            description: 'Registra un nuevo maestro',
             actions: [
                 {
                     label: 'Registrar',
-                    action: () => goToOption({ path: 'admin/classes/register-class' })
-                },
+                    action: () => goToOption({ path: 'admin/teacher/register'})
+                }
             ]
         },
-        {
-            title: 'Registrar periodo de inscripción',
-            description: 'Registra un nuevo periodo de inscripción en el sistema',
-            actions: [
-                {
-                    label: 'Registrar',
-                    action: () => goToOption({ path: 'admin/enrollment-period/create' })
-                },
-            ]
-        },
-        {
-            title: 'Registrar materia',
-            description: 'Registra una nueva materia en el sistema',
-            actions: [
-                {
-                    label: 'Registrar',
-                    action: () => goToOption({ path: 'admin/subjects/register-subject' })
-                },
-            ]
-        }
     ];
 
     // Mostrar las opciones en el main

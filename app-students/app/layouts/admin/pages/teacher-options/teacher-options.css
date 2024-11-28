@@ -1,11 +1,10 @@
 @import url('../../../../styles/global.css');
 
 /* Contenedor principal del administrador */
-.content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+#admin-main {
+    padding: 20px;
+    background-color: #f4f4f4;  /* Color de fondo para diferenciar */
+    min-height: 100vh;  /* Para que el main ocupe al menos toda la altura de la pantalla */
 }
 
 /* Contenedor de opciones */

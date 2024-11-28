@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Materia</title>
+    <link rel="stylesheet" href="create-subject.css">
+</head>
+<body>
+    <back-button></back-button>
+    <admin-header></admin-header>
+    <main class="content">
+        <div class="card">
+            <div class="card-header">
+                <h1>Crear Materia</h1>
+            </div>
+            <div class="card-content">
+                <form id="subject-form">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label for="course-map">Mapa currícular</label>
+                            <select id="course-map" name="year" required>
+                                <option value="" disabled selected>Seleccione un mapa currícular</option>
+                            </select>
+                            <div class="form-group" id="course-map-info" hidden></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Nombre de la Materia</label>
+                            <input type="text" id="name" name="name" placeholder="Materia" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="hoursPerWeek">Horas por Semana</label>
+                        <input type="number" id="hoursPerWeek" name="hoursPerWeek" placeholder="3" min="1" max="40" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="semester">Semestre</label>
+                        <input type="number" id="semester" name="semester" placeholder="7" min="1" max="12" required>
+                    </div>
+                </form>
+                <div class="card-footer">
+                    <button class="btn" id="submit-subject">Guardar Materia</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script type="module" src="create-subject.js"></script>
+</body>
+</html>

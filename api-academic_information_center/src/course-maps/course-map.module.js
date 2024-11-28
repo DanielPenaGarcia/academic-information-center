@@ -9,10 +9,20 @@ const path = "/course-maps";
 const courseMapController = new CourseMapController();
 
 const middlewares = (req, res, next) => {
-  roleAdminGuard(req, res, next);
+  next();
 };
 
 router.post(
-  `${path}`, middlewares,
+  `${path}`, roleAdminGuard, middlewares,
   courseMapController.createCourseMap.bind(courseMapController)
 );
+
+router.get(
+  `${path}`, middlewares,
+  courseMapController.getAllCourseMaps.bind(courseMapController)
+);
+
+router.get(
+  `${path}/:id`, middlewares,
+  courseMapController.getCourseMapById.bind(courseMapController)
+)

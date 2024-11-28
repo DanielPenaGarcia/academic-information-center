@@ -1,3 +1,4 @@
+import { Pageable } from "../utils/classes/pageable.class.js";
 import { CourseMapsService } from "./course-maps.service.js";
 
 export class CourseMapController {
@@ -20,20 +21,27 @@ export class CourseMapController {
 
   async getAllCourseMaps(req, res, next) {
     try {
-        const { pageable } = req.query;
-        const result = await this.courseMapsService.findAllCourseMaps({
+      const query = req.query;
+      if (!query.page) {
+        query.page = 1;
+      }
+      if (!query.size) {
+        query.size = 10;
+      }
+      const pageable = new Pageable(query.page, query.size);
+        const courseMaps = await this.courseMapsService.findAllCourseMaps({
             pageable,
         });
-        res.status(200).json(result);
+        res.status(200).json(courseMaps);
     } catch (error) {
       next(error);
     }
   }
 
-  getCourseMapByYear(req, res, next) {
+  async getCourseMapById(req, res, next) {
     try {
-      const { year } = req.params;
-      const result = this.courseMapsService.getCourseMapByYear(year);
+      const { id } = req.params;
+      const result = await this.courseMapsService.findCourseMapById({ id });
       res.status(200).json(result);
     } catch (error) {
       next(error);

@@ -20,6 +20,7 @@ export class StudentsService {
           academicId: academicId? academicId:undefined
         },
         select:{
+          id: true,
           academicId: true,
           names: true,
           fatherLastName: true,

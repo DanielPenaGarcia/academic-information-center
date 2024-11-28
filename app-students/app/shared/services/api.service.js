@@ -11,7 +11,6 @@ const api = {
   async get({ endpoint, query }) {
     const queryString = new URLSearchParams(query).toString();
     const headers = this.getAuthHeader();
-
     const response = await fetch(`${this.apiUrl}/${endpoint}?${queryString}`, {
       method: "GET",
       headers: headers,

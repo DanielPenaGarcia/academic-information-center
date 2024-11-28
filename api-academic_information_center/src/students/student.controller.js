@@ -17,8 +17,6 @@ export class StudentController {
     }
   }
 
-  async (){}
-
   async getStudentInfoByAcademicId(req,res,next){
     try{
       const {academicId} = req.user;
