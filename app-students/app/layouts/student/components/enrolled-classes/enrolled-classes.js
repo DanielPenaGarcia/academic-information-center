@@ -14,7 +14,7 @@ class EnrolledClasses extends HTMLElement {
             console.error("Student ID is not available. Check localStorage data.");
             return;
         }
-
+ 
         this.getEnrolledClasses();
     }
 
@@ -80,10 +80,10 @@ class EnrolledClasses extends HTMLElement {
                   <li class="class-item">
                       <div class="class-info">
                           <strong>${klass.subjectName}</strong><br>
-                          Professor: ${klass.teacherName}<br>
-                          Start: ${klass.startTime || "N/A"}<br>
-                          Finish: ${klass.finishTime || "N/A"}<br>
-                          Days: ${klass.days || "N/A"}
+                          Profesor: ${klass.teacherName}<br>
+                          Hora inicio: ${klass.startTime || "N/A"}<br>
+                          Hora finalización: ${klass.finishTime || "N/A"}<br>
+                          Días: ${klass.days || "N/A"}
                       </div>
                       <button class="remove-button">Dar de baja</button>
                   </li>
@@ -101,17 +101,44 @@ class EnrolledClasses extends HTMLElement {
       console.log("Rendering completed.");
   }
   
-  async removeClass(classId) {
-    const body ={
-      studentId:JSON.parse(localStorage.getItem('user')).id,
-      classId: classId
-  }
-  const response = await api.patch({
-      endpoint: `classes/dropClass`,
-      body
-    });
-    return response;
+    showToast(message, type) {
+    const toast = document.createElement('div');
+    toast.textContent = message;
+    toast.className = `toast ${type}`;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.remove();
+    }, 3000); // Adjust time as needed
+}
+
+
+async removeClass(classId) {
+    const body = {
+        studentId: JSON.parse(localStorage.getItem('user')).id,
+        classId: classId
+    };
+
+    try {
+        const response = await api.patch({
+            endpoint: `classes/dropClass`,
+            body
+        });
+
+        if (response.status === 200) {
+            // Remove the class from the `classes` array
+            this.classes = this.classes.filter(klass => klass.id !== classId);
+
+            // Re-render the component to update the view
+            this.render();
+        } else {
+            console.warn("Failed to remove class:", response.data?.message || "Unknown error");
+        }
+    } catch (error) {
+        console.error("Error removing class:", error);
     }
+}
+
  
 }
 

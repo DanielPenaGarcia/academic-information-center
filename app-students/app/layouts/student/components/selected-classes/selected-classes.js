@@ -35,10 +35,10 @@ document.addEventListener("DOMContentLoaded", function () {
             classDetails.classList.add('class-info');
             classDetails.innerHTML = `
                 <strong>${classInfo.name}</strong><br>
-                Professor: ${classInfo.professor}<br>
-                Start: ${classInfo.startTime}<br>
-                Finish: ${classInfo.finishTime}<br>
-                Days: ${classInfo.days}
+                Profesor: ${classInfo.professor}<br>
+                Hora inicio: ${classInfo.startTime}<br>
+                Hora finalización: ${classInfo.finishTime}<br>
+                Días: ${classInfo.days}
             `;
 
             const selectButton = document.createElement('button');
@@ -60,7 +60,6 @@ document.addEventListener("DOMContentLoaded", function () {
         // Filter out the class from the enrolled list based on object comparison
         enrolledClasses = enrolledClasses.filter(classItem => classItem !== classInfo);
         
-        console.log("After"+enrolledClasses);
 
         // Send updated list back to parent
         window.parent.postMessage({ type: 'REMOVE_ENROLLED_CLASSES', class: classInfo }, '*');

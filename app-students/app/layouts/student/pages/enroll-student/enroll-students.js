@@ -75,18 +75,25 @@ document.addEventListener("DOMContentLoaded", function () {
             body
           })
 
-          showToast(
-            `Se ha inscrito en la clase ${enrolledClass.name}`,
-            "success"
-          );
-
+          if (response.status==201){
+            showToast(
+              `Se ha inscrito en la clase ${enrolledClass.name}`,
+              "success"
+            );
+          } else {
+            showToast(
+              `No se pudo inscribir en la clase ${enrolledClass.name}\n${response.data.message}`,
+              `error`
+            );
+          }
         }catch(error){
           console.log(error)
           }
       })
       enrolledClasses = []; 
       enrolledFrame.contentWindow.postMessage({ type: 'UPDATE_ENROLLED_CLASSES', classes: enrolledClasses }, '*');
-  } else {
+      availableFrame.contentWindow.postMessage({ type: 'RELOAD' }, '*');
+    } else {
     alert('No classes selected!');
   }
   };

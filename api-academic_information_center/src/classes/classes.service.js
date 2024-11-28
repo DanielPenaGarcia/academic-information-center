@@ -100,20 +100,44 @@ export class ClassesService {
     });
     if (!student) {
       throw new BadRequestException(
-        `No se encontró al alumno con el ID ${subjectId}`
+        `No se encontró al alumno con el ID ${studentId}`
       );
     }
     const klass = await this.classesRepository.findOne({
       where: {
         id: classId,
-      },
+      }, relations:["subject"]
     });
     if (!klass) {
       throw new BadRequestException(
-        `No se encontró la clase con el ${subjectId}`
+        `No se encontró la clase con el ${classId}`
       );
     }
 
+  let enrolledClasses = await this.getEnrolledClasses({ studentId });
+
+// Normalize `enrolledClasses` to be an array
+if (!Array.isArray(enrolledClasses)) {
+  // Case 1: If it's a single object, wrap it in an array
+  enrolledClasses = [enrolledClasses];
+} else if (enrolledClasses.data && Array.isArray(enrolledClasses.data)) {
+  // Case 2: If it's an object with an array under a property called `data`
+  enrolledClasses = enrolledClasses.data;
+}
+
+// Iterate over the normalized `enrolledClasses` array
+enrolledClasses.forEach(studentClass => {
+  const enrolledKlass = studentClass.klass;
+  console.log(studentClass)
+  // Check if there is a common day between `enrolledKlass` and `klass`
+  for (let i = 0; i < enrolledKlass.days.length; i++) {
+    if (klass.days.includes(enrolledKlass.days[i]) && this.#doHoursClash({ enrolledKlass, klass })) {
+      throw new Error(`La clase ${klass.subject.name} se empalma con la clase ${enrolledKlass.subject.name}`);
+    }
+  }
+});
+
+    
     const studentClass = this.studentClassRepository.create({
       student: studentId,
       klass: classId,
@@ -121,6 +145,43 @@ export class ClassesService {
     await this.studentClassRepository.save(studentClass);
     return studentClass;
   }
+
+  #doHoursClash({ enrolledKlass, klass }) {
+    const parseTime = (timeString) => {
+      const [hours, minutes, seconds] = timeString.split(':').map(Number);
+      return { hours, minutes };
+    };
+  
+    // Function to add minutes to a start time
+    const addMinutes = (time, minutesToAdd) => {
+      const newTime = new Date(0, 0, 0, time.hours, time.minutes);
+      newTime.setMinutes(newTime.getMinutes() + minutesToAdd);
+      return newTime;
+    };
+  
+    // Convert `startTime` to Date objects
+    const enrolledStartTime = parseTime(enrolledKlass.startTime);
+    const newClassStartTime = parseTime(klass.startTime);
+  
+    // Calculate end times by adding duration (in minutes)
+    const enrolledEndTime = addMinutes(enrolledStartTime, enrolledKlass.duration);
+    const newClassEndTime = addMinutes(newClassStartTime, klass.duration);
+  
+    // Create Date objects for comparisons
+    const enrolledStartDate = new Date(0, 0, 0, enrolledStartTime.hours, enrolledStartTime.minutes);
+    const enrolledEndDate = enrolledEndTime;
+  
+    const newClassStartDate = new Date(0, 0, 0, newClassStartTime.hours, newClassStartTime.minutes);
+    const newClassEndDate = newClassEndTime;
+  
+    // Check if time periods clash
+    return (
+      (newClassStartDate < enrolledEndDate && newClassEndDate > enrolledStartDate) ||
+      (enrolledStartDate < newClassEndDate && enrolledEndDate > newClassStartDate)
+    );
+  }
+  
+
 
   async getAvailableClassesByStudent({ studentId }) {
     const student = await this.studentRepository.findOne({
@@ -202,9 +263,7 @@ export class ClassesService {
         },
         relations: ['klass', 'student']
     });
-    console.log("CURRENT")
 
-    console.log(currentClasses)
 
     const currentClassIds = currentClasses.map((currentClass) => currentClass.klass.id);
 
@@ -212,7 +271,6 @@ export class ClassesService {
       (eligibleClass) => !currentClassIds.includes(eligibleClass.id)
     );
     
-    console.log(eligibleClasses);
     return eligibleClasses; 
     }
 
@@ -228,7 +286,6 @@ export class ClassesService {
 
         });
 
-        console.log(enrolledClasses)
 
         return enrolledClasses;
     }
