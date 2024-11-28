@@ -9,7 +9,7 @@ export class TeacherController{
 
     async getTeacherInfoByAcademicId(req,res,next){
       try{
-        const {academicId} = req.user;
+        const {academicId} = req.query;
         const teacher = await this.teacherService.getTeacherInfoByAcademicId({academicId})
         res.status(200).json({teacher});
       } catch (error) {

@@ -1,4 +1,4 @@
-import api from "../../../../shared/services/api.service.js";
+import api from '../../../../app/shared/services/api.service.js';
 
 let selectedTeacher = null;
 let selectedSubject = null; // Variable para almacenar la materia seleccionada
@@ -11,15 +11,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Agregar listeners a los elementos
 const addListeners = () => {
-  addSearchProfessorListener();
   addAssignSubjectListener();
 };
 
 // Listener para el formulario de búsqueda de profesor
 const addSearchProfessorListener = () => {
-  const searchButton = document.getElementById("search-button");
+  const searchButton = document.getElementById("searchButton");
   searchButton.addEventListener("click", async () => {
-    const query = document.getElementById("search-input").value;
+    const query = document.getElementById("academicIdInput").value;
     if (query.trim() === "") {
       showAlert("Por favor ingresa el id academico del profesor a buscar");
       return;
@@ -31,7 +30,7 @@ const addSearchProfessorListener = () => {
 // Buscar profesor en la API
 const searchProfessor = async (query) => {
   try {
-    const response = await api.get({ endpoint: `users?academicId=${query}` });
+    const response = await api.get({ endpoint: `teacher?academicId=${query}` });
     if (response.data && response.data.length > 0) {
       displayProfessor(response.data[0]); // Mostrar el primer resultado
     } else {
@@ -58,7 +57,7 @@ const displayProfessor = (teacher) => {
 
 // Listener para asignar una materia al profesor
 const addAssignSubjectListener = () => {
-  const assignButton = document.getElementById("assign-button");
+  const assignButton = document.getElementById("assignButton");
   assignButton.addEventListener("click", async () => {
     if (!selectedTeacher) {
       showAlert("Por favor selecciona un profesor primero");
@@ -97,7 +96,7 @@ const assignSubjectToProfessor = async () => {
 // Cargar la lista de materias disponibles
 const loadComponents = () => {
   const subjectsTable = document.getElementById("subjects-table");
-  subjectsTable.addEventListener("click", (e) => {
+  subjectsTable.addEventListener("click", (e) => { 
     const row = e.target.closest("tr");
     if (row && row.dataset.subjectId) {
       selectSubject(row.dataset.subjectId, row.dataset.subjectName);
