@@ -13,7 +13,7 @@ const middlewares = (req, res, next) => {
 
 
 router.get(
-  `${path}`,
+  `${path}/:teacherAcademicId`,
   teacherSubjectsController.getSubjectsByTeacher.bind(teacherSubjectsController)
 );
 
