@@ -29,4 +29,14 @@ export class TeacherSubjectsController{
         throw new Error("Forbidden");
       }
       }
+
+    async getSubjectsByTeacher(req,res){
+        try {
+            const {academicId} = req.query;
+            const result = await this.teacherSubjecstService.getSubjectsByTeacher({academicId});
+            res.status(200).json(result);
+          } catch (error) {
+            res.status(500).json({ error: error.message });
+          }
+    }
 }

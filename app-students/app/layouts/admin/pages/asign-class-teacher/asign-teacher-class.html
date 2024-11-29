@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asignar Maestro a Clase</title>
+  <link rel="stylesheet" href="./asign-teacher-class.css">
+  
+  
+</head>
+<body>
+  <admin-header></admin-header>
+  <back-button></back-button>
+  <h1>Asignar Maestro a Clase</h1>
+  <div class="container">
+    <div class="professor-section">
+      <div class="search-bar">
+        <input id="academicIdInput" type="text" placeholder="ID académico del profesor" />
+        <button id="searchButton">Buscar</button>
+      </div>
+      <professor-details></professor-details>
+    </div>
+    <div id="subjects-table" class="subjects-section">
+      <table-subjects year="2016" semester="2"></table-subjects>
+    </div>
+  </div>
+  <div class="assign-button">
+    <button id="assignButton">Asignar Maestro a Clase</button>
+  </div>
+
+  <script>
+    const searchButton = document.getElementById("searchButton");
+    const academicIdInput = document.getElementById("academicIdInput");
+    const professorDetails = document.querySelector("professor-details");
+
+    searchButton.addEventListener("click", () => {
+      const academicId = academicIdInput.value.trim();
+      if (academicId) {
+        professorDetails.dispatchEvent(
+          new CustomEvent("search-professor", {
+            detail: { academicId },
+          })
+        );
+      }
+    });
+  </script>
+  <script type="module" src="../../../../../layouts/admin/components/subject-item/subject-item.js"></script>
+  <script type="module" src="./asign-teacher-class.js"></script>
+  <script type="module" src="../../../../../layouts/admin/components/teacher-item/ProfessorDetails.js"></script>
+  
+
+</body>
+</html>
