@@ -1,50 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>School Schedule</title>
-    <link rel="stylesheet" href="my-schedule.css">
-</head>
-<body>
+    <link rel="stylesheet" href="my-schedule.css" />
+  </head>
+  <body>
     <!-- Custom header component -->
     <student-header></student-header>
-    
+
     <main class="content">
-        <section class="schedule">
-            <div class="schedule-container">
-                <div class="schedule-day">
-                    <h2 class="column-name">Lunes</h2>
-                    <ul class="schedule-list" id="classes-L"></ul>
-                </div>
-                <div class="schedule-day">
-                    <h2 class="column-name">Martes</h2>
-                    <ul class="schedule-list" id="classes-M"></ul>
-                </div>
-                <div class="schedule-day">
-                    <h2 class="column-name">Miércoles</h2>
-                    <ul class="schedule-list" id="classes-X"></ul>
-                </div>
-                <div class="schedule-day">
-                    <h2 class="column-name">Jueves</h2>
-                    <ul class="schedule-list" id="classes-J"></ul>
-                </div>
-                <div class="schedule-day">
-                    <h2 class="column-name">Viernes</h2>
-                    <ul class="schedule-list" id="classes-V"></ul>
-                </div>
-                <div class="schedule-day">
-                    <h2 class="column-name">Sábado</h2>
-                    <ul class="schedule-list" id="classes-S"></ul>
-                </div>
-                <div class="schedule-day">
-                    <h2 class="column-name">Dómingo</h2>
-                    <ul class="schedule-list" id="classes-D"></ul>
-                </div>
-            </div>
-        </section>
+      <section class="schedule">
+        <div class="schedule-container">
+          <div class="schedule-day">
+            <h2 class="column-name">Lunes</h2>
+            <ul class="schedule-list" id="classes-L"></ul>
+          </div>
+          <div class="schedule-day">
+            <h2 class="column-name">Martes</h2>
+            <ul class="schedule-list" id="classes-M"></ul>
+          </div>
+          <div class="schedule-day">
+            <h2 class="column-name">Miércoles</h2>
+            <ul class="schedule-list" id="classes-X"></ul>
+          </div>
+          <div class="schedule-day">
+            <h2 class="column-name">Jueves</h2>
+            <ul class="schedule-list" id="classes-J"></ul>
+          </div>
+          <div class="schedule-day">
+            <h2 class="column-name">Viernes</h2>
+            <ul class="schedule-list" id="classes-V"></ul>
+          </div>
+          <div class="schedule-day">
+            <h2 class="column-name">Sábado</h2>
+            <ul class="schedule-list" id="classes-S"></ul>
+          </div>
+          <div class="schedule-day">
+            <h2 class="column-name">Dómingo</h2>
+            <ul class="schedule-list" id="classes-D"></ul>
+          </div>
+        </div>
+      </section>
     </main>
-    
     <script type="module" src="my-schedule.js"></script>
-</body>
+    <div class="print-button">
+      <div class="icon">
+        <svg
+          width="40"
+          height="40"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M19 10V5a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v5m15 0H4a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1"
+          />
+          <path d="M17.5 20v-3a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v3m-4-7h2" />
+        </svg>
+      </div>
+    </div>
+  </body>
 </html>

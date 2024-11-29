@@ -5,6 +5,7 @@
     font-weight: bold;
     color: var(--primary);
     font-family: 'Inter', sans-serif;
+    user-select: none;
 }
 
 .schedule {
@@ -40,6 +41,39 @@
     overflow-x: auto;
     padding: 5px;
     scrollbar-width: thin;
+}
+
+.print-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 50%;
+    background-color: var(--primary);
+    color: var(--primary-contrast);
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.print-button:hover {
+    scale: 1.02;
+    background-color: var(--primary-tint);
+}
+
+.print-button:active {
+    scale: 1;
+    background-color: var(--primary-shade);
+}
+
+.print-button > .icon {
+    width: 40px;
+    height: 40px;
 }
 
 
