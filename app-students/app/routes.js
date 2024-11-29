@@ -38,6 +38,11 @@ export const routes = [
         page: 'app/layouts/student/pages/drop-class-student/drop-class-student.html',
         canActivate: [authGuard, roleGuard('STUDENT')],
     },
+    {
+        path: '/student/schedule',
+        page: 'app/layouts/student/pages/my-schedule/my-schedule.html',
+        canActivate: [authGuard, roleGuard('STUDENT')],
+    },
     //Teacher routes
     {
         path: '/teacher',

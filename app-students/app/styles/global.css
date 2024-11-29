@@ -36,17 +36,6 @@ body {
     font-size: 0.9rem;
 }
 
-/* Media queries para pantallas pequeñas */
-@media (max-width: 768px) {
-    .content-page {
-        padding: 15px;
-    }
-
-    .footer-page {
-        font-size: 0.8rem;
-    }
-}
-
 
 /* Estilos generales de la tarjeta */
 .card {

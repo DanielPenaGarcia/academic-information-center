@@ -1,9 +1,28 @@
+import { role } from "../entities/enums/role.enum.js";
 import { Pageable } from "../utils/classes/pageable.class.js";
+import { ForbiddenException } from "../utils/exceptions/http/forbidden.exception.js";
 import { StudentsClassesService } from "./students-classes.service.js";
 
 export class StudentsClassesController {
+
   constructor() {
     this.studentsClassesService = new StudentsClassesService();
+  }
+
+  async studentSchedule(req, res, next) {
+    try {
+      const { academicId } = req.params;
+      const user = req.user;
+      if (user.academicId !== academicId && user.role !== role.ADMIN) {
+        throw new ForbiddenException("No tienes permisos para ver este horario");
+      }
+      const studentClasses = await this.studentsClassesService.studentSchedule({
+        academicId,
+      });
+      res.status(200).json(studentClasses);
+    } catch (error) {
+      next(error);
+    }
   }
 
   async getStudentClassesByStudentId(req,res,next){
@@ -27,79 +46,4 @@ export class StudentsClassesController {
       next(error);
     }
   }
-
-//   #validateDropStudentClassByStudentOrAdmin(req){
-//     const userRequesting = req.user;
-//     if(userRequesting.role === UserRole.STUDENT){
-//         if(userRequesting.academicId !== req.body.academicId){
-//           throw new Error("Forbidden");
-//         }
-//     }else if(userRequesting.role !== UserRole.ADMINISTRATOR){
-//       throw new Error("Forbidden");
-//     }
-//   }
-//   async enrollClass(req, res) {
-//     try {
-//       this.#validateUser(req, res);
-//       const { academicId, classId } = req.body;
-//       const enrolledClass = await this.studentsClassesService.enrollClass({
-//         academicId,
-//         classId,
-//       });
-//       if (!enrolledClass) {
-//         return res
-//           .status(500)
-//           .send(
-//             `Error enrolling the class, try paying the classes that you owe us first`
-//           );
-//       }
-//       //TODO: Eliminar datos que regresen nulos
-//       return res.status(200).send(enrolledClass.classRef);
-//     } catch (error) {
-//       if (error.message === "Forbidden") {
-//         return res.status(403).json({ error: "Forbidden" });
-//       }
-//       res.status(500).json({ error: error.message });
-//     }
-//   }
-
-//   async gradeStudent(req, res) {
-//     try {
-//       this.#validateTeacher(req);
-//       const { academicId, classId, grade } = req.body;
-//       const result = await this.studentsClassesService.gradeStudent({
-//         academicId,
-//         classId,
-//         grade,
-//       });
-//       if (!result) {
-//         return res.status(500).send(`Error grading the student`);
-//       }
-//       return res.status(200).send(result);
-//     } catch (error) {
-//       res.status(500).json({ error: error.message });
-//     }
-//   }
-
-//   #validateUser(req) {
-//     const userRequesting = req.user;
-//     if (
-//       userRequesting.role !== UserRole.STUDENT &&
-//       userRequesting.role !== UserRole.ADMINISTRATOR
-//     ) {
-//       throw new Error("Forbidden");
-//     }
-//     if (userRequesting.role === UserRole.STUDENT) {
-//       if (userRequesting.academicId !== req.body.academicId) {
-//         throw new Error("Forbidden");
-//       }
-//     }
-//   }
-
-//   #validateTeacher(req) {
-//     const userRequesting = req.user;
-//     if (userRequesting.role != UserRole.TEACHER) {
-//       throw new Error("Forbidden");
-//     }
-//   }
 }

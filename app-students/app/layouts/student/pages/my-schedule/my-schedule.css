@@ -1,0 +1,70 @@
+@import url("../../../../styles/global.css");
+
+.column-name {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--primary);
+    font-family: 'Inter', sans-serif;
+}
+
+.schedule {
+    width: 100%;
+}
+
+.schedule-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: start;
+    margin-top: 20px;
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+}
+
+.schedule-day {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    height: 100%;
+    padding: 5px;
+    width: 100%;
+}
+
+.schedule-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 20px;
+    overflow-x: auto;
+    padding: 5px;
+    scrollbar-width: thin;
+}
+
+
+@media (max-width: 1287px) {
+    .schedule-container {
+        flex-direction: column;
+    }
+
+    .schedule-day {
+        display: flex;
+        align-items: start;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .schedule-list {
+        display: flex;
+        flex-direction: row;
+        margin: 10px 0;
+        width: 100%;
+        gap: 15px;
+    }
+
+    #time {
+        display: none;
+    }
+
+}

@@ -1,0 +1,71 @@
+* {
+    user-select: none;
+}
+
+.class-item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
+    border-bottom: 5px solid var(--primary);
+}
+
+.class-item:hover {
+    transform: scale(1.02);
+}
+
+.subject-name {
+    font-size: 1em;
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.teacher-name {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    color: #555;
+}
+
+.teacher-name .label {
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #777;
+}
+
+.teacher-name .value {
+    font-size: 0.9em;
+    font-family: 'Inter', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: #555;
+}
+
+.classroom {
+    font-size: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: var(--primary-tint);
+}
+
+.schedule {
+    display: flex;
+    gap: 5px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.schedule .stars, 
+.schedule .ends {
+    font-weight: bold;
+    color: #333;
+}
+
+.schedule .dash {
+    color: #999;
+}

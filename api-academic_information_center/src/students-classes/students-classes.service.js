@@ -6,8 +6,45 @@ import { Like } from "typeorm";
 import { NotFoundException } from "../utils/exceptions/http/not-found.exception.js";
 
 export class StudentsClassesService{
+  
     constructor(){
         this.studentClasseRepository = dataSource.getRepository(StudentClassSchema);
+    }
+
+    async studentSchedule({academicId}) {
+        try {
+          const studentClasses = await this.studentClasseRepository.find({
+            where: {
+              student: {
+                academicId: academicId
+              },
+              status: StatusClass.PENDING
+            },
+            relations: {
+              klass: {
+                subject: true,
+                teacher: true
+              }
+            },
+            select: {
+              klass: {
+                id: true,
+                subject: {
+                  name: true
+                },
+                teacher: {
+                  names: true
+                },
+                startTime: true,
+                days: true,
+                duration: true
+              }
+            }
+          });
+          return studentClasses;
+        } catch (error) {
+          throw new InternalServerErrorException(error);
+        }
     }
 
     async getStudentClassesByStudentId({academicId},pageable,{className}){
@@ -78,9 +115,10 @@ export class StudentsClassesService{
             },
             klass:{
               subject:{
-                name:true
+                name:true,
               },
-              days: true
+              days: true,
+              duration: true
             },
             status: true
           },
@@ -103,84 +141,6 @@ export class StudentsClassesService{
         throw new InternalServerErrorException("Can not drop class");
       }
     }
-
-    // async dropClass({academicId,classId}){
-
-    //     const condition = where().equal('academic_id',academicId).build();
-
-    //     const studet = await this.repositoryStudent.findOne({condition: condition});
-    //     if(!studet){
-    //       throw new Error(`Student with academic id ${academicId} not found`);
-    //     }
-
-    //     const clase = await this.repositoryClass.findOneById(classId);
-    
-    //     if(!clase){
-    //       throw new Error(`Class with id ${classId} not found`);
-    //     }
-
-    //     const conditionStudentClass = where().equal('student_id',studet.id).and().equal('class_id',clase.id).build();
-
-    //     const studentClass = await this.repositoryStudentClasses.findOne({condition:conditionStudentClass});
-
-    //     if(!studentClass){
-    //       throw Error(`Alumn doesn not have this class assigned`);
-    //     }
-
-    //     if(studentClass.status !='PENDING'){
-    //       throw Error(`Can not drop class if is not PENDING`);
-    //     }
-
-    //     const conditionDelete = where().equal('student_id',studet.id).and().equal('class_id',clase.id).build();
-
-    //     const result = await this.repositoryStudentClasses.delete({condition: conditionDelete});
-    //     if(result.affectedRows!=1){
-    //       throw Error(`Something went wrong droping class`);
-    //     }
-    //     const studentClassDTO = studentClassDtoToEntityMapper(studentClass);
-    //     studentClassDTO.classRef = clase;
-    //     studentClassDTO.student = studet;
-    //     return studentClassDTO;
-    // }
-
-    // async enrollClass({academicId, classId}){
-    //   const classCondition = where().equal("id", classId).build();
-    //   const classDTO = await this.repositoryClass.findOne({
-    //     conditions: classCondition,
-    //   });
-    //   if (!classDTO){
-    //     throw new Error("Class not found");
-    //   }
-    //   const classRef = classDtoToEntityMapper(classDTO);
-
-    //   const studentCondition = where().equal("academic_id", academicId).build();
-    //   const studentDTO = await this.repositoryStudent.findOne({
-    //     conditions: studentCondition,
-    //   });
-    //   if (!studentDTO){
-    //     throw new Error("Student not found");
-    //   }
-    //   const student = studentDtoToEntityMapper(studentDTO);
-
-    //   const studentClassCondition = where().equal('student_id',student.id).and().equal('class_id',classId).build();
-    //   const studentClassDTO = await this.repositoryStudentClasses.findOne({condition: studentClassCondition});
-      
-    //   if (studentClassDTO){
-    //     throw new Error("Class alerady enrolled");
-    //   }
-
-
-    //   const fields = ["student_id", "class_id","status"];
-    //   const values = [[student.id,classId,StudentClassStatus.PENDING]];
-    //   const result = await this.repositoryStudentClasses.create({
-    //     fields: fields,
-    //     values: values,
-    //   });
-    //   if (result.affectedRows === 0) {
-    //     throw new Error("Error enrolling");
-    //   }
-    //   return {classRef,student}
-    // }
 
      async gradeStudent({academicId, classId, grade}){
        if(!grade){

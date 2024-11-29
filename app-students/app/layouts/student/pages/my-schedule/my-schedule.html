@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Schedule</title>
+    <link rel="stylesheet" href="my-schedule.css">
+</head>
+<body>
+    <!-- Custom header component -->
+    <student-header></student-header>
+    
+    <main class="content">
+        <section class="schedule">
+            <div class="schedule-container">
+                <div class="schedule-day">
+                    <h2 class="column-name">Lunes</h2>
+                    <ul class="schedule-list" id="classes-L"></ul>
+                </div>
+                <div class="schedule-day">
+                    <h2 class="column-name">Martes</h2>
+                    <ul class="schedule-list" id="classes-M"></ul>
+                </div>
+                <div class="schedule-day">
+                    <h2 class="column-name">Miércoles</h2>
+                    <ul class="schedule-list" id="classes-X"></ul>
+                </div>
+                <div class="schedule-day">
+                    <h2 class="column-name">Jueves</h2>
+                    <ul class="schedule-list" id="classes-J"></ul>
+                </div>
+                <div class="schedule-day">
+                    <h2 class="column-name">Viernes</h2>
+                    <ul class="schedule-list" id="classes-V"></ul>
+                </div>
+                <div class="schedule-day">
+                    <h2 class="column-name">Sábado</h2>
+                    <ul class="schedule-list" id="classes-S"></ul>
+                </div>
+                <div class="schedule-day">
+                    <h2 class="column-name">Dómingo</h2>
+                    <ul class="schedule-list" id="classes-D"></ul>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script type="module" src="my-schedule.js"></script>
+</body>
+</html>
