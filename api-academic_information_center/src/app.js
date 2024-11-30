@@ -15,6 +15,7 @@ import {router as StudentClassesRouter} from "./students-classes/students-classe
 import {router as CourseMapRouter} from "./course-maps/course-map.module.js";
 import {router as SubjectTeacherRouter} from "./teachers-subjects/teachers-subjects.module.js";
 import {router as EnrollmentPeriodRouter} from "./enrollment-periods/enrollment-periods.module.js";
+import {router as ClassReviewRouter} from "./classes-review/classes-review.module.js";
 
 //Middlewares
 import { errorHandler } from "./middlewares/error-handleler.middleware.js";
@@ -44,6 +45,7 @@ app.use(API_PATH,StudentClassesRouter);
 app.use(API_PATH, CourseMapRouter);
 app.use(API_PATH, SubjectTeacherRouter);
 app.use(API_PATH, EnrollmentPeriodRouter);
+app.use(API_PATH,ClassReviewRouter);
 
 //Error Handler
 app.use(errorHandler);
