@@ -7,21 +7,23 @@ const studentsClassesController = new StudentsClassesController();
 const PATH = "/student";
 
 router.get(
-`${PATH}/:studentId/classes`,
-studentsClassesController.getStudentClassesByStudentId.bind(studentsClassesController)
+  `${PATH}/:studentId/classes`,
+  studentsClassesController.getStudentClassesByStudentId.bind(
+    studentsClassesController
+  )
 );
 
 router.delete(
-    `${PATH}/:academicId/classes/:studentClassId`,
-    studentsClassesController.dropClass.bind(studentsClassesController));
+  `${PATH}/:academicId/classes/:studentClassId`,
+  studentsClassesController.dropClass.bind(studentsClassesController)
+);
 
+router.get(
+  `${PATH}/schedule/:academicId`,
+  studentsClassesController.studentSchedule.bind(studentsClassesController)
+);
 
-// router.post(
-//     "/student/class",
-//     studentsClassesController.enrollClass.bind(studentsClassesController)
-// )
-
-// router.patch(
-//     "/student/class/",
-//     studentsClassesController.gradeStudent.bind(studentsClassesController)
-// )
+router.get(
+  `${PATH}/schedule/:academicId/print`,
+  studentsClassesController.printStudentSchedule.bind(studentsClassesController)
+);
