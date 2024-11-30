@@ -6,6 +6,8 @@ import localStorageService from "../../../../shared/services/local-storage.servi
 document.addEventListener("DOMContentLoaded", function () {
   window.customElements.define("student-header", Header);
   window.customElements.define("schedule-class-item", ScheduleClassItem);
+  const printButton = document.getElementById("print");
+  printButton.addEventListener("click", printSchedule);
   findSchedule();
 });
 
@@ -37,3 +39,25 @@ function loadDayClasses(schedules, day) {
     classesLList.append(scheduleL);
   });
 }
+
+async function printSchedule() {
+  const user = localStorageService.getItem("user");
+  try {
+    const { status, blob } = await api.getBlob({ endpoint: `student/schedule/${user.academicId}/print` });
+    if (status === 200) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'schedule.pdf';
+      document.body.appendChild(a);
+      a.click(); 
+      a.remove();
+      URL.revokeObjectURL(url);
+    } else {
+      console.error("Error al obtener el archivo PDF", status);
+    }
+  } catch (error) {
+    console.error("Hubo un error al obtener el PDF:", error);
+  }
+}
+

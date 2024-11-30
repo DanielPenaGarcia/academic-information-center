@@ -3,14 +3,22 @@ import localStorageService from "./local-storage.service.js"; // Suponiendo que 
 const api = {
   apiUrl: "http://localhost:3000/api/v1",
 
-  getAuthHeader() {
-    const token = localStorageService.getItem('token');
-    return token ? { Authorization: `Bearer ${token}` } : {};
+  getAuthHeader(contentType = "application/json") {
+    // const token = localStorageService.getItem('token');
+    // return token ? { Authorization: `Bearer ${token}` } : {};
+    const token = localStorageService.getItem("token");
+    const headers = {
+      "Content-Type": contentType,  // Si contentType no se pasa, por defecto será "application/json"
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    return headers;
   },
-
-  async get({ endpoint, query }) {
+  
+  async get({ endpoint, query, contentType = "application/json" }) {
     const queryString = new URLSearchParams(query).toString();
-    const headers = this.getAuthHeader();
+    const headers = this.getAuthHeader(contentType);  // Pasamos contentType directamente
     const response = await fetch(`${this.apiUrl}/${endpoint}?${queryString}`, {
       method: "GET",
       headers: headers,
@@ -20,15 +28,35 @@ const api = {
     return { status, data };
   },
 
+  async getBlob({ endpoint, query }) {
+    const queryString = new URLSearchParams(query).toString();
+    const headers = this.getAuthHeader("application/pdf"); // Usamos "application/pdf" como contentType
+    const response = await fetch(`${this.apiUrl}/${endpoint}?${queryString}`, {
+      method: "GET",
+      headers: headers,
+    });
+  
+    // Verificamos si la respuesta fue exitosa
+    if (!response.ok) {
+      throw new Error(`Error fetching the PDF: ${response.status}`);
+    }
+  
+    // Si la respuesta es correcta, obtenemos el blob
+    const status = response.status;
+    const blob = await response.blob();
+  
+    return { status, blob };
+  },  
+
   async post({ endpoint, body }) {
     const headers = {
       "Content-Type": "application/json",
       ...this.getAuthHeader(),
     };
     const response = await fetch(`${this.apiUrl}/${endpoint}`, {
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify(body),
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(body),
     });
     const status = response.status;
     const data = await response.json();

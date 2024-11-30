@@ -25,6 +25,26 @@ export class StudentsClassesController {
     }
   }
 
+  async printStudentSchedule(req, res, next) {
+    try {
+      const { academicId } = req.params;
+      const user = req.user;
+      if (user.academicId !== academicId && user.role !== role.ADMIN) {
+        throw new ForbiddenException("No tienes permisos para ver este horario");
+      }
+      const studentClasses = await this.studentsClassesService.printStudentSchedule({
+        academicId,
+        params: req.query,
+      });
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'inline; filename="schedule.pdf"');
+      res.status(200).send(studentClasses);
+    } catch (error) {
+      next(error);
+    }
+  }
+  
+
   async getStudentClassesByStudentId(req,res,next){
     try{
       const {page,count,subject} = req.query;
