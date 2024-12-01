@@ -23,6 +23,7 @@ body {
 .content-page {
     flex: 1; /* Se expande para ocupar el espacio restante */
     background-color: #fff;
+    width: 100%;
 }
 
 
@@ -76,7 +77,7 @@ body {
 }
 
 /* Botón de acción en el pie de página */
-.card-footer .btn {
+.btn {
     font-family: 'Inter', sans-serif; /* Usa la fuente Inter */
     background-color: var(--primary); /* Usa el color primario para el fondo */
     color: #fff; /* Texto blanco */
@@ -89,11 +90,11 @@ body {
     width: 100%;
 }
 
-.card-footer .btn:hover {
+.btn:hover {
     transform: scale(1.02); /* Agrandar el botón al pasar el mouse */
     background-color: var(--primary-shade); /* Fondo más oscuro al pasar el mouse */
 }
 
-.card-footer .btn:active {
+.btn:active {
     background-color: var(--primary-tint); /* Fondo más claro al hacer clic */
 }

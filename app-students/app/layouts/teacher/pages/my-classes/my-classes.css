@@ -1,0 +1,168 @@
+@import url("../../../../styles/global.css");
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
+.classes-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  margin: 10px;
+  width: 98%;
+}
+
+.class-item {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  font-family: "Inter", sans-serif;
+  width: 100%;
+  border-radius: 10px;
+  border-top: 5px solid var(--primary);
+  border-right: 2px solid var(--primary);
+}
+
+.info-label {
+  display: flex;
+  align-items: center;
+  color: var(--primary);
+  margin-right: 10px;
+}
+
+.class-item > div {
+  padding: 15px;
+}
+
+.class-header {
+  background-color: rgba(var(--primary-rgb), 0.1);
+  border-radius: 10px 10px 0 0;
+  color: var(--primary);
+}
+
+.class-content {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.class-info {
+  font-size: large;
+  margin: 10px 0;
+}
+
+.class-info strong {
+  font-weight: bold;
+  color: var(--primary);
+}
+
+.class-info {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  align-items: center;
+  color: var(--primary-shade);
+}
+
+.class-description > textarea {
+  border: 1px solid rgba(var(--primary-rgb), 0.5);
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%;
+  font-size: 1rem;
+  font-family: "Inter", sans-serif;
+  height: 100px;
+}
+
+.class-description > textarea:focus {
+  outline: none;
+  border: 2px solid var(--primary-tint);
+}
+
+.class-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.class-option {
+  width: fit-content !important;
+  padding: 10px 20px !important;
+  height: fit-content !important;
+  max-height: 40px;
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon-option {
+  padding: 5px !important;
+}
+
+.page-controller {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Inter", sans-serif;
+  margin: 20px 0;
+}
+
+.nav-button {
+  background: rgba(var(--primary-rgb), 0.2);
+  border: none;
+  font-size: 18px;
+  color: var(--primary);
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px 15px;
+}
+
+.nav-button:hover {
+    background: rgba(var(--primary-rgb), 0.3);
+    color: var(--primary-tint);
+}
+
+.nav-button:active {
+  background: var(--primary-shade);
+}
+
+.nav-button:disabled {
+  background: rgba(var(--primary-rgb), 0.1);
+  color: rgba(var(--primary-rgb), 0.5);
+  cursor: not-allowed;
+}
+
+.page-list {
+  display: flex;
+}
+
+.page-item {
+  width: 40px;
+  text-align: center;
+  height: 40px;
+  padding: 10px;
+  margin: 0 5px;
+  cursor: pointer;
+  color: var(--primary);
+  border-radius: 5px;
+}
+
+.page-item:hover {
+  background-color: rgba(var(--primary-rgb), 0.1);
+}
+
+.page-item.active {
+  font-weight: bold;
+  background-color: var(--primary);
+  color: white;
+}

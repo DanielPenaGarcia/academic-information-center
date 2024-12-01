@@ -1,7 +1,7 @@
 import localStorageService from "./local-storage.service.js"; // Suponiendo que tienes un servicio para manejar el localStorage
 
 const api = {
-  apiUrl: "http://localhost:3000/api/v1",
+  apiUrl: `https://f30d1wq4-3000.usw3.devtunnels.ms/api/v1`,
 
   getAuthHeader(contentType = "application/json") {
     // const token = localStorageService.getItem('token');

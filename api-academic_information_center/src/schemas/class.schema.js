@@ -25,6 +25,16 @@ export const ClassSchema = new EntitySchema({
             length: 255,
             nullable: false,
         },
+        classroom: {
+            type: 'varchar',
+            length: 255,
+            nullable: true
+        },
+        description: {
+            type: 'varchar',
+            length: 255,
+            nullable: true
+        },
         createdAt: {
             name: 'created_at',
             type: 'timestamp',

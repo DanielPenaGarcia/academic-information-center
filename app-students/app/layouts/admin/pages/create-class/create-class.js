@@ -30,10 +30,12 @@ const createSubject = async (e) => {
   const data = {};
   const duration = form.querySelector("#duration").value;
   const start = form.querySelector("#start-time").value;
+  const classroom = form.querySelector("#classroom").value;
   data.duration = duration;
   data.start = start;
   data.days = selectedDays;
   data.subject = subject;
+  data.classroom = classroom;
   submitCreateClass(data);
 };
 
@@ -54,7 +56,7 @@ const validateCreateClass = ({ duration, start, days, subject }) => {
   return true;
 };
 
-const submitCreateClass = async ({ duration, start, days, subject }) => {
+const submitCreateClass = async ({ duration, start, days, subject, classroom }) => {
   if (!validateCreateClass({ duration, start, days, subject })) {
     return;
   }
@@ -63,6 +65,7 @@ const submitCreateClass = async ({ duration, start, days, subject }) => {
     startTime: start,
     days: days.join(","),
     subjectId: subject.id,
+    classroom:  classroom,
   };
   const response = await api.post({ endpoint: "classes", body: body });
   if (response.status === 201) {

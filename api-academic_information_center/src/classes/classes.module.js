@@ -20,6 +20,7 @@ router.post(`${path}/availableClasses`, middlewares, classesController.getAvaila
 router.post(`${path}/enroll`, middlewares, classesController.enrollStudent.bind(classesController));
 router.post(`${path}/enrolledClasses`, middlewares, classesController.getEnrolledClasses.bind(classesController));
 router.patch(`${path}/dropClass`, middlewares, classesController.dropClass.bind(classesController));
+router.patch(`${path}/:id/description`, middlewares, classesController.patchClassDescription.bind(classesController));
 
 
 
