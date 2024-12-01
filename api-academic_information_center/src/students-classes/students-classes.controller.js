@@ -4,7 +4,6 @@ import { ForbiddenException } from "../utils/exceptions/http/forbidden.exception
 import { StudentsClassesService } from "./students-classes.service.js";
 
 export class StudentsClassesController {
-
   constructor() {
     this.studentsClassesService = new StudentsClassesService();
   }
@@ -14,7 +13,9 @@ export class StudentsClassesController {
       const { academicId } = req.params;
       const user = req.user;
       if (user.academicId !== academicId && user.role !== role.ADMIN) {
-        throw new ForbiddenException("No tienes permisos para ver este horario");
+        throw new ForbiddenException(
+          "No tienes permisos para ver este horario"
+        );
       }
       const studentClasses = await this.studentsClassesService.studentSchedule({
         academicId,
@@ -30,38 +31,69 @@ export class StudentsClassesController {
       const { academicId } = req.params;
       const user = req.user;
       if (user.academicId !== academicId && user.role !== role.ADMIN) {
-        throw new ForbiddenException("No tienes permisos para ver este horario");
+        throw new ForbiddenException(
+          "No tienes permisos para ver este horario"
+        );
       }
-      const studentClasses = await this.studentsClassesService.printStudentSchedule({
-        academicId,
-        params: req.query,
-      });
-      res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', 'inline; filename="schedule.pdf"');
+      const studentClasses =
+        await this.studentsClassesService.printStudentSchedule({
+          academicId,
+          params: req.query,
+        });
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Content-Disposition", 'inline; filename="schedule.pdf"');
       res.status(200).send(studentClasses);
     } catch (error) {
       next(error);
     }
   }
-  
 
-  async getStudentClassesByStudentId(req,res,next){
-    try{
-      const {page,count,subject} = req.query;
-      const pageable = new Pageable(page,count);
+  async getStudentClassesByStudentId(req, res, next) {
+    try {
+      const { page, count, subject } = req.query;
+      const pageable = new Pageable(page, count);
       const academicId = req.params.studentId;
-      const studentClasses = await  this.studentsClassesService.getStudentClassesByStudentId({academicId},pageable,{className:subject});
+      const studentClasses =
+        await this.studentsClassesService.getStudentClassesByStudentId(
+          { academicId },
+          pageable,
+          { className: subject }
+        );
       res.status(200).json(studentClasses);
-    }catch(error){
+    } catch (error) {
       next(error);
     }
   }
 
-  async dropClass(req, res,next) {
+  async dropClass(req, res, next) {
     try {
-      const { academicId,studentClassId } = req.params;
-      const classDroped = await this.studentsClassesService.dropClass({academicId,studentClassId});
+      const { academicId, studentClassId } = req.params;
+      const classDroped = await this.studentsClassesService.dropClass({
+        academicId,
+        studentClassId,
+      });
       return res.status(200).json(classDroped);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getStudentsInClass(req, res, next) {
+    try {
+      const { classId } = req.params;
+      let { page, size } = req.query;
+      if (!page || page < 0) {
+        page = 1;
+      }
+      if (!size || size < 1) {
+        size = 10;
+      }
+      const pageable = new Pageable(page, size);
+      const students = await this.studentsClassesService.studentsInClass({
+        classId: classId,
+        pageable: pageable
+      });
+      res.status(200).json(students);
     } catch (error) {
       next(error);
     }

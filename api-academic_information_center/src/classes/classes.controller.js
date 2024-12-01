@@ -7,6 +7,16 @@ export class ClassesController {
     this.classesService = new ClassesService();
   }
 
+  async getClassById(req, res, next) {
+    try {
+      const { id } = req.params;
+      const klass = await this.classesService.findClassById({ id });
+      res.status(200).json(klass);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async postCreateClass(req, res, next) {
     try {
       if (!req.body || Object.keys(req.body).length === 0) {
@@ -152,7 +162,7 @@ export class ClassesController {
         currentRole: role,
         user: {
           academicId: academicId,
-        }
+        },
       });
       res.status(200).json(klass);
     } catch (error) {

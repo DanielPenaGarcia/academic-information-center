@@ -1,6 +1,10 @@
-import api from '../../../../shared/services/api.service.js';
+import { router } from "../../../../shared/router.js";
+import api from "../../../../shared/services/api.service.js";
 
 class ClassItem extends HTMLElement {
+
+  classId;
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -18,7 +22,7 @@ class ClassItem extends HTMLElement {
 
   connectedCallback() {
     this.currentDescription = this.getAttribute("description");
-    this.id = this.getAttribute("class-id");
+    this.classId = this.getAttribute("class-id");
     this.subjectName = this.getAttribute("subject-name");
     this.days = this.getAttribute("days");
     this.classroom = this.getAttribute("classroom");
@@ -31,7 +35,7 @@ class ClassItem extends HTMLElement {
     //item
     const classItem = document.createElement("div");
     classItem.className = "class-item";
-    classItem.id = `class-${this.id}`;
+    classItem.classId = `class-${this.classId}`;
     //Header
     const header = document.createElement("div");
     header.className = "class-header";
@@ -123,16 +127,25 @@ class ClassItem extends HTMLElement {
     //Footer
     const footer = document.createElement("div");
     footer.className = "class-footer";
-    const editButton = this.#createEditButton({ classId: this.id });
+    const editButton = this.#createEditButton({ classId: this.classId });
     footer.appendChild(editButton);
     //See students
     const studentsButton = document.createElement("button");
     studentsButton.classList.add("btn", "class-option");
     studentsButton.textContent = "Ver alumnos";
+    studentsButton.addEventListener("click", this.goToStudents.bind(this));
     footer.appendChild(studentsButton);
     classItem.appendChild(footer);
 
     this.shadowRoot.appendChild(classItem);
+  }
+
+  //Navegar a ver alumnos
+  goToStudents(event) {
+    event.preventDefault();
+    router.navigate("/teacher/classes/students", {
+      classId: this.classId,
+    });
   }
 
   #getDays() {
@@ -163,7 +176,7 @@ class ClassItem extends HTMLElement {
   #createEditButton({ classId }) {
     const button = document.createElement("button");
     button.classList.add("btn", "class-option", "icon-option");
-    button.id = `class-${classId}-edit`;
+    button.classId = `class-${classId}-edit`;
     button.innerHTML = this.#editIcon();
     button.addEventListener("click", (event) => this.toggleEditButton(event)); // Usamos una función flecha
     return button;
@@ -196,9 +209,12 @@ class ClassItem extends HTMLElement {
   }
 
   async #updateDescription({ description }) {
-    const button = this.shadowRoot.getElementById(`class-${this.id}-edit`);
+    const button = this.shadowRoot.getElementById(`class-${this.classId}-edit`);
     button.disabled = true;
-    const response = await api.patch({ endpoint: `classes/${this.id}/description`, body: { description } });
+    const response = await api.patch({
+      endpoint: `classes/${this.classId}/description`,
+      body: { description },
+    });
     if (response.status === 200) {
       this.currentDescription = description;
     }
