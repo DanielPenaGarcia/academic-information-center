@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const response = await authService.login({ academicId: user, password });
     if (response.status !== 200) {
       alert("Login fallido. Verifica tus credenciales.");
-      debugger;
     }
     localStorageService.setItem("token", response.data.token);
     localStorageService.setItem("user", response.data.user);

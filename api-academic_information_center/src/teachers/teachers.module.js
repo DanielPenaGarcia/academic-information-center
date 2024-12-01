@@ -29,3 +29,9 @@ router.patch(
   middlewares,
   teacherController.updateTeacher.bind(teacherController)
 );
+
+router.get(
+  `${PATH}/:academicId/classes`,
+  middlewares,
+  teacherController.getFindTeacherClassesByAcademicId.bind(teacherController)
+);

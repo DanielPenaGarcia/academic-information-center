@@ -70,7 +70,6 @@ const loadComponents = () => {
   window.customElements.define("table-subjects", TableSubjects);
   const subjectsTable = document.getElementById("subjects-table");
   subjectsTable.addEventListener("subject-selected", async (e) => { 
-    debugger;
     const subject = e.detail;
     selectedSubject = await getSubject(subject.id); 
   });

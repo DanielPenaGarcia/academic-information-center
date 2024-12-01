@@ -59,6 +59,11 @@ export const routes = [
         page: 'app/layouts/teacher/pages/update-teacher-user/update-teacher-user.html',
         canActivate: [authGuard, roleGuard('TEACHER')],
     },
+    {
+        path: '/teacher/classes',
+        page: 'app/layouts/teacher/pages/my-classes/my-classes.html',
+        canActivate: [authGuard, roleGuard('TEACHER')],
+    },
     //Admin routes
     {
         path: '/admin',
