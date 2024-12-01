@@ -112,7 +112,7 @@ class ClassItem extends HTMLElement {
     description.className = "class-description";
     const descriptionInfo = document.createElement("p");
     descriptionInfo.className = "class-info";
-    descriptionInfo.innerHTML = `<strong>Descripción:</strong>.`;
+    descriptionInfo.innerHTML = `<strong>Descripción:</strong>`;
     description.appendChild(descriptionInfo);
     const descriptionText = document.createElement("textarea");
     if (this.currentDescription) {
@@ -176,13 +176,14 @@ class ClassItem extends HTMLElement {
   #createEditButton({ classId }) {
     const button = document.createElement("button");
     button.classList.add("btn", "class-option", "icon-option");
-    button.classId = `class-${classId}-edit`;
+    button.id = `class-${classId}-edit`;
     button.innerHTML = this.#editIcon();
     button.addEventListener("click", (event) => this.toggleEditButton(event)); // Usamos una función flecha
     return button;
   }
 
   toggleEditButton(event) {
+    event.preventDefault();
     const textArea = this.shadowRoot.querySelector("textarea");
     const button = event.currentTarget; // Apunta al botón, no al SVG
 
@@ -194,12 +195,8 @@ class ClassItem extends HTMLElement {
         textArea.focus();
         button.innerHTML = `Guardar`;
         button.className = "btn class-option"; // Cambia las clases al estilo de "Guardar"
-        const classItem = this.shadowRoot.querySelector(".class-item");
-        classItem.classList.remove("updating");
       } else {
-        const classItem = this.shadowRoot.querySelector(".class-item");
         if (textArea.value !== this.currentDescription) {
-          classItem.classList.add("updating");
           this.#updateDescription({ description: textArea.value });
         }
         button.innerHTML = this.#editIcon();
