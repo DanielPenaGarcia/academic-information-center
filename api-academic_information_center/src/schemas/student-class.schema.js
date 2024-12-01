@@ -22,8 +22,12 @@ export const StudentClassSchema = new EntitySchema({
         grade: {
             type: 'decimal',
             nullable: true,
-            precision: 2,
-            scale: 1
+            precision: 5,
+            scale: 2
+        },
+        feedback: {
+            type: 'varchar',
+            nullable: true
         },
         createdAt: {
             name: 'created_at',

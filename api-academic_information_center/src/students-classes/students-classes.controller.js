@@ -98,4 +98,33 @@ export class StudentsClassesController {
       next(error);
     }
   }
+
+  async getStudentInClass(req, res, next) {
+    try {
+      const { classId, academicId } = req.params;
+      const student = await this.studentsClassesService.findStudentInClass({
+        classId,
+        academicId,
+      });
+      res.status(200).json(student);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async patchGradeStudent(req, res, next) {
+    try {
+      const { academicId, classId } = req.params;
+      const { grade, feedback } = req.body;
+      const updatedStudent = await this.studentsClassesService.gradeStudent({
+        academicId,
+        classId,
+        grade,
+        feedback,
+      });
+      res.status(200).json(updatedStudent);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

@@ -1,3 +1,5 @@
+import GradeStudent from "../grade-student/grade-student.js";
+
 class StudentItem extends HTMLElement {
   constructor() {
     super();
@@ -16,6 +18,8 @@ class StudentItem extends HTMLElement {
   connectedCallback() {
     this.classId = this.getAttribute("student-id");
     this.name = this.getAttribute("student-name");
+    this.academicId = this.getAttribute("academic-id");
+    this.grade = this.getAttribute("student-grade");
     this.createStudentItem();
   }
 
@@ -31,7 +35,11 @@ class StudentItem extends HTMLElement {
     const name = document.createElement("div");
     name.classList.add("name");
     const nameText = document.createElement("p");
-    nameText.textContent = this.name;
+    if (this.name.length > 25) {
+      nameText.textContent = `${this.name.substring(0, 25)}...`;
+    } else {
+      nameText.textContent = this.name;
+    }
     name.append(nameText);
     basicInformation.append(name);
     const actions = document.createElement("div");
@@ -59,9 +67,24 @@ class StudentItem extends HTMLElement {
   #gradeStudentButton() {
     const gradeButton = document.createElement("button");
     gradeButton.classList.add("btn", "action");
-    gradeButton.textContent = "Calificar";
+    if (this.grade) {
+      gradeButton.textContent = "Calificado";
+    } else {
+      gradeButton.textContent = "Calificar";
+    }
     gradeButton.addEventListener("click", () => {
-      console.log("Calificar estudiante");
+      const modal = document.createElement("grade-student");
+      modal.hidden = false;
+      modal.setAttribute("class-id", this.classId);
+      modal.setAttribute("academic-id", this.academicId);
+      modal.addEventListener("close-modal", (event) => {
+          this.shadowRoot.removeChild(modal);
+      });
+      modal.addEventListener("grade-confirmed", (event) => {
+        gradeButton.textContent = "Calificado";
+        this.shadowRoot.removeChild(modal);
+      });
+      this.shadowRoot.append(modal);
     });
     return gradeButton;
   }

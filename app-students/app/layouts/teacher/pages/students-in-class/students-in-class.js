@@ -76,10 +76,12 @@ async function findStudents() {
 
 function createStudentItem(studentClass) {
   const item = document.createElement("student-item");
-  item.setAttribute("student-id", studentClass.id);
+  item.setAttribute("student-id", studentClass.klass.id);
   item.setAttribute(
     "student-name",
     `${studentClass.student.names} ${studentClass.student.fatherLastName} ${studentClass.student.motherLastName}`
   );
+  item.setAttribute("academic-id", studentClass.student.academicId);
+  item.setAttribute("student-grade", studentClass.grade || "");
   return item;
 }
