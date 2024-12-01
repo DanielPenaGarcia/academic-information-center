@@ -14,6 +14,7 @@ const middlewares = (req, res, next) => {
     next();
 };
 
+router.get(`${path}/:id`, middlewares, classesController.getClassById.bind(classesController));
 router.post(`${path}`, roleAdminGuard, middlewares, classesController.postCreateClass.bind(classesController));
 router.patch(`${path}/assign-teacher`, roleAdminGuard, middlewares, classesController.AssignTeacherToClass.bind(classesController));
 router.post(`${path}/availableClasses`, middlewares, classesController.getAvailableClassesByStudent.bind(classesController));

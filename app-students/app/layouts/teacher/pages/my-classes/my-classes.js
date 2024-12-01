@@ -32,7 +32,7 @@ function loadPages() {
     for (let i = 1; i <= totalPages; i++) {
       const pageItem = document.createElement("span");
       pageItem.textContent = i;
-      pageItem.id = `page-${i}`;
+      pageItem.classId = `page-${i}`;
       pageItem.classList.add("page-item");
       if (i === page) {
         pageItem.classList.add("active");
@@ -55,17 +55,17 @@ function loadPageController() {
     const previousButton = document.createElement("button");
     previousButton.textContent = "Anterior";
     previousButton.classList.add("nav-button");
-    previousButton.id = "previous-button";
+    previousButton.classId = "previous-button";
     previousButton.addEventListener("click", loadPreviousPage);
     controller.appendChild(previousButton);
     const pages = document.createElement("div");
-    pages.id = "pages";
+    pages.classId = "pages";
     pages.className = "page-list";
     controller.appendChild(pages);
     const nextButton = document.createElement("button");
     nextButton.textContent = "Siguiente";
     nextButton.classList.add("nav-button");
-    nextButton.id = "next-button";
+    nextButton.classId = "next-button";
     nextButton.addEventListener("click", loadNextPage);
     controller.appendChild(nextButton);
   });

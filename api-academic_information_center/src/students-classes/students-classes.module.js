@@ -27,3 +27,8 @@ router.get(
   `${PATH}/schedule/:academicId/print`,
   studentsClassesController.printStudentSchedule.bind(studentsClassesController)
 );
+
+router.get(
+  `${PATH}/classes/:classId`,
+  studentsClassesController.getStudentsInClass.bind(studentsClassesController)
+)

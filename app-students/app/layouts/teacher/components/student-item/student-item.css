@@ -1,0 +1,46 @@
+@import url("../../../../styles/global.css");
+
+.student-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f9f9f9;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f0f0f0;
+}
+
+.student-item .basic-information {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.student-item .basic-information .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: var(--primary);
+  border-radius: 50%;
+  color: white;
+}
+
+.student-item .basic-information .name p {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.student-item .actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.action {
+  font-size: medium !important;
+  cursor: pointer;
+  width: fit-content;
+}

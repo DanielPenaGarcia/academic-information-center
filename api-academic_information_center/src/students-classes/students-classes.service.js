@@ -7,10 +7,12 @@ import { NotFoundException } from "../utils/exceptions/http/not-found.exception.
 import { readContentFile } from "../utils/functions/file.render.js";
 import puppeteer from "puppeteer";
 import handlebars from "handlebars";
+import { ClassSchema } from "../schemas/class.schema.js";
 
 export class StudentsClassesService {
   constructor() {
     this.studentClasseRepository = dataSource.getRepository(StudentClassSchema);
+    this.classRepository = dataSource.getRepository(ClassSchema);
   }
 
   async studentSchedule({ academicId }) {
@@ -85,25 +87,57 @@ export class StudentsClassesService {
 
   async #createSchedulePDF({ studentClasses }) {
     // Filtra las clases según los días de la semana
-    const monday = studentClasses.filter((studentClass) => studentClass.klass.days.includes("L"));
-    const tuesday = studentClasses.filter((studentClass) => studentClass.klass.days.includes("M"));
-    const wednesday = studentClasses.filter((studentClass) => studentClass.klass.days.includes("X"));
-    const thursday = studentClasses.filter((studentClass) => studentClass.klass.days.includes("J"));
-    const friday = studentClasses.filter((studentClass) => studentClass.klass.days.includes("V"));
-    const saturday = studentClasses.filter((studentClass) => studentClass.klass.days.includes("S"));
-    const sunday = studentClasses.filter((studentClass) => studentClass.klass.days.includes("D"));
-  
+    const monday = studentClasses.filter((studentClass) =>
+      studentClass.klass.days.includes("L")
+    );
+    const tuesday = studentClasses.filter((studentClass) =>
+      studentClass.klass.days.includes("M")
+    );
+    const wednesday = studentClasses.filter((studentClass) =>
+      studentClass.klass.days.includes("X")
+    );
+    const thursday = studentClasses.filter((studentClass) =>
+      studentClass.klass.days.includes("J")
+    );
+    const friday = studentClasses.filter((studentClass) =>
+      studentClass.klass.days.includes("V")
+    );
+    const saturday = studentClasses.filter((studentClass) =>
+      studentClass.klass.days.includes("S")
+    );
+    const sunday = studentClasses.filter((studentClass) =>
+      studentClass.klass.days.includes("D")
+    );
+
     // Crea el horario
     const schedule = {
       monday: this.#createDaySchedule({ studentClasses: monday, day: "Lunes" }),
-      tuesday: this.#createDaySchedule({ studentClasses: tuesday, day: "Martes" }),
-      wednesday: this.#createDaySchedule({ studentClasses: wednesday, day: "Miércoles" }),
-      thursday: this.#createDaySchedule({ studentClasses: thursday, day: "Jueves" }),
-      friday: this.#createDaySchedule({ studentClasses: friday, day: "Viernes" }),
-      saturday: this.#createDaySchedule({ studentClasses: saturday, day: "Sábado" }),
-      sunday: this.#createDaySchedule({ studentClasses: sunday, day: "Domingo" }),
+      tuesday: this.#createDaySchedule({
+        studentClasses: tuesday,
+        day: "Martes",
+      }),
+      wednesday: this.#createDaySchedule({
+        studentClasses: wednesday,
+        day: "Miércoles",
+      }),
+      thursday: this.#createDaySchedule({
+        studentClasses: thursday,
+        day: "Jueves",
+      }),
+      friday: this.#createDaySchedule({
+        studentClasses: friday,
+        day: "Viernes",
+      }),
+      saturday: this.#createDaySchedule({
+        studentClasses: saturday,
+        day: "Sábado",
+      }),
+      sunday: this.#createDaySchedule({
+        studentClasses: sunday,
+        day: "Domingo",
+      }),
     };
-  
+
     // Crear el contexto para el PDF
     const context = {
       nombre: "Mi pdf",
@@ -117,7 +151,9 @@ export class StudentsClassesService {
         schedule.sunday,
       ],
     };
-    const html = await readContentFile("../../assets/templates/schedule.template.html");
+    const html = await readContentFile(
+      "../../assets/templates/schedule.template.html"
+    );
     const template = handlebars.compile(html);
     const hbs = template(context);
     const browser = await puppeteer.launch();
@@ -339,5 +375,47 @@ export class StudentsClassesService {
       return StudentClassStatus.APPROVED;
     }
     return StudentClassStatus.REJECTED;
+  }
+
+  async studentsInClass({ classId, pageable }) {
+    const klass = await this.classRepository.findOne({
+      where: {
+        id: classId,
+      },
+    });
+    if (!klass) {
+      throw new NotFoundException("Class not found");
+    }
+    const studentsInClass = await this.studentClasseRepository.findAndCount({
+      where: {
+        klass: {
+          id: classId,
+        },
+        status: StatusClass.PENDING,
+      },
+      relations: {
+        student: true,
+      },
+      select: {
+        student: {
+          id: true,
+          academicId: true,
+          names: true,
+          fatherLastName: true,
+          motherLastName: true,
+          createdAt: true,
+          updatedAt: true,
+          role: true,
+        }
+      },
+      take: pageable.limit,
+      skip: pageable.offset,
+    });
+    return {
+      students: studentsInClass[0],
+      totalElements: studentsInClass[1],
+      totalPages: Math.ceil(studentsInClass[1] / pageable.limit),
+      currentPage: pageable.page,
+    };
   }
 }

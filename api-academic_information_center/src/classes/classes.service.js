@@ -403,4 +403,34 @@ export class ClassesService {
     });
     return updatedClass;
   }
+
+  async findClassById({ classId }) {
+    const klass = await this.classesRepository.findOne({
+      where: {
+        id: classId,
+      },
+      relations: {
+        teacher: true,
+        subject: true,
+      },
+      select: {
+        teacher: {
+          id: true,
+          names: true,
+          fatherLastName: true,
+          motherLastName: true,
+        },
+        subject: {
+          id: true,
+          name: true,
+        },
+      }
+    });
+    if (!klass) {
+      throw new BadRequestException(
+        `No se encontró la clase con el ID ${classId}`
+      );
+    }
+    return klass;
+  }
 }
