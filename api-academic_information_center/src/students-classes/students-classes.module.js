@@ -13,6 +13,11 @@ router.get(
   )
 );
 
+router.get(
+  `${PATH}/:academicId/classes/:classId`,
+  studentsClassesController.getStudentInClass.bind(studentsClassesController)
+);
+
 router.delete(
   `${PATH}/:academicId/classes/:studentClassId`,
   studentsClassesController.dropClass.bind(studentsClassesController)
@@ -31,4 +36,9 @@ router.get(
 router.get(
   `${PATH}/classes/:classId`,
   studentsClassesController.getStudentsInClass.bind(studentsClassesController)
+)
+
+router.patch(
+  `${PATH}/:academicId/classes/:classId/grade`,
+  studentsClassesController.patchGradeStudent.bind(studentsClassesController)
 )

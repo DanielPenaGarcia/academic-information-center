@@ -8,11 +8,14 @@ import { readContentFile } from "../utils/functions/file.render.js";
 import puppeteer from "puppeteer";
 import handlebars from "handlebars";
 import { ClassSchema } from "../schemas/class.schema.js";
+import { StudentSchema } from "../schemas/student.schema.js";
+import { BadRequestException } from "../utils/exceptions/http/bad-request.exception.js";
 
 export class StudentsClassesService {
   constructor() {
     this.studentClasseRepository = dataSource.getRepository(StudentClassSchema);
     this.classRepository = dataSource.getRepository(ClassSchema);
+    this.studentRepository = dataSource.getRepository(StudentSchema);
   }
 
   async studentSchedule({ academicId }) {
@@ -371,10 +374,10 @@ export class StudentsClassesService {
   }
 
   #getStatusByGrade({ grade }) {
-    if (grade >= approving_grade) {
-      return StudentClassStatus.APPROVED;
+    if (grade >= 70) {
+      return StatusClass.APPROVED;
     }
-    return StudentClassStatus.REJECTED;
+    return StatusClass.REJECTED;
   }
 
   async studentsInClass({ classId, pageable }) {
@@ -391,10 +394,10 @@ export class StudentsClassesService {
         klass: {
           id: classId,
         },
-        status: StatusClass.PENDING,
       },
       relations: {
         student: true,
+        klass: true,
       },
       select: {
         student: {
@@ -406,7 +409,7 @@ export class StudentsClassesService {
           createdAt: true,
           updatedAt: true,
           role: true,
-        }
+        },
       },
       take: pageable.limit,
       skip: pageable.offset,
@@ -417,5 +420,128 @@ export class StudentsClassesService {
       totalPages: Math.ceil(studentsInClass[1] / pageable.limit),
       currentPage: pageable.page,
     };
+  }
+
+  async findStudentInClass({ academicId, classId }) {
+    const student = await this.studentClasseRepository.findOne({
+      where: {
+        student: {
+          academicId: academicId,
+        },
+      },
+    });
+    if (!student) {
+      throw new NotFoundException("Student not found in class");
+    }
+    const klass = await this.classRepository.findOne({
+      where: {
+        id: classId,
+      },
+    });
+    if (!klass) {
+      throw new NotFoundException("Class not found");
+    }
+    const studentInClass = await this.studentClasseRepository.findOne({
+      where: {
+        student: {
+          academicId: academicId,
+        },
+        klass: {
+          id: classId,
+        },
+      },
+      relations: {
+        student: true,
+        klass: true,
+      },
+      select: {
+        id: true,
+        student: {
+          id: true,
+          academicId: true,
+          names: true,
+          fatherLastName: true,
+          motherLastName: true,
+          createdAt: true,
+          updatedAt: true,
+          role: true,
+        },
+        klass: {
+          id: true,
+          subject: {
+            name: true,
+          },
+          startTime: true,
+          days: true,
+          duration: true,
+        },
+        grade: true,
+        feedback: true,
+        status: true,
+      }
+    });
+    return studentInClass;
+  }
+
+  async gradeStudent({ academicId, classId, grade, feedback }) {
+    if (!grade) {
+      throw new BadRequestException("Unassigned grade");
+    }
+    if (grade < 0 || grade > 100) {
+      throw new BadRequestException("Invalid grade");
+    }
+
+    const studentClass = await this.studentClasseRepository.findOne({
+      where: {
+        student: {
+          academicId: academicId,
+        },
+        klass: {
+          id: classId,
+        },
+      },
+      relations: {
+        student: true,
+        klass: true,
+      },
+      select: {
+        id: true,
+        student: {
+          id: true,
+          academicId: true,
+          names: true,
+          fatherLastName: true,
+          motherLastName: true,
+          updatedAt: true,
+          role: true,
+        },
+        klass: {
+          id: true,
+          subject: {
+            name: true,
+          },
+          startTime: true,
+          days: true,
+          duration: true,
+        },
+        grade: true,
+        feedback: true,
+        status: true,
+      }
+    });
+
+    if (!studentClass) {
+      throw new NotFoundException("Student not found in class");
+    }
+
+    studentClass.grade = grade;
+    studentClass.feedback = feedback;
+    studentClass.status = this.#getStatusByGrade({ grade });
+
+    const response  = await this.studentClasseRepository.update({ id: studentClass.id }, { grade: grade, status: studentClass.status, feedback: feedback });
+    if (response.affected == 0) {
+      throw new InternalServerErrorException("Can not grade student");
+    }
+    return studentClass;
   }
 }
