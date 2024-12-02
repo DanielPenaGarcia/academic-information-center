@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación de Clase</title>
+    <link rel="stylesheet" href="review-class.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Evaluación de Clase</h1>
+        
+        <div class="class-info">
+            <h2>Información de la Clase</h2>
+            <p><strong>Materia:</strong> <span id="class"></span></p>
+            <p><strong>Horario:</strong> <span id="days"></span> <span id="time"></span></p>
+            <p><strong>Maestro:</strong> <span id="teacher"></span></p>
+        </div>
+
+        <form id="review-form">
+            <div class="form-group">
+                <label for="comments">Comentarios:</label>
+                <textarea id="comments" name="comments" rows="5" placeholder="Escribe tus comentarios aquí..." required></textarea>
+            </div>
+            <button id="button" type="submit" class="btn">Registrar Evaluación</button>
+        </form>
+    </div>
+    <script type="module" src="review-class.js"></script>
+</body>
+</html>

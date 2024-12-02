@@ -26,6 +26,15 @@ function loadOptions() {
                     action: () => goToOption({ path: '/student/drop-class' })
                 },
             ]
+        },{
+            title: 'Evaluación de Clase',
+            description: 'Registrar una Review a una clase',
+            actions: [
+                {
+                    label: 'Evaluación de clase',
+                    action: () => goToOption({ path: '/student/classes-to-review' })
+                },
+            ]
         },
     ];
 

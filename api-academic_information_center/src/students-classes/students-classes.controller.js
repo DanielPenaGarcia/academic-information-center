@@ -28,6 +28,18 @@ export class StudentsClassesController {
     }
   }
 
+  async getStudentClassesToReview(req, res,next) {
+    try {
+      const {page,count} = req.query;
+      const pageable = new Pageable(page,+count);
+      const { academicId} = req.params;
+      const classDroped = await this.studentsClassesService.getStudentClassesToReview({academicId},pageable);
+      return res.status(200).json(classDroped);
+    } catch (error) {
+      next(error);
+    }
+  }
+
 //   #validateDropStudentClassByStudentOrAdmin(req){
 //     const userRequesting = req.user;
 //     if(userRequesting.role === UserRole.STUDENT){

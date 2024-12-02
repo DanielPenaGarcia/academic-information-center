@@ -4,6 +4,7 @@ import { StudentClassSchema } from "../schemas/student-class.schema.js";
 import { InternalServerErrorException } from "../utils/exceptions/http/internal-server-error.exception.js";
 import { Like } from "typeorm";
 import { NotFoundException } from "../utils/exceptions/http/not-found.exception.js";
+import { BadRequestException } from "../utils/exceptions/http/bad-request.exception.js";
 
 export class StudentsClassesService{
     constructor(){
@@ -102,6 +103,47 @@ export class StudentsClassesService{
       }catch(error){
         throw new InternalServerErrorException("Can not drop class");
       }
+    }
+
+    async getStudentClassesToReview({academicId},pageable){
+
+      if(!academicId){
+        throw new BadRequestException(`Invalid academicId`)
+      }
+      //TODO el paginado no funciona
+      try{
+        const results = await this.studentClasseRepository
+        .createQueryBuilder("sc")
+        .innerJoinAndSelect("sc.student", "student")
+        .innerJoinAndSelect("sc.klass", "klass")
+        .innerJoinAndSelect("klass.teacher", "teacher")
+        .innerJoinAndSelect("klass.subject", "subject")
+        .leftJoin("class_reviews", "review", "review.klass_id = klass.id")
+        .select([
+            "teacher.names AS teacher_name",
+            "teacher.fatherLastName AS teacher_father_last_name",
+            "teacher.motherLastName AS teacher_mother_lastName",
+            "klass.id AS classId",
+            "subject.name AS subject_name",
+            "klass.days",
+            "klass.startTime",
+            "klass.duration",
+            "sc.status AS status",
+            "student.academicId AS academic_id",
+            "student.names AS student_name",
+            "student.fatherLastName AS student_father_lastName",
+            "student.motherLastName AS student_mother_lastName",
+        ])
+        .addSelect("CASE WHEN review.id IS NOT NULL THEN true ELSE false END", "hasReview")
+        .where("student.academicId = :academicId", { academicId })
+        .getRawMany();
+
+    return results;
+
+      }catch(error){
+        throw new InternalServerErrorException("Could not find student class")
+      }
+
     }
 
     // async dropClass({academicId,classId}){

@@ -15,6 +15,10 @@ router.delete(
     `${PATH}/:academicId/classes/:studentClassId`,
     studentsClassesController.dropClass.bind(studentsClassesController));
 
+router.get(
+    `${PATH}/:academicId/classes/review`,
+    studentsClassesController.getStudentClassesToReview.bind(studentsClassesController));
+
 
 // router.post(
 //     "/student/class",
