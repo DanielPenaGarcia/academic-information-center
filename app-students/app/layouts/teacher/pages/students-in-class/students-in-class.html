@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="students-in-class.css" />
+  </head>
+  <body>
+    <teacher-header></teacher-header>
+    <back-button></back-button>
+    <main class="content">
+      <div class="subject">
+        <h1 class="title">Materia: <span id="subject-name"></span></h1>
+        <hr>
+      </div>
+      <section class="students-list" id="students">
+        <div class="no-students-message" id="no-students" hidden>No hay alumnos inscritos en esta clase</div>
+      </section>
+    </main>
+    <script type="module" src="students-in-class.js"></script>
+  </body>
+</html>

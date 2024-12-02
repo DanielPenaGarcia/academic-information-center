@@ -11,6 +11,7 @@ import { StudentCourseMapSchema } from "../schemas/student-course-map.schema.js"
 import { In, Not } from "typeorm";
 import { StatusClass } from "../entities/enums/status-class.enum.js";
 import { Klass } from "../entities/klass.entity.js";
+import { role } from "../entities/enums/role.enum.js";
 
 export class ClassesService {
   constructor() {
@@ -25,7 +26,7 @@ export class ClassesService {
     );
   }
 
-  async createClass({ startTime, duration, days, subjectId }) {
+  async createClass({ startTime, duration, days, subjectId, classroom }) {
     const subject = await this.subjectRepository.findOne({
       where: {
         id: subjectId,
@@ -56,6 +57,7 @@ export class ClassesService {
       days: days,
       duration: duration,
       subject: subject,
+      classroom: classroom,
     });
     await this.classesRepository.save(klass);
     return klass;
@@ -106,7 +108,8 @@ export class ClassesService {
     const klass = await this.classesRepository.findOne({
       where: {
         id: classId,
-      }, relations:["subject"]
+      },
+      relations: ["subject"],
     });
     if (!klass) {
       throw new BadRequestException(
@@ -114,30 +117,34 @@ export class ClassesService {
       );
     }
 
-  let enrolledClasses = await this.getEnrolledClasses({ studentId });
+    let enrolledClasses = await this.getEnrolledClasses({ studentId });
 
-// Normalize `enrolledClasses` to be an array
-if (!Array.isArray(enrolledClasses)) {
-  // Case 1: If it's a single object, wrap it in an array
-  enrolledClasses = [enrolledClasses];
-} else if (enrolledClasses.data && Array.isArray(enrolledClasses.data)) {
-  // Case 2: If it's an object with an array under a property called `data`
-  enrolledClasses = enrolledClasses.data;
-}
-
-// Iterate over the normalized `enrolledClasses` array
-enrolledClasses.forEach(studentClass => {
-  const enrolledKlass = studentClass.klass;
-  console.log(studentClass)
-  // Check if there is a common day between `enrolledKlass` and `klass`
-  for (let i = 0; i < enrolledKlass.days.length; i++) {
-    if (klass.days.includes(enrolledKlass.days[i]) && this.#doHoursClash({ enrolledKlass, klass })) {
-      throw new Error(`La clase ${klass.subject.name} se empalma con la clase ${enrolledKlass.subject.name}`);
+    // Normalize `enrolledClasses` to be an array
+    if (!Array.isArray(enrolledClasses)) {
+      // Case 1: If it's a single object, wrap it in an array
+      enrolledClasses = [enrolledClasses];
+    } else if (enrolledClasses.data && Array.isArray(enrolledClasses.data)) {
+      // Case 2: If it's an object with an array under a property called `data`
+      enrolledClasses = enrolledClasses.data;
     }
-  }
-});
 
-    
+    // Iterate over the normalized `enrolledClasses` array
+    enrolledClasses.forEach((studentClass) => {
+      const enrolledKlass = studentClass.klass;
+      console.log(studentClass);
+      // Check if there is a common day between `enrolledKlass` and `klass`
+      for (let i = 0; i < enrolledKlass.days.length; i++) {
+        if (
+          klass.days.includes(enrolledKlass.days[i]) &&
+          this.#doHoursClash({ enrolledKlass, klass })
+        ) {
+          throw new Error(
+            `La clase ${klass.subject.name} se empalma con la clase ${enrolledKlass.subject.name}`
+          );
+        }
+      }
+    });
+
     const studentClass = this.studentClassRepository.create({
       student: studentId,
       klass: classId,
@@ -148,40 +155,55 @@ enrolledClasses.forEach(studentClass => {
 
   #doHoursClash({ enrolledKlass, klass }) {
     const parseTime = (timeString) => {
-      const [hours, minutes, seconds] = timeString.split(':').map(Number);
+      const [hours, minutes, seconds] = timeString.split(":").map(Number);
       return { hours, minutes };
     };
-  
+
     // Function to add minutes to a start time
     const addMinutes = (time, minutesToAdd) => {
       const newTime = new Date(0, 0, 0, time.hours, time.minutes);
       newTime.setMinutes(newTime.getMinutes() + minutesToAdd);
       return newTime;
     };
-  
+
     // Convert `startTime` to Date objects
     const enrolledStartTime = parseTime(enrolledKlass.startTime);
     const newClassStartTime = parseTime(klass.startTime);
-  
+
     // Calculate end times by adding duration (in minutes)
-    const enrolledEndTime = addMinutes(enrolledStartTime, enrolledKlass.duration);
+    const enrolledEndTime = addMinutes(
+      enrolledStartTime,
+      enrolledKlass.duration
+    );
     const newClassEndTime = addMinutes(newClassStartTime, klass.duration);
-  
+
     // Create Date objects for comparisons
-    const enrolledStartDate = new Date(0, 0, 0, enrolledStartTime.hours, enrolledStartTime.minutes);
+    const enrolledStartDate = new Date(
+      0,
+      0,
+      0,
+      enrolledStartTime.hours,
+      enrolledStartTime.minutes
+    );
     const enrolledEndDate = enrolledEndTime;
-  
-    const newClassStartDate = new Date(0, 0, 0, newClassStartTime.hours, newClassStartTime.minutes);
+
+    const newClassStartDate = new Date(
+      0,
+      0,
+      0,
+      newClassStartTime.hours,
+      newClassStartTime.minutes
+    );
     const newClassEndDate = newClassEndTime;
-  
+
     // Check if time periods clash
     return (
-      (newClassStartDate < enrolledEndDate && newClassEndDate > enrolledStartDate) ||
-      (enrolledStartDate < newClassEndDate && enrolledEndDate > newClassStartDate)
+      (newClassStartDate < enrolledEndDate &&
+        newClassEndDate > enrolledStartDate) ||
+      (enrolledStartDate < newClassEndDate &&
+        enrolledEndDate > newClassStartDate)
     );
   }
-  
-
 
   async getAvailableClassesByStudent({ studentId }) {
     const student = await this.studentRepository.findOne({
@@ -197,7 +219,7 @@ enrolledClasses.forEach(studentClass => {
     }
     const courseMapStudent = await this.studenCourseMapRepository.findOne({
       where: {
-        student: studentId
+        student: studentId,
       },
       relations: ["courseMap"],
     });
@@ -249,94 +271,166 @@ enrolledClasses.forEach(studentClass => {
         eligibleSubjectIds.push(subject.id);
       }
     }
-          
-    let eligibleClasses = await this.classesRepository.find({
-        where: {
-          subject:{id: In(eligibleSubjectIds)},
-        }, relations:["subject", "teacher"]
-      });
 
-      let currentClasses= await this.studentClassRepository.find({
-        where: {
-            status: ("PENDING"),
-            student: { id: studentId }
-        },
-        relations: ['klass', 'student']
+    let eligibleClasses = await this.classesRepository.find({
+      where: {
+        subject: { id: In(eligibleSubjectIds) },
+      },
+      relations: ["subject", "teacher"],
     });
 
+    let currentClasses = await this.studentClassRepository.find({
+      where: {
+        status: "PENDING",
+        student: { id: studentId },
+      },
+      relations: ["klass", "student"],
+    });
 
-    const currentClassIds = currentClasses.map((currentClass) => currentClass.klass.id);
+    const currentClassIds = currentClasses.map(
+      (currentClass) => currentClass.klass.id
+    );
 
     eligibleClasses = eligibleClasses.filter(
       (eligibleClass) => !currentClassIds.includes(eligibleClass.id)
     );
-    
-    return eligibleClasses; 
+
+    return eligibleClasses;
+  }
+
+  async getEnrolledClasses({ studentId }) {
+    let enrolledClasses = await this.studentClassRepository.find({
+      where: {
+        status: "PENDING",
+        student: { id: studentId },
+      },
+      relations: ["klass", "klass.subject", "klass.teacher"],
+    });
+
+    return enrolledClasses;
+  }
+
+  async dropClass({ studentId, classId }) {
+    // Find the student
+    const student = await this.studentRepository.findOne({
+      where: {
+        id: studentId,
+      },
+    });
+    if (!student) {
+      throw new BadRequestException(
+        `No se encontró al alumno con el ID ${studentId}`
+      );
     }
 
-    async getEnrolledClasses({studentId}){
-
-        let enrolledClasses= await this.studentClassRepository.find({
-            where: {
-                status: ("PENDING"),
-                student: { id: studentId }
-            },                  
-            relations: ['klass', 'klass.subject', 'klass.teacher']
-
-
-        });
-
-
-        return enrolledClasses;
+    // Find the class
+    const klass = await this.classesRepository.findOne({
+      where: {
+        id: classId,
+      },
+    });
+    if (!klass) {
+      throw new BadRequestException(
+        `No se encontró la clase con el ID ${classId}`
+      );
     }
 
-    async dropClass({ studentId, classId }) {
-        // Find the student
-        const student = await this.studentRepository.findOne({
-          where: {
-            id: studentId,
-          },
-        });
-        if (!student) {
-          throw new BadRequestException(
-            `No se encontró al alumno con el ID ${studentId}`
-          );
-        }
-      
-        // Find the class
-        const klass = await this.classesRepository.findOne({
-          where: {
-            id: classId,
-          },
-        });
-        if (!klass) {
-          throw new BadRequestException(
-            `No se encontró la clase con el ID ${classId}`
-          );
-        }
-      
-        // Update the student's enrollment status to 'CANCELED'
-        const response = await this.studentClassRepository.update(
-          { student: { id: studentId }, klass: { id: classId } }, // Use relations for student and class
-          { status: StatusClass.CANCELED } // Setting the status to CANCELED
-        );
-      
-        // If no rows were affected, throw an error
-        if (response.affected === 0) {
-          throw new NotFoundException(
-            "The class was NOT dropped, Good luck getting a passing grade :)"
-          );
-        }
-      
-        // Fetch the updated studentClass to return
-        const studentClass = await this.studentClassRepository.findOne({
-          where: {
-            student: { id: studentId },
-            klass: { id: classId },
-          },
-        });
-      
-        return studentClass;
+    // Update the student's enrollment status to 'CANCELED'
+    const response = await this.studentClassRepository.update(
+      { student: { id: studentId }, klass: { id: classId } }, // Use relations for student and class
+      { status: StatusClass.CANCELED } // Setting the status to CANCELED
+    );
+
+    // If no rows were affected, throw an error
+    if (response.affected === 0) {
+      throw new NotFoundException(
+        "The class was NOT dropped, Good luck getting a passing grade :)"
+      );
+    }
+
+    // Fetch the updated studentClass to return
+    const studentClass = await this.studentClassRepository.findOne({
+      where: {
+        student: { id: studentId },
+        klass: { id: classId },
+      },
+    });
+
+    return studentClass;
+  }
+
+  async updateDescription({
+    classId,
+    description,
+    user: { academicId },
+    currentRole,
+  }) {
+    const klass = await this.classesRepository.findOne({
+      where: {
+        id: classId,
+      },
+      relations: {
+        teacher: true,
+      },
+      select: {
+        id: true,
+        teacher: {
+          academicId: true,
+        },
+      },
+    });
+    if (!klass) {
+      throw new BadRequestException(
+        `No se encontró la clase con el ID ${classId}`
+      );
+    }
+    if (klass.teacher.academicId !== academicId && currentRole !== role.ADMIN) {
+      throw new BadRequestException(
+        `No tienes permisos para actualizar la descripción de la clase`
+      );
+    }
+    const response = await this.classesRepository.update(
+      { id: classId },
+      { description }
+    );
+    if (response.affected === 0) {
+      throw new BadRequestException(
+        `No se actualizó la descripción de la clase`
+      );
+    }
+    const updatedClass = await this.classesRepository.findOne({
+      where: { id: classId },
+    });
+    return updatedClass;
+  }
+
+  async findClassById({ classId }) {
+    const klass = await this.classesRepository.findOne({
+      where: {
+        id: classId,
+      },
+      relations: {
+        teacher: true,
+        subject: true,
+      },
+      select: {
+        teacher: {
+          id: true,
+          names: true,
+          fatherLastName: true,
+          motherLastName: true,
+        },
+        subject: {
+          id: true,
+          name: true,
+        },
       }
-
+    });
+    if (!klass) {
+      throw new BadRequestException(
+        `No se encontró la clase con el ID ${classId}`
+      );
     }
+    return klass;
+  }
+}
