@@ -24,7 +24,7 @@ router.delete(
 );
 
 router.get(
-    `${PATH}/:academicId/classes/review`,
+    `${PATH}/classes/review/:academicId`,
     studentsClassesController.getStudentClassesToReview.bind(studentsClassesController));
 
 router.get(

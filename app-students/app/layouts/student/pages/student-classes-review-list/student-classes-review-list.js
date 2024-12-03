@@ -7,7 +7,8 @@ document.addEventListener("DOMContentLoaded",function(){
 
     async function getAllStudentClasses(studentId) {
         try{
-            const endpoint = `/student/${studentId}/classes/review`;
+            debugger
+            const endpoint = `student/classes/review/${studentId}`;
             const studentClasses = await api.get({
                 endpoint,
             });

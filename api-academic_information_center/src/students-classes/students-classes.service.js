@@ -307,7 +307,7 @@ export class StudentsClassesService {
     }
   }
 
-  async getStudentClassesToReview({academicId},pageable){
+  async getStudentClassesToReview({academicId}){
 
     if(!academicId){
       throw new BadRequestException(`Invalid academicId`)
