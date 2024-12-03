@@ -122,3 +122,27 @@
   color: #fff;
   cursor: not-allowed;
 }
+
+.comments {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Estila una p de clase .comment */
+.comment {
+  display: flex;
+  gap: 10px;
+  background-color: rgba(var(--primary-rgb), 0.1);
+  padding: 10px;
+  border-radius: 5px;
+  color: var(--primary);
+}
+
+.no-comments {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--primary);
+  font-weight: bold;
+}

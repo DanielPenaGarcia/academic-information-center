@@ -5,27 +5,43 @@ export class ClassesReviewController {
     this.classesReviewService = new ClassesReviewService();
   }
 
-  
-  async generateReviewClass(req,res,next){
-    try{
-    // this.#validateGenerateReview(req);
-    const {academicId,classId,comment} = req.body;
+  async generateReviewClass(req, res, next) {
+    try {
+      // this.#validateGenerateReview(req);
+      const { academicId, classId, comment } = req.body;
 
-    const reviewClassCreated = await this.classesReviewService.generateClassReview({comment,academicId,classId});
-    
-    return res.status(200).json(reviewClassCreated);
-}catch(error){
-  next(error);
-}
-}
+      const reviewClassCreated =
+        await this.classesReviewService.generateClassReview({
+          comment,
+          academicId,
+          classId,
+        });
 
-// #validateGenerateReview(req){
-//   const userRequesting = req.user;
-//   if(userRequesting.role !== UserRole.STUDENT){
-//     throw new Error("Forbidden");
-//   }
-//   if (userRequesting.academicId !== req.body.academicId) {
-//     throw new Error("Forbidden");
-//   }
-// }
+      return res.status(200).json(reviewClassCreated);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getReviewClass(req, res, next) {
+    try {
+      const { classId } = req.params;
+      const reviews = await this.classesReviewService.findReviewByClassId({
+        classId,
+      });
+      return res.status(200).json(reviews);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // #validateGenerateReview(req){
+  //   const userRequesting = req.user;
+  //   if(userRequesting.role !== UserRole.STUDENT){
+  //     throw new Error("Forbidden");
+  //   }
+  //   if (userRequesting.academicId !== req.body.academicId) {
+  //     throw new Error("Forbidden");
+  //   }
+  // }
 }

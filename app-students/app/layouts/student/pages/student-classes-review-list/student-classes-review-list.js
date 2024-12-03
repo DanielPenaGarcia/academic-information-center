@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded",function(){
 
     async function getAllStudentClasses(studentId) {
         try{
-            debugger
             const endpoint = `student/classes/review/${studentId}`;
             const studentClasses = await api.get({
                 endpoint,
@@ -46,7 +45,6 @@ document.addEventListener("DOMContentLoaded",function(){
             const time = studentClass.klass_start_time;
             const teacher = `${studentClass.teacher_name} ${studentClass.teacher_father_last_name} ${studentClass.teacher_mother_lastName}`;
             const hasReview = studentClass.hasReview;
-            debugger;
             studentClassItem.setSubjectInfo(id,name,days,time,teacher,hasReview);
             classesList.appendChild(studentClassItem);
         }

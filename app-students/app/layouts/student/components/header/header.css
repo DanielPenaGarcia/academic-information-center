@@ -14,7 +14,7 @@
 }
 
 .nav-button {
-    color: var(--primary-contrast);
+    color: white;
     background-color: transparent;
     border: none;
     cursor: pointer;

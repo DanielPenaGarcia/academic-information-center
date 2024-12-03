@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   
 
-  document.getElementById('enroll-button').onclick = async() => {
+  document.getElementById('enroll-button').addEventListener('click', async() => {
 
     if (enrolledClasses.length > 0) {
 
@@ -66,9 +66,6 @@ document.addEventListener("DOMContentLoaded", function () {
           "studentId":studentObject.id, 
           "classId": enrolledClass.id
         }
-    
-        console.log(body)
-
         try{
           const response = await api.post({
             endpoint: `classes/enroll`,
@@ -96,5 +93,5 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
     alert('No classes selected!');
   }
-  };
+  });
 });

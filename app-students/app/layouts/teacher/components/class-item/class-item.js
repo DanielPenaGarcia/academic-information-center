@@ -2,8 +2,8 @@ import { router } from "../../../../shared/router.js";
 import api from "../../../../shared/services/api.service.js";
 
 class ClassItem extends HTMLElement {
-
   classId;
+  openComments = false;
 
   constructor() {
     super();
@@ -135,6 +135,9 @@ class ClassItem extends HTMLElement {
     studentsButton.textContent = "Ver alumnos";
     studentsButton.addEventListener("click", this.goToStudents.bind(this));
     footer.appendChild(studentsButton);
+    //Comments
+    const commentsButton = this.#createReviewButton();
+    footer.appendChild(commentsButton);
     classItem.appendChild(footer);
 
     this.shadowRoot.appendChild(classItem);
@@ -171,6 +174,83 @@ class ClassItem extends HTMLElement {
       }
     });
     return days.join(", ");
+  }
+
+  async #openReviews() {
+    const comments = this.shadowRoot.querySelector(".comments");
+    if (comments) {
+      if (!this.openComments) {
+        // Llama a findReviews si se está abriendo la sección de comentarios
+        const reviews = await this.#findReviews();
+        comments.innerHTML = reviews
+          .map((review) => `<p>${review.text}</p>`)
+          .join("");
+      }
+      comments.hidden = !comments.hidden;
+      this.openComments = !comments.hidden;
+    } else {
+      console.error("La sección de comentarios no se encontró.");
+    }
+  }
+
+  #createReviewButton() {
+    const button = document.createElement("button");
+    button.classList.add("btn", "class-option", "icon-option");
+    button.innerHTML = this.#commentIcon();
+    button.addEventListener("click", this.#findReviews.bind(this));
+    return button;
+  }
+
+  async #findReviews() {
+    if (!this.openComments) {
+      const response = await api.get({
+        endpoint: `class/review/${this.classId}`,
+      });
+      const comments = document.createElement("div");
+      comments.className = "comments";
+      const hr = document.createElement("hr");
+      comments.appendChild(hr);
+      const classItem = this.shadowRoot.querySelector(".class-item");
+      classItem.appendChild(comments);
+      if (response.data.reviews.length > 0) {
+        response.data.reviews.forEach((review) => {
+          const comment = document.createElement("p");
+          comment.className = "comment";
+          comment.textContent = review.comment;
+          comments.appendChild(comment);
+        });
+      } else {
+        const noComments = document.createElement("p");
+        noComments.className = "no-comments";
+        noComments.textContent = "No hay comentarios";
+        comments.appendChild(noComments);
+      }
+    } else {
+      const comments = this.shadowRoot.querySelector(".comments");
+      const classItem = this.shadowRoot.querySelector(".class-item");
+      classItem.removeChild(comments);
+    }
+    this.openComments = !this.openComments;
+  }
+
+  #commentIcon() {
+    return `
+        <svg
+      width="24"
+      height="24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      viewBox="0 0 24 24"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M3.464 16.828C2 15.657 2 14.771 2 11s0-5.657 1.464-6.828C4.93 3 7.286 3 12 3s7.071 0 8.535 1.172S22 7.229 22 11s0 4.657-1.465 5.828C19.072 18 16.714 18 12 18c-2.51 0-3.8 1.738-6 3v-3.212c-1.094-.163-1.899-.45-2.536-.96"
+      />
+    </svg>
+    `;
   }
 
   #createEditButton({ classId }) {

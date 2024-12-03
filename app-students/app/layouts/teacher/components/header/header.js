@@ -46,10 +46,6 @@ class Header extends HTMLElement {
                 action: () => router.navigate('/teacher/classes')
             },
             {
-                label: 'Horario',
-                action: () => router.navigate('/teacher/schedule')
-            },
-            {
                 label: 'Opciones',
                 action: () => router.navigate('/teacher/options')
             },

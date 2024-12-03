@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded",function(){
             const submitButton = document.getElementById('button');
             submitButton.disable = true;
             const classId = urlParams.get('classId');
-            debugger
             const comment = document.getElementById("comments").value;
             const academicId = JSON.parse(localStorage.getItem('user'))?.academicId;
             const endpoint = `class/review`;
@@ -44,7 +43,6 @@ document.addEventListener("DOMContentLoaded",function(){
     }
 
     function init(){
-debugger
         const urlParams = new URLSearchParams(window.location.search);
         const teacher = urlParams.get('teacher');
         const subjectName = urlParams.get('subjectName');

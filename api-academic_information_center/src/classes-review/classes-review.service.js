@@ -14,70 +14,95 @@ export class ClassesReviewService {
     this.studentClassRepository = dataSource.getRepository(StudentClassSchema);
   }
 
-  async generateClassReview({comment,academicId,classId}){
-
-    if(!comment){
+  async generateClassReview({ comment, academicId, classId }) {
+    if (!comment) {
       throw BadRequestException("Invalid comment");
     }
-    
+
     const studentFound = await this.studentRepository.findOne({
-      where:{
-        academicId:academicId
-      }
+      where: {
+        academicId: academicId,
+      },
     });
 
-    if(!studentFound){
-      throw new NotFoundException(`Student with academic id: ${academicId} not found`);
+    if (!studentFound) {
+      throw new NotFoundException(
+        `Student with academic id: ${academicId} not found`
+      );
     }
 
     const classFound = await this.classRepository.findOne({
-      where : {
-        id: classId
+      where: {
+        id: classId,
       },
-      relations:{
-        subject: true
-      }
+      relations: {
+        subject: true,
+      },
     });
 
-    if(!classFound){
+    if (!classFound) {
       throw new NotFoundException(`Class not create review found`);
     }
 
     const studentClassFound = await this.studentClassRepository.findOneBy({
-      student:{
-        id: studentFound.id
+      student: {
+        id: studentFound.id,
       },
-      klass:{
-        id: classFound.id
-      }
+      klass: {
+        id: classFound.id,
+      },
     });
 
-    if(!studentClassFound){
-      throw new NotFoundException(`Student with academic id ${academicId} is not enrolled in the class ${classFound.subject.name}`);
+    if (!studentClassFound) {
+      throw new NotFoundException(
+        `Student with academic id ${academicId} is not enrolled in the class ${classFound.subject.name}`
+      );
     }
 
-    const review = this.classReviewRepository.create(
-      {
-        comment: comment,
-        klass:{
-          id: classFound.id
-        },
-        student:{
-          id:studentFound.id
-        }
-      }
-    );
+    const review = this.classReviewRepository.create({
+      comment: comment,
+      klass: {
+        id: classFound.id,
+      },
+      student: {
+        id: studentFound.id,
+      },
+    });
 
     const reviewCreated = await this.classReviewRepository.save(review);
 
-    if(!reviewCreated){
+    if (!reviewCreated) {
       throw new BadRequestException(`Can not register a review to the class`);
     }
 
-      return {
-        class: classFound.subject.name,
-        student: studentFound.academicId,
-        comment: comment
-      };
+    return {
+      class: classFound.subject.name,
+      student: studentFound.academicId,
+      comment: comment,
+    };
+  }
+
+  async findReviewByClassId({ classId }) {
+    const classFound = await this.classRepository.findOne({
+      where: {
+        id: classId,
+      },
+      relations: {
+        subject: true,
+      },
+    });
+    if (!classFound) {
+      throw new NotFoundException(`Class not found`);
+    }
+    const reviews = await this.classReviewRepository.find({
+      where: {
+        klass: {
+          id: classFound.id,
+        },
+      }
+    });
+    return {
+      reviews: reviews
+    }
   }
 }
