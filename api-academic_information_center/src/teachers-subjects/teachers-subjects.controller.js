@@ -31,5 +31,5 @@ export class TeacherSubjectsController {
       throw new Error("Forbidden");
     }
   }
-
 }
+
