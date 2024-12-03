@@ -307,6 +307,47 @@ export class StudentsClassesService {
     }
   }
 
+  async getStudentClassesToReview({academicId}){
+
+    if(!academicId){
+      throw new BadRequestException(`Invalid academicId`)
+    }
+    //TODO el paginado no funciona
+    try{
+      const results = await this.studentClasseRepository
+      .createQueryBuilder("sc")
+      .innerJoinAndSelect("sc.student", "student")
+      .innerJoinAndSelect("sc.klass", "klass")
+      .innerJoinAndSelect("klass.teacher", "teacher")
+      .innerJoinAndSelect("klass.subject", "subject")
+      .leftJoin("class_reviews", "review", "review.klass_id = klass.id")
+      .select([
+          "teacher.names AS teacher_name",
+          "teacher.fatherLastName AS teacher_father_last_name",
+          "teacher.motherLastName AS teacher_mother_lastName",
+          "klass.id AS classId",
+          "subject.name AS subject_name",
+          "klass.days",
+          "klass.startTime",
+          "klass.duration",
+          "sc.status AS status",
+          "student.academicId AS academic_id",
+          "student.names AS student_name",
+          "student.fatherLastName AS student_father_lastName",
+          "student.motherLastName AS student_mother_lastName",
+      ])
+      .addSelect("CASE WHEN review.id IS NOT NULL THEN true ELSE false END", "hasReview")
+      .where("student.academicId = :academicId", { academicId })
+      .getRawMany();
+
+  return results;
+
+    }catch(error){
+      throw new InternalServerErrorException("Could not find student class")
+    }
+
+  }
+
   async gradeStudent({ academicId, classId, grade }) {
     if (!grade) {
       throw new Error("Unassigned grade");
@@ -314,7 +355,6 @@ export class StudentsClassesService {
     if (grade < 0 || grade > 10) {
       throw new Error("Invalid grade");
     }
-
     const classCondition = where().equal("id", classId).build();
     console.log(classCondition);
     const classDTO = await this.repositoryClass.findOne({
@@ -324,7 +364,6 @@ export class StudentsClassesService {
       throw new Error("Class not found");
     }
     const classRef = classDtoToEntityMapper(classDTO);
-
     const studentCondition = where().equal("academic_id", academicId).build();
     console.log(studentCondition);
     const studentDTO = await this.repositoryStudent.findOne({

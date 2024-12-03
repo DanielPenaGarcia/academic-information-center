@@ -34,6 +34,16 @@ export const routes = [
         canActivate: [authGuard, roleGuard('STUDENT')],
     },
     {
+        path: '/student/review-class',
+        page: 'app/layouts/student/pages/review-class/review-class.html',
+        canActivate: [authGuard, roleGuard('STUDENT')],
+    },
+    {
+        path: '/student/classes-to-review',
+        page: 'app/layouts/student/pages/student-classes-review-list/student-classes-review-list.html',
+        canActivate: [authGuard, roleGuard('STUDENT')],
+    },
+    {
         path: '/student/drop-class',
         page: 'app/layouts/student/pages/drop-class-student/drop-class-student.html',
         canActivate: [authGuard, roleGuard('STUDENT')],

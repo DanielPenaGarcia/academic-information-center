@@ -24,6 +24,10 @@ router.delete(
 );
 
 router.get(
+    `${PATH}/classes/review/:academicId`,
+    studentsClassesController.getStudentClassesToReview.bind(studentsClassesController));
+
+router.get(
   `${PATH}/schedule/:academicId`,
   studentsClassesController.studentSchedule.bind(studentsClassesController)
 );

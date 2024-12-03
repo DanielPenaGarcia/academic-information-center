@@ -1,0 +1,119 @@
+@import url("../../../../styles/global.css");
+
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(
+        135deg,
+        rgb(111, 182, 243) 16%,
+        rgb(165, 212, 241) 90%
+      );
+    color: #333;
+    height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.item-list {
+    list-style: none;
+    padding: 0;
+}
+
+.item-list li {
+    padding: 10px 15px;
+    border-bottom: 1px solid #ccc;
+}
+
+.item-list li:last-child {
+    border-bottom: none;
+}
+
+.item-list li:hover {
+    background-color: #f9f9f9;
+}
+
+.toast {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    font-size: 17px;
+    transition: opacity 0.5s ease-in-out;
+  }
+
+  .toast.success {
+    background-color: #4CAF50;
+  }
+
+  .toast.error {
+    background-color: #f44336;
+  }
+
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 10px 15px;
+    margin: 0 5px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    font-size: 16px;
+    margin: 0 10px;
+}
+
+/* Contenedor para el título dividido */
+.title-container {
+    display: flex;
+    justify-content: space-between; /* Alinea los elementos a los extremos */
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Título alineado a la izquierda */
+.left-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007BFF;
+    margin: 0;
+}
+
+/* Título alineado a la derecha */
+.right-title {
+    font-size: 18px;
+    color: #555;
+    font-weight: normal;
+}
