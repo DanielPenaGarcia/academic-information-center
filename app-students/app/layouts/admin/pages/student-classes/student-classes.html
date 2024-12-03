@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materias del Alumno</title>
+    <link rel="stylesheet" href="student-classes.css">
+</head>
+<body>
+    <back-button></back-button>
+    <div class="container">
+        <div class="title-container">
+            <h1 class="left-title">Selecciona clase a dar de baja</h1>
+            <span class="right-title">ID del alumno: <span id="studentId"></span></span>
+        </div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Buscar elementos...">
+            <button id="searchButton">Buscar</button>
+        </div>
+        <ul class="item-list" id="itemList">
+        </ul>
+        <div class="pagination">
+            <button id="prevButton" disabled>Anterior</button>
+            <span id="pageInfo">Página 1</span>
+            <button id="nextButton">Siguiente</button>
+        </div>
+    </div>
+    <div id="toast" class="toast"></div>
+    <script type="module" src="student-classes.js"></script>
+</body>
+</html>

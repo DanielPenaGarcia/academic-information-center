@@ -1,0 +1,107 @@
+@import url("../../styles/global.css");
+
+.title-page {
+  font-weight: bold;
+  margin-bottom: 20px;
+  font-family: "Inter", sans-serif;
+  width: fit-content;
+  margin: 10px auto;
+}
+
+.title-page > h1 {
+  font-size: 3.5rem;
+  padding: 10px;
+  text-align: center;
+  background-color: var(--primary);
+  color: white;
+}
+
+.title-page > h2 {
+  color: var(--primary);
+  font-size: 2.5rem;
+  padding: 10px;
+  text-align: center;
+  text-decoration: underline;
+  text-transform: uppercase;
+}
+
+/* Sección de descripción */
+.about-section {
+  margin: 20px auto;
+  padding: 15px;
+  max-width: 800px;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #333;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Enlaces rápidos */
+.links-section {
+  margin: 20px auto;
+  text-align: center;
+}
+
+.links-section h3 {
+  font-size: 1.8rem;
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+
+.quick-links {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.quick-links li {
+  font-size: 1.2rem;
+}
+
+.quick-links a {
+  color: var(--primary);
+  text-decoration: none;
+  padding: 5px 10px;
+  border: 2px solid var(--primary);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.quick-links a:hover {
+  background-color: var(--primary);
+  color: #fff;
+}
+
+/* Noticias destacadas */
+.news-section {
+  margin: 20px auto;
+  padding: 15px;
+  max-width: 800px;
+}
+
+.news-section h3 {
+  font-size: 1.8rem;
+  text-align: center;
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+
+.news-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: #333;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.news-card p {
+  margin: 0;
+  line-height: 1.5;
+}

@@ -1,0 +1,35 @@
+.header {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--primary);
+    padding: 10px 20px;
+}
+
+.nav-list {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+}
+
+.nav-button {
+    color: white;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: transform 0.3s ease;
+}
+
+.nav-button:hover {
+    background-color: var(--primary-tint);
+    transform: scale(1.1);
+}
+
+.nav-button:active {
+    background-color: var(--primary-shade);
+}

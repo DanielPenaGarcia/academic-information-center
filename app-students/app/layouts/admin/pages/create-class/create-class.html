@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Materias</title>
+    <link rel="stylesheet" href="create-class.css" />
+  </head>
+  <body>
+    <admin-header></admin-header>
+    <back-button></back-button>
+    <main class="content">
+      <section id="form-section">
+        <form class="card create-class-form" id="create-class-form">
+            <h2 class="form-header">Crear Clase</h2>
+            <input type="text" class="subject-name" placeholder="Nombre de la materia" disabled id="subject"/>
+            <div class="form-group">
+              <label for="duration">Duración en minutos</label>
+              <input type="number" id="duration" class="subject-name" placeholder="Duración" />
+            </div>
+            <div class="form-group">
+              <label for="start-time">Hora de inicio</label>
+              <input type="time" id="start-time" class="subject-name" />
+            </div>
+            <div class="form-group">
+              <label for="classroom">Salón</label>
+              <input type="text" id="classroom" class="subject-name" placeholder="Salón" />
+            </div>
+            <div class="form-group days">
+              <label for="subjectName">Días</label>
+              <div class="days-checks" id="days-container">
+              </div>
+            </div>
+            <button class="block" type="submit" id="class-confirm">Guardar</button>
+          </form>
+      </section>
+      <section id="table-section">
+        <aside class="card">
+          <table-subjects name="" year="2016" semester=""></table-subjects>
+        </aside>
+      </section>
+    </main>
+    <script type="module" src="create-class.js"></script>
+  </body>
+</html>

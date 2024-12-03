@@ -4,8 +4,14 @@ import { ClassesReviewController } from "./classes-review.controller.js";
 export const router = express.Router();
 
 const classesReviewController = new ClassesReviewController();
-
+const PATH = "/class/review";
 
 router.post(
-  "/class/review",
-  classesReviewController.generateReviewClass.bind(classesReviewController));
+  PATH,
+  classesReviewController.generateReviewClass.bind(classesReviewController)
+);
+
+router.get(
+  `${PATH}/:classId`,
+  classesReviewController.getReviewClass.bind(classesReviewController)
+);

@@ -1,0 +1,153 @@
+@import url("../../../../styles/global.css");
+
+:root {
+  /* Variables para tamaños en la presentación */
+  --presentation-width: 30%;
+  --presentation-height: 100%;
+
+  /* Variables para la imagen */
+  --presentation-width: 30%;
+  --presentation-height: 100%;
+  --img-height: 100%; /* Cambia esta por una altura dinámica */
+  --img-width-calc: auto; /* Deja que el ancho sea calculado por la altura */
+
+  /* Variables para el login */
+  --login-padding: 10%;
+  --login-width: 70%;
+  --login-height: 100%;
+}
+
+body {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.presentation {
+  height: var(--presentation-height);
+  width: var(--presentation-width);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 124, 234, 1) 16%,
+    rgba(94, 193, 255, 1) 90%
+  );
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+.girl-photo {
+  height: calc(var(--img-height) - 10%);
+  width: calc(var(--img-width-calc) - 10%);
+  display: flex;
+  justify-content: start;
+  align-items: flex-end;
+}
+
+.girl-photo img {
+  height: auto;
+  max-height: 100%;
+  width: 100%;
+  max-width: 100%;
+  object-fit: contain; /* Usa 'contain' para que la imagen no se corte */
+}
+
+.login {
+  padding: var(--login-padding);
+  width: var(--login-width);
+  height: var(--login-height);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.cia-logo img {
+  width: 250px;
+}
+
+.login-data {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  align-items: center;
+}
+
+.form-title {
+  text-align: center;
+  font-family: "Inter", sans-serif;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+  width: auto;
+  max-width: 60%;
+  min-width: 50%;
+}
+
+.form-group > input {
+  text-align: start;
+  width: 100%;
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: medium;
+}
+
+.btn {
+  padding: 10px 40px;
+  border-radius: 15px;
+  background-color: var(--primary);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: large;
+  border: none;
+  transition: 0.3s all;
+}
+
+.btn:hover {
+  background-color: var(--primary-tint);
+}
+
+.btn:active {
+  background-color: var(--primary-shade);
+}
+
+.forget-password {
+  text-align: center;
+  font-family: "Inter", sans-serif;
+  color: var(--primary);
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .presentation {
+    display: none;
+  }
+
+  .login {
+    padding: 10%;
+    width: 100%;
+  }
+
+  .form-group {
+    width: auto;
+    max-width: 300px;
+    min-width: 200px;
+  }
+}

@@ -1,0 +1,41 @@
+@import url("../../../../styles/global.css");
+
+.content {
+  padding: 30px 90px;
+}
+
+.subject {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--primary);
+}
+
+.subject > .title > span {
+  font-weight: 400;
+  font-size: xx-large;
+  color: var(--primary-tint);
+}
+
+hr {
+  border: 2px solid var(--primary-tint);
+  margin: 1rem 0;
+}
+
+.students-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: 'Inter', sans-serif;
+}
+
+.no-students-message {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary);
+}

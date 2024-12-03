@@ -1,40 +1,79 @@
-import { BusinessException } from "../utils/exceptions/business.exception.js";
-import { courseMapDtoToEntityMapper } from "../utils/mappers/course-map-dto-to-entity.mapper.js";
-import { where } from "../utils/query-builder/condition.builder.js";
-import { Repository, RepositoryTable } from "../utils/repository/repository.js";
+import { dataSource } from "../config/orm.config.js";
+import { CourseMapSchema } from "../schemas/course-map.schema.js";
+import { BadRequestException } from "../utils/exceptions/http/bad-request.exception.js";
+import { NotFoundException } from "../utils/exceptions/http/not-found.exception.js";
 
 export class CourseMapsService {
-    constructor() {
-        this.courseMapsRepository = new Repository(RepositoryTable.COURSEMAP);
+  constructor() {
+    this.courseMapsRepository = dataSource.getRepository(CourseMapSchema);
+  }
+
+  async createCourseMap({ semesters, year }) {
+    const courseMaps = await this.courseMapsRepository.findOne({
+      where: {
+        year: year,
+      },
+    });
+
+    if (courseMaps) {
+      throw new BadRequestException(
+        `Course map with year ${year} already exists`
+      );
     }
 
-    async createCourseMap({ semesters, year }){
-        const courseMaps = await this.findCourseMapsByYear({ year });
-        if(courseMaps.length > 0){
-            throw new BusinessException('El mapa curricular ya existe para el año proporcionado');
-        }
-
-        if(semesters <= 0){
-            throw new BusinessException('Semesters must be greater than 0');
-        }
-        const fields = ['semesters', 'year'];
-        const values = [[semesters, year]];
-        const result = await this.courseMapsRepository.create({
-            fields: fields,
-            values: values
-        });
-        if(result.affectedRows === 0){
-            throw new Error('Error creating course map');
-        }
-        const courseMapDTO = await this.courseMapsRepository.findOneById(result.insertId);
-        const courseMap = courseMapDtoToEntityMapper(courseMapDTO);
-        return courseMap;
+    if (semesters <= 0) {
+      throw new BadRequestException("Semesters must be greater than 0");
     }
 
-    async findCourseMapsByYear({ year }) {
-        const condition = where().equal('year', year).build();
-        const courseMapsDTOs = await this.courseMapsRepository.find({ conditions: condition });
-        const courseMap = courseMapsDTOs.map(courseMapDtoToEntityMapper);
-        return courseMap;
+    if (year <= 0) {
+      throw new BadRequestException("Year must be greater than 0");
     }
+
+    const courseMap = this.courseMapsRepository.create({
+      semesters: semesters,
+      year: year,
+    });
+
+    await this.courseMapsRepository.save(courseMap);
+    return courseMap;
+  }
+
+  async findAllCourseMaps({ pageable }) {
+    const [courseMaps, total] = await this.courseMapsRepository.findAndCount({
+      select: {
+        id: true,
+        semesters: true,
+        year: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      take: pageable.limit,
+      skip: pageable.offset,
+    });
+    return {
+      courseMaps: courseMaps,
+      totalElements: total,
+      totalPages: Math.ceil(total / pageable.limit),
+      currentPage: pageable.page,
+    };
+  }
+
+  async findCourseMapById({ id }) {
+    const courseMap = await this.courseMapsRepository.findOne({
+      where: {
+        id: id,
+      },
+      select: {
+        id: true,
+        semesters: true,
+        year: true,
+        createdAt: true,
+        updatedAt: true,
+      }
+    });
+    if (!courseMap) {
+      throw new NotFoundException(`Course map with id ${id} not found`);
+    }
+    return courseMap;
+  }
 }

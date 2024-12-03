@@ -5,7 +5,14 @@ export const router = express.Router();
 
 const teacherSubjectsController = new TeacherSubjectsController();
 
+const path = "/subjects/teachers";
+
+const middlewares = (req, res, next) => {
+  roleAdminGuard(req, res, next);
+};
+
+
 router.post(
-  "/teacher/subject",
+  `${path}`,
   teacherSubjectsController.asignSubjectToTeacher.bind(teacherSubjectsController)
 );

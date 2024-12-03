@@ -1,202 +1,436 @@
-import { classDtoToEntityMapper } from "../utils/mappers/class-dto-to-entity.mapper.js";
-import { studentDtoToEntityMapper } from "../utils/mappers/student-dto-to-entity.mapper.js";
-import { subjectDtoToEntityMapper } from "../utils/mappers/subject-dto-to-entity.mapper.js";
-import { teacherDtoToEntityMapper } from "../utils/mappers/teacher-dto-to-entity.mapper.js";
-import { classReviewDtoToEntityMapper } from "../utils/mappers/class-review-dto-to-entity.mapper.js"
-import { where } from "../utils/query-builder/condition.builder.js";
-import { Repository, RepositoryTable } from "../utils/repository/repository.js";
-import { BusinessException } from "../utils/exceptions/business.exception.js";
+import { dataSource } from "../config/orm.config.js";
+import { ClassSchema } from "../schemas/class.schema.js";
+import { StudentSchema } from "../schemas/student.schema.js";
+import { SubjectSchema } from "../schemas/subject.schema.js";
+import { UserSchema } from "../schemas/user.schema.js";
+import { BadRequestException } from "../utils/exceptions/http/bad-request.exception.js";
+import { days as daysOption } from "../utils/constanst/days.constants.js";
+import { StudentClassSchema } from "../schemas/student-class.schema.js";
+import { CourseMapSchema } from "../schemas/course-map.schema.js";
+import { StudentCourseMapSchema } from "../schemas/student-course-map.schema.js";
+import { In, Not } from "typeorm";
+import { StatusClass } from "../entities/enums/status-class.enum.js";
+import { Klass } from "../entities/klass.entity.js";
+import { role } from "../entities/enums/role.enum.js";
 
 export class ClassesService {
   constructor() {
-    this.classesRepository = new Repository(RepositoryTable.CLASS);
-    this.studentsRepository = new Repository(RepositoryTable.STUDENT);
-    this.studentsClassesRepository = new Repository(RepositoryTable.STUDENTS_CLASSES);
-    this.classesRepository = new Repository(RepositoryTable.CLASS);
-    this.subjectsRepository = new Repository(RepositoryTable.SUBJECT);
-    this.teachersRepository = new Repository(RepositoryTable.TEACHER);
-    this.teachersClassesRepository = new Repository(RepositoryTable.TEACHERS_CLASSES);
-    this.repositoryClassReview = new Repository(RepositoryTable.CLASS_REVIEW);
-  }
-
-  async createClass({ startTime, description, duration, days, subjectId, teacherId }) {
-    const fields = ["start_time", "description", "duration", "days", "subject_id", "teacher_id"];
-    const values = [[startTime, description, duration, days, subjectId, teacherId]];
-
-    if (duration < 0) {
-      throw new Error("Duration must be greater than 0");
-    }
-    const result = await this.classesRepository.create({
-      fields: fields,
-      values: values,
-    });
-    if (result.affectedRows === 0) {
-      throw new Error("Error creating class");
-    }
-    const classDTO = await this.classesRepository.findOneById(
-      result.insertId
+    this.classesRepository = dataSource.getRepository(ClassSchema);
+    this.subjectRepository = dataSource.getRepository(SubjectSchema);
+    this.teacherRepository = dataSource.getRepository(UserSchema);
+    this.studentRepository = dataSource.getRepository(StudentSchema);
+    this.studentClassRepository = dataSource.getRepository(StudentClassSchema);
+    this.courseMapRepository = dataSource.getRepository(CourseMapSchema);
+    this.studenCourseMapRepository = dataSource.getRepository(
+      StudentCourseMapSchema
     );
-    const classEntity = classDtoToEntityMapper(classDTO);
-    return classEntity;
   }
 
-  async updateClass({id, startTime, description, duration, days, subjectId}) {
-    const values = [];
-
-    if (duration < 0) {
-      throw new BusinessException("Duration must be greater than 0");
-    }
-    
-    const classCondition = where().equal("id", id).build();
-    const classDTO = await this.classesRepository.findOne({
-      conditions: classCondition,
+  async createClass({ startTime, duration, days, subjectId, classroom }) {
+    const subject = await this.subjectRepository.findOne({
+      where: {
+        id: subjectId,
+      },
     });
-    if (!classDTO) {
-      throw new BusinessException("Class not found");
+    if (!subject) {
+      throw new BadRequestException(
+        `Materia con id ${subjectId} no encontrada`
+      );
     }
-
-    if (startTime) {
-      values.push({
-        column: "start_time",
-        value: startTime,
-      });
+    const daysArray = days.split(",");
+    const notDaysValid = daysArray.filter((day) => !daysOption.includes(day));
+    if (notDaysValid.length > 0) {
+      throw new BadRequestException(
+        `Días no válidos: ${notDaysValid.join(
+          ", "
+        )}, los días válidos son: ${daysOption.join(", ")}`
+      );
     }
-    if (description) {
-      values.push({
-        column: "description",
-        value: description,
-      });
+    const classHours = (daysArray.length * duration) / 60;
+    if (classHours > subject.hoursPerWeek) {
+      throw new BadRequestException(
+        `Las horas de la clase superan las horas por semana de la materia`
+      );
     }
-    if (duration) {
-      values.push({
-        column: "duration",
-        value: duration,
-      });
-    }
-    if (days) {
-      values.push({
-        column: "days",
-        value: days,
-      });
-    }
-    if (subjectId) {
-      values.push({
-        column: "subject_id",
-        value: subjectId,
-      });
-    }
-
-    const conditionUpdate = where().equal("id", classDTO.id).build();
-    const result = await this.classesRepository.update({setValues: values, conditions: conditionUpdate});
-    if (result.affectedRows === 0) {
-      throw new Error("Error updating class");
-    }
-
-    let classEntity = classDtoToEntityMapper(classDTO);
-    return classEntity;
+    const klass = this.classesRepository.create({
+      startTime: startTime,
+      days: days,
+      duration: duration,
+      subject: subject,
+      classroom: classroom,
+    });
+    await this.classesRepository.save(klass);
+    return klass;
   }
 
-  async findScheduleByStudentAcademicId({ academicId }) {
-    const studentCondition = where().equal("academic_id", academicId).build();
-    const studentDTO = await this.studentsRepository.findOne({
-      conditions: studentCondition,
+  async assignTeacherToClass({ classId, teacherId }) {
+    const klass = await this.classesRepository.findOne({
+      where: {
+        id: classId,
+      },
     });
-    if (!studentDTO) {
-      throw new BusinessException("Student not found");
+    if (!klass) {
+      throw new BadRequestException(`Clase con id ${classId} no encontrada`);
     }
-    const student = studentDtoToEntityMapper(studentDTO);
-    const classesStudentsCondition = where()
-      .equal("student_id", student.id)
-      .build();
-    const studentClassesDTOs = await this.studentsClassesRepository.find({
-      conditions: classesStudentsCondition,
+    const teacher = await this.teacherRepository.findOne({
+      where: {
+        id: teacherId,
+        role: "TEACHER",
+      },
     });
-    const classes = await Promise.all(
-      studentClassesDTOs.map(async (studentClassDTO) => {
-        const classDTO = await this.classesRepository.findOneById(
-          studentClassDTO.class_id
-        );
-        const teacherDTO = await this.teachersRepository.findOneById(
-          classDTO.teacher_id
-        );
-        const teacher = teacherDtoToEntityMapper(teacherDTO);
-        const subjectDTO = await this.subjectsRepository.findOneById(
-          classDTO.subject_id
-        );
-        const subject = subjectDtoToEntityMapper(subjectDTO);
-        let classEntity = classDtoToEntityMapper(classDTO);
-        classEntity.teacher = {
-          id: teacher.id,
-          names: teacher.names,
-          fatherLastName: teacher.fatherLastName,
-          motherLastName: teacher.motherLastName,
-        };
-        classEntity.subject = { id: subject.id, name: subject.name };
-        return classEntity;
-      })
+    if (!teacher) {
+      throw new BadRequestException(
+        `Profesor con id ${teacherId} no encontrado`
+      );
+    }
+
+    const teacherExist = klass.teacher === teacher;
+    if (teacherExist) {
+      throw new BadRequestException(`El profesor ya está asignado a la clase`);
+    }
+
+    klass.teacher = teacher;
+    await this.classesRepository.save(klass);
+    return klass;
+  }
+
+  async enrollStudent({ studentId, classId }) {
+    const student = await this.studentRepository.findOne({
+      where: {
+        id: studentId,
+      },
+    });
+    if (!student) {
+      throw new BadRequestException(
+        `No se encontró al alumno con el ID ${studentId}`
+      );
+    }
+    const klass = await this.classesRepository.findOne({
+      where: {
+        id: classId,
+      },
+      relations: ["subject"],
+    });
+    if (!klass) {
+      throw new BadRequestException(
+        `No se encontró la clase con el ${classId}`
+      );
+    }
+
+    let enrolledClasses = await this.getEnrolledClasses({ studentId });
+
+    // Normalize `enrolledClasses` to be an array
+    if (!Array.isArray(enrolledClasses)) {
+      // Case 1: If it's a single object, wrap it in an array
+      enrolledClasses = [enrolledClasses];
+    } else if (enrolledClasses.data && Array.isArray(enrolledClasses.data)) {
+      // Case 2: If it's an object with an array under a property called `data`
+      enrolledClasses = enrolledClasses.data;
+    }
+
+    // Iterate over the normalized `enrolledClasses` array
+    enrolledClasses.forEach((studentClass) => {
+      const enrolledKlass = studentClass.klass;
+      console.log(studentClass);
+      // Check if there is a common day between `enrolledKlass` and `klass`
+      for (let i = 0; i < enrolledKlass.days.length; i++) {
+        if (
+          klass.days.includes(enrolledKlass.days[i]) &&
+          this.#doHoursClash({ enrolledKlass, klass })
+        ) {
+          throw new Error(
+            `La clase ${klass.subject.name} se empalma con la clase ${enrolledKlass.subject.name}`
+          );
+        }
+      }
+    });
+
+    const studentClass = this.studentClassRepository.create({
+      student: studentId,
+      klass: classId,
+    });
+    await this.studentClassRepository.save(studentClass);
+    return studentClass;
+  }
+
+  #doHoursClash({ enrolledKlass, klass }) {
+    const parseTime = (timeString) => {
+      const [hours, minutes, seconds] = timeString.split(":").map(Number);
+      return { hours, minutes };
+    };
+
+    // Function to add minutes to a start time
+    const addMinutes = (time, minutesToAdd) => {
+      const newTime = new Date(0, 0, 0, time.hours, time.minutes);
+      newTime.setMinutes(newTime.getMinutes() + minutesToAdd);
+      return newTime;
+    };
+
+    // Convert `startTime` to Date objects
+    const enrolledStartTime = parseTime(enrolledKlass.startTime);
+    const newClassStartTime = parseTime(klass.startTime);
+
+    // Calculate end times by adding duration (in minutes)
+    const enrolledEndTime = addMinutes(
+      enrolledStartTime,
+      enrolledKlass.duration
     );
-    return classes;
-  }
+    const newClassEndTime = addMinutes(newClassStartTime, klass.duration);
 
-  async findScheduleByTeacherAcademicId({ academicId }) {
-    const teacherCondition = where().equal("academic_id", academicId).build();
-    const teacherDTO = await this.teachersRepository.findOne({
-      conditions: teacherCondition,
-    });
-    if (!teacherDTO) {
-      throw new BusinessException("Teacher not found");
-    }
-    const teacher = teacherDtoToEntityMapper(teacherDTO);
-    const teachersClassesCondition = where()
-      .equal("teacher_id", teacher.id)
-      .build();
-    const teacherClassesDTOs = await this.classesRepository.find({
-      conditions: teachersClassesCondition,
-    });
-    const classes = await Promise.all(
-      teacherClassesDTOs.map(async (teacherClassDTO) => {
-        const subjectDTO = await this.subjectsRepository.findOneById(
-          teacherClassDTO.subject_id
-        );
-        const subject = subjectDtoToEntityMapper(subjectDTO);
-        let classEntity = classDtoToEntityMapper(teacherClassDTO);
-        classEntity.subject = { id: subject.id, name: subject.name };
-        return classEntity;
-      })
+    // Create Date objects for comparisons
+    const enrolledStartDate = new Date(
+      0,
+      0,
+      0,
+      enrolledStartTime.hours,
+      enrolledStartTime.minutes
     );
-    return classes;
+    const enrolledEndDate = enrolledEndTime;
+
+    const newClassStartDate = new Date(
+      0,
+      0,
+      0,
+      newClassStartTime.hours,
+      newClassStartTime.minutes
+    );
+    const newClassEndDate = newClassEndTime;
+
+    // Check if time periods clash
+    return (
+      (newClassStartDate < enrolledEndDate &&
+        newClassEndDate > enrolledStartDate) ||
+      (enrolledStartDate < newClassEndDate &&
+        enrolledEndDate > newClassStartDate)
+    );
   }
 
-  async assignTeacher({ academicId, classId }) {
-
-    const classCondition = where().equal("id", classId).build();
-    console.log(classCondition)
-    const classDTO = await this.classesRepository.findOne({
-      conditions: classCondition,
+  async getAvailableClassesByStudent({ studentId }) {
+    const student = await this.studentRepository.findOne({
+      where: {
+        id: studentId,
+      },
     });
-    if (!classDTO) {
-      throw new BusinessException("Class not found");
+
+    if (!student) {
+      throw new BadRequestException(
+        `No se encontró al alumno con el ID ${studentId}`
+      );
     }
-    const classRef = classDtoToEntityMapper(classDTO);
-
-    const teacherCondition = where().equal("academic_id", academicId).build();
-    console.log(teacherCondition)
-    const teacherDTO = await this.teachersRepository.findOne({
-      conditions: teacherCondition,
+    const courseMapStudent = await this.studenCourseMapRepository.findOne({
+      where: {
+        student: studentId,
+      },
+      relations: ["courseMap"],
     });
-    if (!teacherDTO) {
-      throw new BusinessException("Teacher not found");
+
+    const courseMapId = courseMapStudent.courseMapId;
+
+    const courseMap = await this.courseMapRepository.findOne({
+      where: {
+        id: courseMapId,
+      },
+    });
+    if (!courseMap) {
+      throw new BadRequestException(
+        `El alumno ${studentId} no tiene un plan curricular`
+      );
     }
-    const teacher = teacherDtoToEntityMapper(teacherDTO);
-
-    const values = [];
-    values.push({
-      column: "teacher_id",
-      value: teacher.id
+    const subjects = await this.subjectRepository.find({
+      where: {
+        courseMap: { id: courseMapId },
+      },
+      relations: ["subjectsRequirements"],
+    });
+    if (!subjects) {
+      throw new BadRequestException(
+        `El plan curricular ${courseMapId} no tiene materias`
+      );
+    }
+    const subjectsIds = subjects.map((subject) => subject.id);
+    const approvedSubjects = await this.studentClassRepository.find({
+      where: {
+        student: { id: studentId },
+        status: "approved",
+      },
     });
 
-    const conditionUpdate = where().equal("class_id", classId).build();
-    const result = await this.classesRepository.update({ setValues: values, condition: conditionUpdate });
-    return { classRef, teacher }
+    const approvedSubjectIds = approvedSubjects.map((sc) => sc.subject_id);
+
+    const eligibleSubjectIds = [];
+
+    for (const subject of subjects) {
+      const prerequisites = subject.subjectsRequirements.map((req) => req.id);
+
+      const canEnroll =
+        subject.semester === 1 ||
+        prerequisites.length === 0 ||
+        prerequisites.every((reqId) => approvedSubjectIds.includes(reqId));
+
+      if (canEnroll) {
+        eligibleSubjectIds.push(subject.id);
+      }
+    }
+
+    let eligibleClasses = await this.classesRepository.find({
+      where: {
+        subject: { id: In(eligibleSubjectIds) },
+      },
+      relations: ["subject", "teacher"],
+    });
+
+    let currentClasses = await this.studentClassRepository.find({
+      where: {
+        status: "PENDING",
+        student: { id: studentId },
+      },
+      relations: ["klass", "student"],
+    });
+
+    const currentClassIds = currentClasses.map(
+      (currentClass) => currentClass.klass.id
+    );
+
+    eligibleClasses = eligibleClasses.filter(
+      (eligibleClass) => !currentClassIds.includes(eligibleClass.id)
+    );
+
+    return eligibleClasses;
+  }
+
+  async getEnrolledClasses({ studentId }) {
+    let enrolledClasses = await this.studentClassRepository.find({
+      where: {
+        status: "PENDING",
+        student: { id: studentId },
+      },
+      relations: ["klass", "klass.subject", "klass.teacher"],
+    });
+
+    return enrolledClasses;
+  }
+
+  async dropClass({ studentId, classId }) {
+    // Find the student
+    const student = await this.studentRepository.findOne({
+      where: {
+        id: studentId,
+      },
+    });
+    if (!student) {
+      throw new BadRequestException(
+        `No se encontró al alumno con el ID ${studentId}`
+      );
+    }
+
+    // Find the class
+    const klass = await this.classesRepository.findOne({
+      where: {
+        id: classId,
+      },
+    });
+    if (!klass) {
+      throw new BadRequestException(
+        `No se encontró la clase con el ID ${classId}`
+      );
+    }
+
+    // Update the student's enrollment status to 'CANCELED'
+    const response = await this.studentClassRepository.update(
+      { student: { id: studentId }, klass: { id: classId } }, // Use relations for student and class
+      { status: StatusClass.CANCELED } // Setting the status to CANCELED
+    );
+
+    // If no rows were affected, throw an error
+    if (response.affected === 0) {
+      throw new NotFoundException(
+        "The class was NOT dropped, Good luck getting a passing grade :)"
+      );
+    }
+
+    // Fetch the updated studentClass to return
+    const studentClass = await this.studentClassRepository.findOne({
+      where: {
+        student: { id: studentId },
+        klass: { id: classId },
+      },
+    });
+
+    return studentClass;
+  }
+
+  async updateDescription({
+    classId,
+    description,
+    user: { academicId },
+    currentRole,
+  }) {
+    const klass = await this.classesRepository.findOne({
+      where: {
+        id: classId,
+      },
+      relations: {
+        teacher: true,
+      },
+      select: {
+        id: true,
+        teacher: {
+          academicId: true,
+        },
+      },
+    });
+    if (!klass) {
+      throw new BadRequestException(
+        `No se encontró la clase con el ID ${classId}`
+      );
+    }
+    if (klass.teacher.academicId !== academicId && currentRole !== role.ADMIN) {
+      throw new BadRequestException(
+        `No tienes permisos para actualizar la descripción de la clase`
+      );
+    }
+    const response = await this.classesRepository.update(
+      { id: classId },
+      { description }
+    );
+    if (response.affected === 0) {
+      throw new BadRequestException(
+        `No se actualizó la descripción de la clase`
+      );
+    }
+    const updatedClass = await this.classesRepository.findOne({
+      where: { id: classId },
+    });
+    return updatedClass;
+  }
+
+  async findClassById({ classId }) {
+    const klass = await this.classesRepository.findOne({
+      where: {
+        id: classId,
+      },
+      relations: {
+        teacher: true,
+        subject: true,
+      },
+      select: {
+        teacher: {
+          id: true,
+          names: true,
+          fatherLastName: true,
+          motherLastName: true,
+        },
+        subject: {
+          id: true,
+          name: true,
+        },
+      }
+    });
+    if (!klass) {
+      throw new BadRequestException(
+        `No se encontró la clase con el ID ${classId}`
+      );
+    }
+    return klass;
   }
 }

@@ -1,0 +1,18 @@
+@import url('../../../../styles/global.css');
+
+/* Contenedor principal del administrador */
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+/* Contenedor de opciones */
+#options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));  /* Grid flexible con columnas adaptables */
+    gap: 20px;  /* Espacio entre las tarjetas */
+    margin-top: 20px;
+    padding: 0 20px;  /* Añadir espaciado lateral */
+}

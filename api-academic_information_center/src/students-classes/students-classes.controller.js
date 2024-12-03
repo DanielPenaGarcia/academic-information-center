@@ -1,4 +1,6 @@
-import { UserRole } from "../entities/enums/roles.enum.js";
+import { role } from "../entities/enums/role.enum.js";
+import { Pageable } from "../utils/classes/pageable.class.js";
+import { ForbiddenException } from "../utils/exceptions/http/forbidden.exception.js";
 import { StudentsClassesService } from "./students-classes.service.js";
 
 export class StudentsClassesController {
@@ -6,100 +8,135 @@ export class StudentsClassesController {
     this.studentsClassesService = new StudentsClassesService();
   }
 
-  async dropClass(req, res) {
+  async studentSchedule(req, res, next) {
     try {
-      this.#validateDropStudentClassByStudentOrAdmin(req);
-      const { academic_id, classId } = req.body;
-
-      const classDroped = await this.studentsClassesService.dropClass({
-        academic_id,
-        classId,
-      });
-
-      if (!classDroped) {
-        return res.status(500).json({ message: `Error droping class` });
+      const { academicId } = req.params;
+      const user = req.user;
+      if (user.academicId !== academicId && user.role !== role.ADMIN) {
+        throw new ForbiddenException(
+          "No tienes permisos para ver este horario"
+        );
       }
+      const studentClasses = await this.studentsClassesService.studentSchedule({
+        academicId,
+      });
+      res.status(200).json(studentClasses);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async printStudentSchedule(req, res, next) {
+    try {
+      const { academicId } = req.params;
+      const user = req.user;
+      if (user.academicId !== academicId && user.role !== role.ADMIN) {
+        throw new ForbiddenException(
+          "No tienes permisos para ver este horario"
+        );
+      }
+      const studentClasses =
+        await this.studentsClassesService.printStudentSchedule({
+          academicId,
+          params: req.query,
+        });
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Content-Disposition", 'inline; filename="schedule.pdf"');
+      res.status(200).send(studentClasses);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getStudentClassesByStudentId(req, res, next) {
+    try {
+      const { page, count, subject } = req.query;
+      const pageable = new Pageable(page, count);
+      const academicId = req.params.studentId;
+      const studentClasses =
+        await this.studentsClassesService.getStudentClassesByStudentId(
+          { academicId },
+          pageable,
+          { className: subject }
+        );
+      res.status(200).json(studentClasses);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async dropClass(req, res, next) {
+    try {
+      const { academicId, studentClassId } = req.params;
+      const classDroped = await this.studentsClassesService.dropClass({
+        academicId,
+        studentClassId,
+      });
       return res.status(200).json(classDroped);
     } catch (error) {
-      if (error.message === "Forbidden") {
-        return res.status(403).json({ error: "Forbidden" });
-      }
-      res.status(500).json({ error: error.message });
+      next(error);
     }
   }
 
-  #validateDropStudentClassByStudentOrAdmin(req){
-    const userRequesting = req.user;
-    if(userRequesting.role === UserRole.STUDENT){
-        if(userRequesting.academicId !== req.body.academicId){
-          throw new Error("Forbidden");
-        }
-    }else if(userRequesting.role !== UserRole.ADMINISTRATOR){
-      throw new Error("Forbidden");
-    }
-  }
-  async enrollClass(req, res) {
+  async getStudentClassesToReview(req, res,next) {
     try {
-      this.#validateUser(req, res);
-      const { academicId, classId } = req.body;
-      const enrolledClass = await this.studentsClassesService.enrollClass({
-        academicId,
-        classId,
-      });
-      if (!enrolledClass) {
-        return res
-          .status(500)
-          .send(
-            `Error enrolling the class, try paying the classes that you owe us first`
-          );
-      }
-      //TODO: Eliminar datos que regresen nulos
-      return res.status(200).send(enrolledClass.classRef);
+      //const {page,count} = req.query;
+      // const pageable =  new Pageable(page,+count);
+      const { academicId} = req.params;
+      const classDroped = await this.studentsClassesService.getStudentClassesToReview({academicId});
+      return res.status(200).json(classDroped);
     } catch (error) {
-      if (error.message === "Forbidden") {
-        return res.status(403).json({ error: "Forbidden" });
+      next(error);
+    }
+  }
+  
+  async getStudentsInClass(req, res, next) {
+    try {
+      const { classId } = req.params;
+      let { page, size } = req.query;
+      if (!page || page < 0) {
+        page = 1;
       }
-      res.status(500).json({ error: error.message });
+      if (!size || size < 1) {
+        size = 10;
+      }
+      const pageable = new Pageable(page, size);
+      const students = await this.studentsClassesService.studentsInClass({
+        classId: classId,
+        pageable: pageable
+      });
+      res.status(200).json(students);
+    } catch (error) {
+      next(error);
     }
   }
 
-  async gradeStudent(req, res) {
+  async getStudentInClass(req, res, next) {
     try {
-      this.#validateTeacher(req);
-      const { academicId, classId, grade } = req.body;
-      const result = await this.studentsClassesService.gradeStudent({
+      const { classId, academicId } = req.params;
+      const student = await this.studentsClassesService.findStudentInClass({
+        classId,
+        academicId,
+      });
+      res.status(200).json(student);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async patchGradeStudent(req, res, next) {
+    try {
+      const { academicId, classId } = req.params;
+      const { grade, feedback } = req.body;
+      const updatedStudent = await this.studentsClassesService.gradeStudent({
         academicId,
         classId,
         grade,
+        feedback,
       });
-      if (!result) {
-        return res.status(500).send(`Error grading the student`);
-      }
-      return res.status(200).send(result);
+      res.status(200).json(updatedStudent);
     } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  }
-
-  #validateUser(req) {
-    const userRequesting = req.user;
-    if (
-      userRequesting.role !== UserRole.STUDENT &&
-      userRequesting.role !== UserRole.ADMINISTRATOR
-    ) {
-      throw new Error("Forbidden");
-    }
-    if (userRequesting.role === UserRole.STUDENT) {
-      if (userRequesting.academicId !== req.body.academicId) {
-        throw new Error("Forbidden");
-      }
-    }
-  }
-
-  #validateTeacher(req) {
-    const userRequesting = req.user;
-    if (userRequesting.role != UserRole.TEACHER) {
-      throw new Error("Forbidden");
+      next(error);
     }
   }
 }

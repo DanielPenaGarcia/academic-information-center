@@ -1,115 +1,173 @@
+import { dataSource } from "../config/orm.config.js";
+import { TeacherSchema } from "../schemas/teacher.schema.js";
 import { createAcademicEmail } from "../utils/functions/create-academic-email.function.js";
 import { createAcademicPassword } from "../utils/functions/create-academic-password.function.js";
-import { teacherDtoToEntityMapper } from "../utils/mappers/teacher-dto-to-entity.mapper.js";
-import { where } from "../utils/query-builder/condition.builder.js";
-import { Repository, RepositoryTable } from "../utils/repository/repository.js";
+import { InternalServerErrorException } from "../utils/exceptions/http/internal-server-error.exception.js";
+import { BadRequestException } from "../utils/exceptions/http/bad-request.exception.js";
+import { UserSchema } from "../schemas/user.schema.js";
+import { NotFoundException } from "../utils/exceptions/http/not-found.exception.js";
+import { ClassSchema } from "../schemas/class.schema.js";
 
 export class TeachersService {
   constructor() {
-    this.teachersRepository = new Repository(RepositoryTable.TEACHER);
+    this.teachersRepository = dataSource.getRepository(TeacherSchema);
+    this.classesRepository = dataSource.getRepository(ClassSchema);
   }
 
-  async createTeacher({ names, fatherLastName, motherLastName, curp }) {
+  async getTeacherInfoByAcademicId({ academicId }) {
+    const teacherFound = await this.teachersRepository.findOneBy({
+      academicId: academicId,
+    });
+    if (!teacherFound) {
+      throw new NotFoundException("Teacher not found");
+    }
+    delete teacherFound.password;
+    return teacherFound;
+  }
+
+  async createTeacher({ names, fatherLastName, motherLastName }) {
     //TODO: Agregar photo a los values cuando se reciba de la petición
-    const fields = ["names", "father_last_name", "mother_last_name", "curp"];
-    const values = [[names, fatherLastName, motherLastName, curp]];
-    const result = await this.teachersRepository.create({
-      fields: fields,
-      values: values,
-    });
+    let teacherCreated = null;
+    await dataSource.transaction(async (transactionalEntityManager) => {
+      //Transaction Implementation
+      try {
+        const teacher = {
+          names: names,
+          fatherLastName: fatherLastName,
+          motherLastName: motherLastName,
+          password: "",
+        };
+        // transactionalEntityManager.create(TeacherSchema,{}) Para armar el objeto
+        teacherCreated = await transactionalEntityManager.save(
+          TeacherSchema,
+          teacher
+        );
 
-    if (curp.length !== 18) {
-      throw new Error("CURP must have 18 characters");
-    } 
+        teacherCreated = await transactionalEntityManager.findOneBy(
+          TeacherSchema,
+          { id: teacherCreated.id }
+        );
 
-    const curpExists = await this.teachersRepository.findOne({
-      condition: where().equal("curp", curp).build(),
-    });
-    
-    if(curpExists){ 
-      throw new Error("CURP already exists");
-    }
-    
-    if (result.affectedRows === 0) {
-      throw new Error("Error creating teacher");
-    }
-    const teacherDTO = await this.teachersRepository.findOneById(
-      result.insertId
-    );
-    let teacher = teacherDtoToEntityMapper(teacherDTO);
-    const email = createAcademicEmail({
-      name: teacher.names,
-      fatherLastName: teacher.fatherLastName,
-      academicId: teacher.academicId,
-    });
-    const password = createAcademicPassword({
-      name: teacher.names,
-      fatherLastName: teacher.fatherLastName,
-      academicId: teacher.academicId,
-    });
+        const emailCreated = createAcademicEmail({
+          name: teacherCreated.names,
+          fatherLastName: teacherCreated.fatherLastName,
+          academicId: teacherCreated.academicId,
+        });
 
-    await this.teachersRepository.update({
-      setValues: [
-        { column: "email", value: email },
-        { column: "password", value: password },
-      ],
-      conditions: where().equal("id", teacher.id).build(),
+        const passwordCreated = createAcademicPassword({
+          name: teacherCreated.names,
+          fatherLastName: teacherCreated.fatherLastName,
+          academicId: teacherCreated.academicId,
+        });
+
+        teacherCreated.email = emailCreated;
+        teacherCreated.password = passwordCreated;
+
+        await transactionalEntityManager.save(TeacherSchema, teacherCreated);
+      } catch (error) {
+        throw new InternalServerErrorException("Error on create Teacher");
+      }
     });
-    if (result.affectedRows === 0) {
-      throw new Error("Error updating teacher");
-    }
-    teacher.email = email;
-    teacher.password = password;
-    return teacher;
+    return teacherCreated;
   }
 
-  async updateTeacher({ academicId, names, fatherLastName, motherLastName, curp, photo }) {
+  async updateTeacher({
+    academicId,
+    names,
+    fatherLastName,
+    motherLastName,
+    password,
+    curp,
+    photo,
+  }) {
     //TODO: UPDATE PHOTO
-    const values = [];
+    const updateData = {};
 
-    const condition = where().equal('academic_id', academicId).build();
-
-    const teacher = await this.teachersRepository.findOne({ condition: condition });
-    if (!teacher) {
-      throw new Error(`Teacher with academic id ${academicId} not found`);
+    if (!academicId) {
+      throw new BadRequestException("Invalid academic Id");
     }
 
     if (names) {
-      values.push({
-        column: "names",
-        value: names
-      });
+      updateData.names = names;
     }
+
     if (fatherLastName) {
-      values.push({
-        column: "father_last_name",
-        value: fatherLastName
-      });
+      updateData.fatherLastName = fatherLastName;
     }
+
     if (motherLastName) {
-      values.push({
-        column: "mother_last_name",
-        value: motherLastName
-      });
+      updateData.motherLastName = motherLastName;
     }
+
+    if (password) {
+      updateData.password = password;
+    }
+
     if (curp) {
-      values.push({
-        column: "curp",
-        value: curp
-      });
-    }
-    if (values.length == 0) {
-      throw Error("Error empty values");
+      updateData.curp = curp;
     }
 
-    const conditionUpdate = where().equal('id', teacher.id).build();
-
-    const result = await this.teachersRepository.update({ setValues: values, conditions: conditionUpdate });
-
-    if(result.affectedRows!=1){
-      throw Error("Something went wrong with the update");
+    if (photo) {
+      updateData.photo = photo;
     }
 
-    return await this.teachersRepository.findOne({ condition: condition });;
+    if (Object.keys(updateData).length == 0) {
+      throw new BadRequestException(
+        "Empty values, there are no values to update"
+      );
+    }
+
+    const response = await this.teachersRepository.update(
+      { academicId: academicId },
+      updateData
+    );
+    if (response.affected == 0) {
+      throw new NotFoundException("There were no updated teacher");
+    }
+    const teacherUpdated = await this.teachersRepository.findOneBy({
+      academicId: academicId,
+    });
+    return teacherUpdated;
+  }
+
+  async findTeacherClassesByAcademicId({ academicId, pageable }) {
+    const teacher = await this.teachersRepository.findOne({
+      where: {
+        academicId: academicId
+      },
+    });
+    if (!teacher) {
+      throw new BadRequestException(`Teacher with academic id ${academicId} not found`);
+    }
+    const classes = await this.classesRepository.findAndCount({
+      where: {
+        teacher: {
+          academicId: academicId
+        },
+      },
+      relations: {
+        subject: true,
+      },
+      select: {
+        id: true,
+        days: true,
+        startTime: true,
+        duration: true,
+        classroom: true,
+        description: true,
+        subject: {
+          id: true,
+          name: true,
+        },
+      },
+      take: pageable.limit,
+      skip: pageable.offset,
+    });
+    return {
+      classes: classes[0],
+      totalElements: classes[1],
+      totalPages: Math.ceil(classes[1] / pageable.limit),
+      currentPage: pageable.page,
+    };
   }
 }

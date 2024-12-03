@@ -1,4 +1,5 @@
-import { UserRole } from "../entities/enums/roles.enum.js";
+import { ClassSchema } from "../schemas/class.schema.js";
+import { BadRequestException } from "../utils/exceptions/http/bad-request.exception.js";
 import { ClassesService } from "./classes.service.js";
 
 export class ClassesController {
@@ -6,125 +7,166 @@ export class ClassesController {
     this.classesService = new ClassesService();
   }
 
-  async create(req, res, next) {
+  async getClassById(req, res, next) {
     try {
-      const { startTime, description, duration, days, subjectId, teacherId } =
-        req.body;
-      const classEntity = await this.classesService.createClass({
-        startTime,
-        description,
-        duration,
-        days,
-        subjectId,
-        teacherId,
-      });
-      res.status(201).json(classEntity);
+      const { id } = req.params;
+      const klass = await this.classesService.findClassById({ id });
+      res.status(200).json(klass);
     } catch (error) {
       next(error);
     }
   }
 
-  async update(req, res) {
+  async postCreateClass(req, res, next) {
     try {
-      const { id, startTime, description, duration, days, subjectId } =
-        req.body;
-      const classUpdated = await this.classesService.updateClass({
-        id,
+      if (!req.body || Object.keys(req.body).length === 0) {
+        throw new BadRequestException("El cuerpo de la petición está vacío");
+      }
+      let { startTime, duration, days, subjectId, classroom } = req.body;
+      if (!startTime || !duration || !days || !subjectId) {
+        throw new BadRequestException(
+          "Faltan campos obligatorios en el cuerpo de la petición"
+        );
+      }
+      classroom ? (classroom = classroom) : (classroom = "Aula por asignar");
+      const klass = await this.classesService.createClass({
         startTime,
-        description,
         duration,
         days,
         subjectId,
+        classroom,
       });
-      res.status(201).json(classUpdated);
+      res.status(201).json(klass);
     } catch (error) {
       next(error);
     }
   }
 
-  async findScheduleByStudentAcademicId(req, res) {
+  async AssignTeacherToClass(req, res, next) {
     try {
-      this.#validateFindScheduleByStudentByAcademicId(req, res);
-      const { academicId } = req.params;
-      const classes = await this.classesService.findScheduleByStudentAcademicId(
-        {
-          academicId,
-        }
-      );
-      res.json(classes);
-    } catch (error) {
-      if (error.message === "Forbidden") {
-        return res.status(403).json({ error: "Forbidden" });
+      if (!req.body || Object.keys(req.body).length === 0) {
+        throw new BadRequestException("El cuerpo de la petición está vacío");
       }
-      res.status(500).json({ error: error.message });
-    }
-  }
-
-  #validateFindScheduleByStudentByAcademicId(req, res) {
-    const userRequesting = req.user;
-    if (userRequesting.role !== UserRole.STUDENT) {
-      throw new Error("Forbidden");
-    }
-    if (userRequesting.academicId !== req.params.academicId) {
-      throw new Error("Forbidden");
-    }
-    if (userRequesting.role === UserRole.TEACHER) {
-      throw new Error("Forbidden");
-    }
-  }
-
-  async findScheduleByTeacherAcademicId(req, res) {
-    try {
-      this.#validateFindScheduleByTeacherAcademicIdRequest(req, res);
-      const { academicId } = req.params;
-      const classes = await this.classesService.findScheduleByTeacherAcademicId(
-        {
-          academicId,
-        }
-      );
-      res.json(classes);
-    } catch (error) {
-      if (error.message === "Forbidden") {
-        return res.status(403).json({ error: "Forbidden" });
+      const { classId, teacherId } = req.body;
+      if (!classId || !teacherId) {
+        throw new BadRequestException(
+          "Faltan campos obligatorios en el cuerpo de la petición"
+        );
       }
-      res.status(500).json({ error: error.message });
+      await this.classesService.assignTeacherToClass({ classId, teacherId });
+      res.status(201).json({ message: "Profesor asignado correctamente" });
+    } catch (error) {
+      next(error);
     }
   }
 
-  async assignTeacher(req, res) {
+  async enrollStudent(req, res, next) {
     try {
-      this.#validateAssignTeacher(req);
-      const { academicId, classId } = req.body;
-      const result = await this.classesService.assignTeacher({
-        academicId,
+      if (!req.body || Object.keys(req.body).length === 0) {
+        throw new BadRequestException("El cuerpo de la petición está vacío");
+      }
+      const { studentId, classId } = req.body;
+      if (!studentId || !classId) {
+        throw new BadRequestException(
+          "Faltan campos obligatorios en el cuerpo de la petición"
+        );
+      }
+      const studentClass = await this.classesService.enrollStudent({
+        studentId,
         classId,
       });
-      if (!result) {
-        return res.status(500).send(`Error assigning the teacher`);
-      }
-      return res.status(200).send(result);
+      res.status(201).json(studentClass);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error);
     }
   }
 
-  #validateAssignTeacher(req) {
-    const userRequesting = req.user;
-    if (userRequesting.role != UserRole.ADMINISTRATOR) {
-      throw new Error("Forbidden");
+  async getEnrolledClasses(req, res, next) {
+    try {
+      if (!req.body || Object.keys(req.body).length === 0) {
+        throw new BadRequestException("El cuerpo de la petición está vacío");
+      }
+      const { studentId } = req.body;
+      if (!studentId) {
+        throw new BadRequestException(
+          "Faltan campos obligatorios en el cuerpo de la petición"
+        );
+      }
+      const classes = await this.classesService.getEnrolledClasses({
+        studentId,
+      });
+      res.status(200).json(classes);
+    } catch (error) {
+      next(error);
     }
   }
 
-  #validateFindScheduleByTeacherAcademicIdRequest(req, res) {
-    const userRequesting = req.user;
-    if (userRequesting.role !== UserRole.TEACHER) {
-      throw new Error("Forbidden");
+  async getAvailableClassesByStudent(req, res, next) {
+    try {
+      if (!req.body || Object.keys(req.body).length === 0) {
+        throw new BadRequestException("El cuerpo de la petición está vacío");
+      }
+      const { studentId } = req.body;
+      if (!studentId) {
+        throw new BadRequestException(
+          "Faltan campos obligatorios en el cuerpo de la petición"
+        );
+      }
+      const classes = await this.classesService.getAvailableClassesByStudent({
+        studentId,
+      });
+      res.status(200).json(classes);
+    } catch (error) {
+      next(error);
     }
-    if (userRequesting.academicId !== req.params.academicId) {
-      throw new Error("Forbidden");
+  }
+
+  async dropClass(req, res, next) {
+    try {
+      if (!req.body || Object.keys(req.body).length === 0) {
+        throw new BadRequestException("El cuerpo de la petición está vacío");
+      }
+      const { studentId, classId } = req.body;
+      if (!studentId || !classId) {
+        throw new BadRequestException(
+          "Faltan campos obligatorios en el cuerpo de la petición"
+        );
+      }
+      const klass = await this.classesService.dropClass({
+        studentId,
+        classId,
+      });
+      res.status(200).json(klass);
+    } catch (error) {
+      next(error);
     }
-    if (userRequesting.role === UserRole.STUDENT) {
-      throw new Error("Forbidden");
+  }
+
+  async patchClassDescription(req, res, next) {
+    try {
+      if (!req.body || Object.keys(req.body).length === 0) {
+        throw new BadRequestException("El cuerpo de la petición está vacío");
+      }
+      const { description } = req.body;
+      const { id } = req.params;
+      const { academicId, role } = req.user;
+
+      if (!id || !description) {
+        throw new BadRequestException(
+          "Faltan campos obligatorios en el cuerpo de la petición"
+        );
+      }
+      const klass = await this.classesService.updateDescription({
+        classId: id,
+        description: description,
+        currentRole: role,
+        user: {
+          academicId: academicId,
+        },
+      });
+      res.status(200).json(klass);
+    } catch (error) {
+      next(error);
     }
   }
 }
