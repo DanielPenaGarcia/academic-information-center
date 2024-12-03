@@ -1,58 +1,108 @@
-import {classReviewDtoToEntityMapper} from "../utils/mappers/class-review-dto-to-entity.mapper.js"
-import { where } from "../utils/query-builder/condition.builder.js";
-import { Repository, RepositoryTable } from "../utils/repository/repository.js";
+import { dataSource } from "../config/orm.config.js";
+import { ClassReviewSchema } from "../schemas/class-review.schema.js";
+import { ClassSchema } from "../schemas/class.schema.js";
+import { StudentClassSchema } from "../schemas/student-class.schema.js";
+import { StudentSchema } from "../schemas/student.schema.js";
+import { BadRequestException } from "../utils/exceptions/http/bad-request.exception.js";
+import { NotFoundException } from "../utils/exceptions/http/not-found.exception.js";
 
 export class ClassesReviewService {
   constructor() {
-    this.classesRepository = new Repository(RepositoryTable.CLASS);
-    this.studentsRepository = new Repository(RepositoryTable.STUDENT);
-    this.studentsClassesRepository = new Repository(RepositoryTable.STUDENTS_CLASSES);
-    this.repositoryClassReview = new Repository(RepositoryTable.CLASS_REVIEW);
-
-
+    this.classReviewRepository = dataSource.getRepository(ClassReviewSchema);
+    this.studentRepository = dataSource.getRepository(StudentSchema);
+    this.classRepository = dataSource.getRepository(ClassSchema);
+    this.studentClassRepository = dataSource.getRepository(StudentClassSchema);
   }
 
-  async generateClassReview({comment,academicId,classId}){
-
-    const condition = where().equal('academic_id',academicId).build();
-
-    const studet = await this.studentsRepository.findOne({condition: condition});
-    if(!studet){
-      throw new Error(`Student with academic id ${academicId} not found`);
+  async generateClassReview({ comment, academicId, classId }) {
+    if (!comment) {
+      throw BadRequestException("Invalid comment");
     }
 
-    const clase = await this.classesRepository.findOneById(classId);
-    
-    if(!clase){
-      throw new Error(`Class with id ${classId} not found`);
-    }
-
-    const condition2 = where().equal('student_id',studet.id).and().equal("class_id",classId).build();
-    const studentClass = await this.studentsClassesRepository.find({condition: condition2});
-
-    if(!studentClass){
-        throw new Error(`Student with academic id ${academicId} is or was not enrolled in the class`);
-    }
-
-    const fields = ["student_id", "comment", "class_id"];
-    const values = [[studet.id,comment,classId]];
-
-    const result = await this.repositoryClassReview.create({
-      fields : fields,
-      values : values
+    const studentFound = await this.studentRepository.findOne({
+      where: {
+        academicId: academicId,
+      },
     });
 
-    if (result.affectedRows === 0) {
-      throw new Error("Error creating class review");
+    if (!studentFound) {
+      throw new NotFoundException(
+        `Student with academic id: ${academicId} not found`
+      );
     }
 
-    const classReview = await this.repositoryClassReview.findOneById(result.insertId);
-    const classReviewDTO = classReviewDtoToEntityMapper(classReview);
-    classReviewDTO.classRef = clase;
-    delete studet.password
-    classReviewDTO.student = {
-      academicId: studet.academic_id
+    const classFound = await this.classRepository.findOne({
+      where: {
+        id: classId,
+      },
+      relations: {
+        subject: true,
+      },
+    });
+
+    if (!classFound) {
+      throw new NotFoundException(`Class not create review found`);
+    }
+
+    const studentClassFound = await this.studentClassRepository.findOneBy({
+      student: {
+        id: studentFound.id,
+      },
+      klass: {
+        id: classFound.id,
+      },
+    });
+
+    if (!studentClassFound) {
+      throw new NotFoundException(
+        `Student with academic id ${academicId} is not enrolled in the class ${classFound.subject.name}`
+      );
+    }
+
+    const review = this.classReviewRepository.create({
+      comment: comment,
+      klass: {
+        id: classFound.id,
+      },
+      student: {
+        id: studentFound.id,
+      },
+    });
+
+    const reviewCreated = await this.classReviewRepository.save(review);
+
+    if (!reviewCreated) {
+      throw new BadRequestException(`Can not register a review to the class`);
+    }
+
+    return {
+      class: classFound.subject.name,
+      student: studentFound.academicId,
+      comment: comment,
     };
-    return classReviewDTO;
+  }
+
+  async findReviewByClassId({ classId }) {
+    const classFound = await this.classRepository.findOne({
+      where: {
+        id: classId,
+      },
+      relations: {
+        subject: true,
+      },
+    });
+    if (!classFound) {
+      throw new NotFoundException(`Class not found`);
+    }
+    const reviews = await this.classReviewRepository.find({
+      where: {
+        klass: {
+          id: classFound.id,
+        },
+      }
+    });
+    return {
+      reviews: reviews
+    }
   }
 }

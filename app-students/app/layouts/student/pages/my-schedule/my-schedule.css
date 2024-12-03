@@ -1,0 +1,104 @@
+@import url("../../../../styles/global.css");
+
+.column-name {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--primary);
+    font-family: 'Inter', sans-serif;
+    user-select: none;
+}
+
+.schedule {
+    width: 100%;
+}
+
+.schedule-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: start;
+    margin-top: 20px;
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+}
+
+.schedule-day {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    height: 100%;
+    padding: 5px;
+    width: 100%;
+}
+
+.schedule-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 20px;
+    overflow-x: auto;
+    padding: 5px;
+    scrollbar-width: thin;
+}
+
+.print-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 50%;
+    background-color: var(--primary);
+    color: var(--primary-contrast);
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.print-button:hover {
+    scale: 1.02;
+    background-color: var(--primary-tint);
+}
+
+.print-button:active {
+    scale: 1;
+    background-color: var(--primary-shade);
+}
+
+.print-button > .icon {
+    width: 40px;
+    height: 40px;
+}
+
+
+@media (max-width: 1287px) {
+    .schedule-container {
+        flex-direction: column;
+    }
+
+    .schedule-day {
+        display: flex;
+        align-items: start;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .schedule-list {
+        display: flex;
+        flex-direction: row;
+        margin: 10px 0;
+        width: 100%;
+        gap: 15px;
+    }
+
+    #time {
+        display: none;
+    }
+
+}

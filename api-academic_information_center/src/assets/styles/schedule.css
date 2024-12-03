@@ -1,0 +1,68 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  body {
+    padding: 10px; /* Reduce padding global */
+    background-color: #f9f9f9;
+  }
+
+  .container {
+    display: flex;
+    gap: 6px; /* Reduce el espacio entre columnas */
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .day-column {
+    flex: 1;
+    min-width: 120px; /* Reduce aún más el ancho mínimo */
+    padding: 8px; /* Reduce padding interno */
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Menor espacio entre tarjetas */
+  }
+
+  .day-name {
+    font-size: 12px; /* Fuente más pequeña */
+    font-weight: 700;
+    color: #333333;
+    margin-bottom: 6px; /* Espacio menor abajo del nombre */
+    padding-bottom: 4px;
+    text-align: center;
+  }
+
+  .class-card {
+    border-radius: 4px; /* Bordes más pequeños */
+    padding: 6px; /* Reduce padding interno de las tarjetas */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Sombra más ligera */
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* Menor espacio entre elementos internos */
+    border-left: 3px solid #4caf50; /* Borde de color más estrecho */
+  }
+
+  .class-card .time {
+    font-size: 10px; /* Fuente más pequeña */
+    font-weight: 700;
+    color: #4caf50;
+  }
+
+  .class-card .subject {
+    font-size: 11px; /* Reduce la fuente principal */
+    font-weight: 700;
+    color: #333333;
+  }
+
+  .class-card .teacher,
+  .class-card .classroom {
+    font-size: 10px; /* Fuente más pequeña para detalles */
+    color: #666666;
+  }
+
+  .class-card .classroom {
+    color: #999999; /* Diferenciación sutil */
+  }

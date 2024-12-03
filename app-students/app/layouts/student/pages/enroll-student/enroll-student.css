@@ -1,9 +1,8 @@
 /* styles.css */
-@import url('../../../../../styles/global.css');
-@import url('../../components/header/header.css');
+@import url('../../../../styles/global.css');
 
 .body-div {
-  font-family: Arial, sans-serif;
+  font-family: 'Inter', sans-serif;
   background-color: #f4f4f4;
   margin: 0;
   padding: 0;

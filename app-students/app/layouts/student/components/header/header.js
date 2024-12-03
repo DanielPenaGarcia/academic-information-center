@@ -42,6 +42,10 @@ class Header extends HTMLElement {
     buttons() {
         const buttons = [
             {
+                label: 'Inicio',
+                action: () => router.navigate('/student')
+            },
+            {
                 label: 'Clases',
                 action: () => router.navigate('/student/classes')
             },

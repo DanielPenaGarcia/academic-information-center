@@ -1,0 +1,148 @@
+@import url("../../../../styles/global.css");
+
+.class-item {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  font-family: "Inter", sans-serif;
+  width: 100%;
+  border-radius: 10px;
+  border-top: 5px solid var(--primary);
+  border-right: 2px solid var(--primary);
+}
+
+.info-label {
+  display: flex;
+  align-items: center;
+  color: var(--primary);
+  margin-right: 10px;
+}
+
+.class-item > div {
+  padding: 15px;
+}
+
+.class-header {
+  background-color: rgba(var(--primary-rgb), 0.1);
+  border-radius: 10px 10px 0 0;
+  color: var(--primary);
+}
+
+.class-content {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.class-info {
+  font-size: large;
+  margin: 10px 0;
+}
+
+.class-info strong {
+  font-weight: bold;
+  color: var(--primary);
+}
+
+.class-info {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  align-items: center;
+  color: var(--primary-shade);
+}
+
+.class-description > textarea {
+  border: 1px solid rgba(var(--primary-rgb), 0.5);
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%;
+  font-size: 1rem;
+  font-family: "Inter", sans-serif;
+  height: 100px;
+}
+
+.class-description > textarea:focus {
+  outline: none;
+  border: 2px solid var(--primary-tint);
+}
+
+/* Text area disable */
+.class-description > textarea:disabled {
+  cursor: not-allowed;
+  resize: none;
+}
+
+.class-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.class-option {
+  width: fit-content !important;
+  padding: 10px 20px !important;
+  height: fit-content !important;
+  max-height: 40px;
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon-option {
+  padding: 5px !important;
+}
+
+.class-item.updating {
+  cursor: not-allowed;
+  background-color: rgba(
+    var(--primary-rgb),
+    0.05
+  ); /* Ejemplo de cambio de fondo */
+  z-index: 1000;
+}
+
+.class-item.updating textarea {
+  background-color: rgba(var(--primary-rgb), 0.1);
+  border-color: var(--primary-tint);
+}
+
+.class-item.updating .class-header {
+  opacity: 0.8;
+}
+
+.class-item.updating .class-option {
+  background-color: var(--primary-tint);
+  color: #fff;
+  cursor: not-allowed;
+}
+
+.comments {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Estila una p de clase .comment */
+.comment {
+  display: flex;
+  gap: 10px;
+  background-color: rgba(var(--primary-rgb), 0.1);
+  padding: 10px;
+  border-radius: 5px;
+  color: var(--primary);
+}
+
+.no-comments {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--primary);
+  font-weight: bold;
+}
