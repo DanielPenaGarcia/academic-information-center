@@ -74,7 +74,7 @@ export class TeacherSubjectsService {
       return subjects;
     }
 }
-}
+
 
 
 

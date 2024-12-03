@@ -188,6 +188,10 @@ export class ClassesController {
     } catch (error) {
       next(error);
     }
+
+  }
+  
+  
     
   async patchClassDescription(req, res, next) {
     try {
@@ -218,3 +222,4 @@ export class ClassesController {
     }
   }
 }
+
