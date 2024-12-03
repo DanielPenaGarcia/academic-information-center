@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Inter';
-    src: url('../fonts/Inter/Inter-VariableFont_opsz\,wght.ttf') format('truetype');
+    src: url('../app/fonts/Inter/Inter-Italic-VariableFont_opsz\,wght.ttf') format('truetype');
     font-weight: 100 900; /* Definir el rango de pesos soportados */
     font-style: normal;
     font-display: swap; /* Para mejorar la carga de la fuente */

@@ -1,4 +1,4 @@
-.table-subject {
+.table-classes {
     width: 100%;
     border-collapse: collapse;
     font-family: Arial, sans-serif;
@@ -11,35 +11,35 @@
     font-family: Arial, sans-serif;
   }
   
-  .table-subject__header {
+  .table-classes__header {
     background-color: transparent;
     color: #333;
     text-align: left;
     font-weight: bold;
   }
   
-  .table-subject__header th {
+  .table-classes__header th {
     padding: 12px;
     border-bottom: 2px solid #ddd;
   }
   
-  .table-subject__body__row:nth-child(even) {
+  .table-classes__body__row:nth-child(even) {
     background-color: transparent;
   }
   
-  .table-subject__body__row:hover {
+  .table-classes__body__row:hover {
     cursor: pointer;
     user-select: none;
     background-color: #eaf2ff;
     transition: background-color 0.2s ease-in-out;
   }
   
-  .table-subject__body td {
+  .table-classes__body td {
     padding: 10px;
     border-bottom: 1px solid #ddd;
   }
   
-  .table-subject__footer {
+  .table-classes__footer {
     display: flex;
     justify-content: space-between;
     align-items: center;

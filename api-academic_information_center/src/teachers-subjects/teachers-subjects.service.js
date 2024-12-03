@@ -49,7 +49,8 @@ export class TeacherSubjectsService{
       return subject;
     }
     
-    async getSubjectsByTeacher({ academicId }) {
+    async getSubjectsByTeacher({academicId}) {
+      console.log(academicId); 
       const teacher = await this.teacherRepository.findOne({
         where: {
           academicId: academicId,
@@ -67,6 +68,7 @@ export class TeacherSubjectsService{
             id: teacher.id,
           },
         },
+        relations: ['teachers'],
       });
     
       return subjects;

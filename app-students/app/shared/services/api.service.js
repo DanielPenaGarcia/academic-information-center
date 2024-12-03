@@ -55,7 +55,7 @@ const api = {
       "Content-Type": "application/json",
       ...this.getAuthHeader(),
     };
-
+    debugger;
     const response = await fetch(`${this.apiUrl}/${endpoint}`, {
       method: "PATCH",
       headers: headers,

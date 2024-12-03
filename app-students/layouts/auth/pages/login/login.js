@@ -1,5 +1,5 @@
-import authService from "../../../../shared/services/auth.service.js";
-import localStorageService from "../../../../shared/services/local-storage.service.js";
+import authService from "../../../../app/shared/services/auth.service.js";
+import localStorageService from "../../../../app/shared/services/local-storage.service.js";
 
 document.addEventListener("DOMContentLoaded", function () {
   const loginForm = document.getElementById("loginForm");

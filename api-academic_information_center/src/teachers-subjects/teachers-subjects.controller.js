@@ -32,7 +32,7 @@ export class TeacherSubjectsController{
 
     async getSubjectsByTeacher(req,res){
         try {
-            const {academicId} = req.query;
+            const {academicId} = req.body;
             const result = await this.teacherSubjecstService.getSubjectsByTeacher({academicId});
             res.status(200).json(result);
           } catch (error) {

@@ -1,128 +1,163 @@
 import api from "../../../../shared/services/api.service.js";
 
 class TableClasses extends HTMLElement {
-    totalElements = 0;
-    totalPages = 0;
-    currentPage = 1;
-    selectedClass = null;
+  totalElements = 0;
+  totalPages = 0;
+  currentPage = 1;
+  selectedClass = null;
 
-    constructor() {
-        super();
-        this.attachShadow({ mode: "open" });
-        this.subject = this.getAttribute("subject") || "";
-        this.days = this.getAttribute("days") || "";
-        this.startTime = this.getAttribute("startTime") || "";
-        this.page = parseInt(this.getAttribute("page")) || 1;
-        this.size = parseInt(this.getAttribute("size")) || 10;
-        this.classes = [];
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+    this.subject = this.getAttribute("subject") || "";
+    this.days = this.getAttribute("days") || "";
+    this.startTime = this.getAttribute("startTime") || "";
+    this.page = parseInt(this.getAttribute("page")) || 1;
+    this.size = parseInt(this.getAttribute("size")) || 10;
+    this.classes = [];
 
-        // Llamar a métodos iniciales
-        this.addListeners();
+  
+    this.addListeners();
+  }
+
+
+  addListeners() {
+    this.addPageListeners();
+  }
+
+
+ async connectedCallback() {
+    const teacherId = this.getAttribute("teacher-id");  
+    if (teacherId) {
+      this.findClassesByTeacher(teacherId);  
     }
+  }
 
-    // Método para agregar los listeners iniciales
-    addListeners() {
-        this.addPageListeners();
-    }
 
-    // Se ejecuta cuando el componente se inserta en el DOM
-    connectedCallback() {
-        this.findClassesBySubject();
-    }
 
-    // Método para obtener clases por materia usando la API
-    
-    async findClassesBySubject() {
-       
-    }
+  async findClassesByTeacher(teacherId) {
+    try {
+      const response = await api.get({
+        endpoint: `classes/teacherSubjects`,
+        query: { teacherId },
+      });
+      
 
-    // Metodo para actualizar la pagina de la tabla
-
-    updatePage(direction) {
-        if (direction === "next" && this.currentPage < this.totalPages) {
-            this.page++;
-          } else if (direction === "previous" && this.currentPage > 1) {
-            this.page--;
-          }
-
-        this.findClassesBySubject();
-    }
-
-    handleRadioChange(classId) {
-        const selectedClass = this.classes.find(
-          (classItem) => classItem.id === parseInt(classId)
-        );
-    
-        this.selectedClass = selectedClass;
-        this.selectedClassEvent(selectedClass);
-    } 
-    
-    selectedClassEvent(selectedClass) {
-        this.dispatchEvent(
-          new CustomEvent("class-selected", {
-            detail: selectedClass,
-            bubbles: true,
-            composed: true,
-          })
-        );
-    }
-
-    addSubjectItemListeners() {
-        const classItems = this.shadowRoot.querySelectorAll(".table-item");
-    
-        classItems.forEach((classItem) => {
-          // Agregar evento click al contenedor
-          classItem.addEventListener("click", (e) =>
-            this.onClassItemClick(e, classItem)
-          );
+      if (response.status === 200) {
+        console.log(response.data);
+        debugger;
+        const data = Array.isArray(response.data) ? response.data.flat() : [];
+        this.classes = data.map((classItem) => {
+          return {
+            ...classItem,
+            subject: classItem.subject,
+            startTime: classItem.startTime,
+            days: classItem.days,
+          };
         });
+        this.totalElements = response.data.totalElements;
+        this.totalPages = response.data.totalPages;
+        this.currentPage = response.data.currentPage;
+        console.log(this.classes);
+        this.render();
+      }
+
+
+    } catch (error) {
+      console.error(error);
+    };
+
+  }
+
+ 
+  async updatePage(direction) {
+    if (direction === "next" && this.currentPage < this.totalPages) {
+      this.page++;
+    } else if (direction === "previous" && this.currentPage > 1) {
+      this.page--;
     }
 
-    onClassItemClick(event, classItem) {
-        const radio = classItem.querySelector(".class-radio");
-        if (radio && !radio.checked) {
-          radio.checked = true;
-        }
-    
-        // Emitir el cambio al seleccionar el radio
-        if (radio) {
-          this.handleRadioChange(radio.getAttribute("data-id"));
-        }
+    this.findClassesByTeacher(this.getAttribute("teacher-id"));
+  }
+
+  async handleRadioChange(classId) {
+    const selectedClass = this.classes.find(
+      (classItem) => classItem.id === parseInt(classId)
+    );
+
+    this.selectedClass = selectedClass;
+    this.selectedClassEvent(selectedClass);
+  }
+
+  async selectedClassEvent(selectedClass) {
+    this.dispatchEvent(
+      new CustomEvent("class-selected", {
+        detail: selectedClass,
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+
+  async addSubjectItemListeners() {
+    debugger;
+    const classItems = this.shadowRoot.querySelectorAll(".table-item");
+
+    classItems.forEach((classItem) => {
+      
+      classItem.addEventListener("click", (e) =>
+        this.onClassItemClick(e, classItem)
+      );
+    });
+  }
+
+  async onClassItemClick(event, classItem) {
+    const radio = classItem.querySelector(".class-radio");
+    if (radio && !radio.checked) {
+      radio.checked = true;
     }
 
-    addPageListeners() {
-        const previousPageButton = this.shadowRoot.querySelector("#previousPage");
-        const nextPageButton = this.shadowRoot.querySelector("#nextPage");
-    
-        if (previousPageButton) {
-          previousPageButton.addEventListener("click", () =>
-            this.updatePage("previous")
-          );
-        }
-    
-        if (nextPageButton) {
-          nextPageButton.addEventListener("click", () => this.updatePage("next"));
-        }
+   
+    if (radio) {
+      this.handleRadioChange(radio.getAttribute("data-id"));
+    }
+  }
+
+  async addPageListeners() {
+    const previousPageButton = this.shadowRoot.querySelector("#previousPage");
+    const nextPageButton = this.shadowRoot.querySelector("#nextPage");
+
+    if (previousPageButton) {
+      previousPageButton.addEventListener("click", () =>
+        this.updatePage("previous")
+      );
     }
 
-    render(){
-        if(!this.shadowRoot){
-            this.attachShadow({mode: "open"});
-        }
+    if (nextPageButton) {
+      nextPageButton.addEventListener("click", () => this.updatePage("next"));
+    }
+  }
 
-        this.shadowRoot.innerHTML = `
+  async render() {
+    debugger;
+    if (!this.shadowRoot) {
+      
+      this.attachShadow({ mode: "open" });
+    }
+
+    this.shadowRoot.innerHTML = `
          <table class="table-classes">
           <thead>
               <tr class="table-classes__header">
                   <th class="table-classes__header__select">Seleccionar</th>
-                  <th class="table-classes__header__name">Materia</th>
-                  <th class="table-classes__header__hours">Dias</th>
-                  <th class="table-classes__header__semester">Hora</th>
+                  <th class="table-classes__header__name">Nombre</th>
+                  <th class="table-classes__header__days">Hora</th>
+                  <th class="table-classes__header__hour">Dias</th>
               </tr>
           </thead>
           <tbody class="table-classes__body">
                 ${this.classes.map(
-                    (classItem) => `
+      (classItem) => `
                 <tr class="table-classes__body__row table-item" id="${classItem.id}">
                   <td>
                       <input type="radio" 
@@ -130,36 +165,32 @@ class TableClasses extends HTMLElement {
                             class="class-radio" 
                             data-id="${classItem.id}" />
                   </td>
-                  <td>${classItem.name}</td>
-                  <td>${classItem.hours}</td>
-                  <td>${classItem.semester}</td>
-                  <td>${classItem.year}</td>
-                </tr>`   
-                ).join("")}          
+                  <td>${classItem.subject.name}</td>
+                  <td>${classItem.startTime}</td>
+                  <td>${classItem.days}</td>
+                </tr>`
+    ).join("")}          
           </tbody>
       </table>
       <div class="table-classes__footer">
-        <button id="previousPage" ${
-          this.page <= 1 ? "disabled" : ""
-        }>Anterior</button>
-        <span class="current-page">Página ${this.currentPage} de ${
-      this.totalPages
-    }</span>
-        <button id="nextPage" ${
-          this.page >= this.totalPages ? "disabled" : ""
-        }>Siguiente</button>
+        <button id="previousPage" ${this.page <= 1 ? "disabled" : ""
+      }>Anterior</button>
+        <span class="current-page">Página ${this.currentPage} de ${this.totalPages
+      }</span>
+        <button id="nextPage" ${this.page >= this.totalPages ? "disabled" : ""
+      }>Siguiente</button>
       </div>
     `;
 
-    
+
     this.attachStyles();
     this.addPageListeners();
     this.addSubjectItemListeners();
-    }
+  }
 
 
-    // Método para agregar estilos
-  attachStyles() {
+ 
+  async attachStyles() {
     const styleLink = document.createElement("link");
     styleLink.setAttribute("rel", "stylesheet");
     styleLink.setAttribute(
@@ -169,6 +200,10 @@ class TableClasses extends HTMLElement {
     this.shadowRoot.appendChild(styleLink);
   }
 
-}   
+}
 
 export default TableClasses;
+
+
+
+
