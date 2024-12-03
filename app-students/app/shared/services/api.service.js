@@ -1,14 +1,12 @@
-import localStorageService from "./local-storage.service.js"; // Suponiendo que tienes un servicio para manejar el localStorage
+import localStorageService from "./local-storage.service.js";
 
 const api = {
   apiUrl: `http://localhost:3000/api/v1`,
 
   getAuthHeader(contentType = "application/json") {
-    // const token = localStorageService.getItem('token');
-    // return token ? { Authorization: `Bearer ${token}` } : {};
     const token = localStorageService.getItem("token");
     const headers = {
-      "Content-Type": contentType,  // Si contentType no se pasa, por defecto será "application/json"
+      "Content-Type": contentType,
     };
     if (token) {
       headers.Authorization = `Bearer ${token}`;
@@ -30,21 +28,16 @@ const api = {
 
   async getBlob({ endpoint, query }) {
     const queryString = new URLSearchParams(query).toString();
-    const headers = this.getAuthHeader("application/pdf"); // Usamos "application/pdf" como contentType
+    const headers = this.getAuthHeader("application/pdf");
     const response = await fetch(`${this.apiUrl}/${endpoint}?${queryString}`, {
       method: "GET",
       headers: headers,
     });
-  
-    // Verificamos si la respuesta fue exitosa
     if (!response.ok) {
       throw new Error(`Error fetching the PDF: ${response.status}`);
     }
-  
-    // Si la respuesta es correcta, obtenemos el blob
     const status = response.status;
     const blob = await response.blob();
-  
     return { status, blob };
   },  
 
@@ -78,6 +71,7 @@ const api = {
     const data = await response.json();
     return { status, data };
   },
+  
   async patch({ endpoint, body }) {
     const headers = {
       "Content-Type": "application/json",

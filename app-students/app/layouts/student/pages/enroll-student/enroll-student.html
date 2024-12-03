@@ -1,31 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Microfrontend Enrollment System</title>
-    <link rel="stylesheet" href="enroll-student.css">
-</head>
+    <link rel="stylesheet" href="enroll-student.css" />
+  </head>
 
-<body>
-    <header>    
-        <student-header class="student-page"></student-header>
-    </header>
+  <body>
+    <student-header class="student-page"></student-header>
     <div class="body-div">
-        <div class="container">
+      <div class="container">
         <h1>Inscripciones</h1>
         <div class="components">
-            <!-- Microfrontend for Available Classes -->
-            <iframe src="../../components/available-classes/available-classes.html" class="microfrontend-frame" id="available-frame"></iframe>
-            
-            <!-- Microfrontend for Selected Classes -->
-            <iframe src="../../components/selected-classes/selected.html" class="microfrontend-frame" id="enrolled-frame"></iframe>
+          <!-- Microfrontend for Available Classes -->
+          <iframe
+            src="../../components/available-classes/available-classes.html"
+            class="microfrontend-frame"
+            id="available-frame"
+          ></iframe>
+
+          <!-- Microfrontend for Selected Classes -->
+          <iframe
+            src="../../components/selected-classes/selected.html"
+            class="microfrontend-frame"
+            id="enrolled-frame"
+          ></iframe>
         </div>
         <button id="enroll-button">Inscribirse</button>
+      </div>
     </div>
-</div>
     <div id="responseMessage" class="toast"></div>
 
-    <script type="module"src="enroll-students.js"></script>
-</body>
+    <script type="module" src="enroll-students.js"></script>
+  </body>
 </html>

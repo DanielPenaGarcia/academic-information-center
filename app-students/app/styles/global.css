@@ -1,100 +1,112 @@
-@import url('./theme.css');
-@import url('./fonts.css');
+@import url("./theme.css");
+@import url("./fonts.css");
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  cursor: url('../assets/icons/frame_1_delay-0.2s\ \(1\).png'), auto !important;
 }
 
-html, body {
-    height: 100%;
-    width: 100%;
+/* Cuando de click */
+*:active {
+    cursor: url('../assets/icons/frame_0_delay-0.2s\ \(1\).png'), auto !important;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
 }
 
 body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f9f9f9;
 }
 
 /* Contenido principal */
 .content-page {
-    flex: 1; /* Se expande para ocupar el espacio restante */
-    background-color: #fff;
-    width: 100%;
+  flex: 1; /* Se expande para ocupar el espacio restante */
+  background-color: #fff;
+  width: 100%;
 }
-
 
 /* Pie de página */
 .footer-page {
-    flex: 0 0 auto; /* Se mantiene en su tamaño natural */
-    background-color: var(--primary-shade);
-    color: var(--primary-contrast);
-    padding: 10px;
-    text-align: center;
-    font-size: 0.9rem;
+  flex: 0 0 auto; /* Se mantiene en su tamaño natural */
+  background-color: var(--primary-shade);
+  color: var(--primary-contrast);
+  padding: 10px;
+  text-align: center;
+  font-size: 0.9rem;
 }
 
+.primary-text {
+  color: var(--primary);
+  font-weight: bold;
+}
 
 /* Estilos generales de la tarjeta */
 .card {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px 30px;
-    text-align: center;
-    display: flex;
-    flex-direction: column; /* Organiza el contenido de la tarjeta en columnas */
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column; /* Organiza el contenido de la tarjeta en columnas */
 }
 
 /* Cabecera de la tarjeta */
 .card-header {
-    font-family: 'Inter', sans-serif; /* Usa la fuente Inter */
-    margin-bottom: 15px; /* Separación entre la cabecera y el contenido */
-    font-size: 1.5rem; /* Tamaño de fuente del título */
-    color: var(--primary); /* Usa el color primario */
-    font-weight: bold; /* Negrita para el título */
+  font-family: "Inter", sans-serif; /* Usa la fuente Inter */
+  margin-bottom: 15px; /* Separación entre la cabecera y el contenido */
+  font-size: 1.5rem; /* Tamaño de fuente del título */
+  color: var(--primary); /* Usa el color primario */
+  font-weight: bold; /* Negrita para el título */
 }
 
 /* Contenido de la tarjeta */
 .card-content {
-    font-family: 'Inter', sans-serif; /* Usa la fuente Inter */
-    margin-bottom: 20px; /* Espacio entre el contenido y el pie de página */
-    font-size: 1rem; /* Tamaño de fuente normal */
-    color: #333; /* Color del texto */
+  font-family: "Inter", sans-serif; /* Usa la fuente Inter */
+  margin-bottom: 20px; /* Espacio entre el contenido y el pie de página */
+  font-size: 1rem; /* Tamaño de fuente normal */
+  color: #333; /* Color del texto */
 }
 
 /* Pie de página de la tarjeta */
 .card-footer {
-    display: flex;
-    justify-content: end;
-    align-items: center;
-    gap: 10px;
-    margin-top: auto; /* Empuja el pie de página hacia abajo */
-    padding-top: 10px; /* Espacio en la parte superior del pie de página */
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto; /* Empuja el pie de página hacia abajo */
+  padding-top: 10px; /* Espacio en la parte superior del pie de página */
 }
 
 /* Botón de acción en el pie de página */
 .btn {
-    font-family: 'Inter', sans-serif; /* Usa la fuente Inter */
-    background-color: var(--primary); /* Usa el color primario para el fondo */
-    color: #fff; /* Texto blanco */
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    width: 100%;
+  font-family: "Inter", sans-serif; /* Usa la fuente Inter */
+  background-color: var(--primary); /* Usa el color primario para el fondo */
+  color: #fff; /* Texto blanco */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  width: 100%;
 }
 
 .btn:hover {
-    transform: scale(1.02); /* Agrandar el botón al pasar el mouse */
-    background-color: var(--primary-shade); /* Fondo más oscuro al pasar el mouse */
+  transform: scale(1.02); /* Agrandar el botón al pasar el mouse */
+  background-color: var(
+    --primary-shade
+  ); /* Fondo más oscuro al pasar el mouse */
 }
 
 .btn:active {
-    background-color: var(--primary-tint); /* Fondo más claro al hacer clic */
+  background-color: var(--primary-tint); /* Fondo más claro al hacer clic */
 }
