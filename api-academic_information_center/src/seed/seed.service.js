@@ -2,18 +2,78 @@ import { dataSource } from "../config/orm.config.js";
 import { AdministratorSchema } from "../schemas/administrator.schema.js";
 import { CourseMapSchema } from "../schemas/course-map.schema.js";
 import { SubjectSchema } from "../schemas/subject.schema.js";
+import {StudentSchema} from "../schemas/student.schema.js";
+import { TeacherSchema } from "../schemas/teacher.schema.js";
+import { StudentCourseMapSchema } from "../schemas/student-course-map.schema.js";
+import { ClassSchema } from "../schemas/class.schema.js";
 
 export class SeedService {
   constructor() {
     this.courseMapRepository = dataSource.getRepository(CourseMapSchema);
     this.subjectRepository = dataSource.getRepository(SubjectSchema);
     this.administratorRepository = dataSource.getRepository(AdministratorSchema);
+    this.studentRepostory = dataSource.getRepository(StudentSchema);
+    this.teacherRepostory = dataSource.getRepository(TeacherSchema);
+    this.studentCourseMapRepository  = dataSource.getRepository(StudentCourseMapSchema);
+    this.classRepository = dataSource.getRepository(ClassSchema);
+
   }
 
   async seed() {
     await this.#createAdministrator();
+    const teacher = await this.#createTeacher();
     const courseMap = await this.#createCourseMap();
-    await this.#createSubjects(courseMap);
+    const subjects = await this.#createSubjects(courseMap);
+    const student = await this.#createStudent();
+    await this.#createTeacherSubject(teacher,subjects);
+    await this.#createStudentCoruseMap(student,courseMap)
+    await this.#createClasse(subjects,teacher)
+
+  }
+
+  async #createTeacherSubject(teacher){
+
+    const subjects = await this.subjectRepository.find({
+      relations: ["teachers"],
+    });
+
+    for(let subject of subjects){
+        subject.teachers.push(teacher)
+        await this.subjectRepository.save(subject);
+    }
+  }
+
+  async #createStudentCoruseMap(student,courseMap) {
+    const studentCourseMap = this.studentCourseMapRepository.create({
+      student: student,
+      courseMap: courseMap
+    });
+
+    await this.studentCourseMapRepository.save(studentCourseMap);
+  }
+
+  async #createTeacher() {
+    const teacher = this.teacherRepostory.create({
+      names: 'Gibran',
+      fatherLastName: 'Duran',
+      motherLastName: 'Solano',
+      password: '123456',
+      email: 'teacher@teacher.com'
+    });
+    await this.teacherRepostory.save(teacher);
+    return teacher;
+  }
+
+  async #createStudent() {
+    const student = this.studentRepostory.create({
+      names: 'Juan',
+      fatherLastName: 'Perez',
+      motherLastName: 'Rubro',
+      password: '123456',
+      email: 'student@student.com'
+    });
+    await this.studentRepostory.save(student);
+    return student;
   }
 
   async #createAdministrator() {
@@ -34,6 +94,76 @@ export class SeedService {
       semesters: 8,
     });
     return await this.courseMapRepository.save(courseMap);
+  }
+
+  async #createClasse(subjects,teacher){
+
+    for(let semester of subjects){
+      for(let subject of semester){
+
+        const { startTime, days, duration } = this.getSchedule();
+        const classroom = this.getRandomClassroom();
+        const description = this.getRandomDescription();
+
+        const classCreated = await this.classRepository.save(
+          {
+            startTime: startTime,
+            duration: duration,
+            days: days,
+            classroom: classroom,
+            description: `Bienvenido a la clase de ${subject.name}`,
+            subject:subject,
+            teacher: teacher
+          }
+        );
+      }
+    }
+
+  }
+
+  getSchedule() {
+    // Duración aleatoria entre 60, 90 o 180 minutos
+    const durations = [60, 90, 180];
+    const duration = durations[Math.floor(Math.random() * durations.length)];
+
+    // Configuración de días según la duración
+    let days;
+    switch (duration) {
+      case 60: // 3 días a la semana
+        days = 'Monday,Wednesday,Friday';
+        break;
+      case 90: // 2 días a la semana
+        days = 'Tuesday,Thursday';
+        break;
+      case 180: // 1 día a la semana
+        days = 'Saturday';
+        break;
+    }
+
+    // Generar un horario de inicio aleatorio (entre 8:00 AM y 6:00 PM)
+    const hour = Math.floor(Math.random() * 10) + 8; // 8 a 18
+    const minute = Math.floor(Math.random() * 2) * 30; // 0 o 30 minutos
+    const startTime = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:00`;
+
+    return { startTime, days, duration };
+  }
+
+  getRandomClassroom() {
+    // Nombres de aulas aleatorios
+    const classrooms = ['A101', 'B202', 'C303', 'D404', 'E505'];
+    return classrooms[Math.floor(Math.random() * classrooms.length)];
+  }
+
+  getRandomDescription() {
+    // Descripciones predefinidas
+    const descriptions = [
+      'Introductory class',
+      'Lab session',
+      'Advanced topics',
+      'Group discussion',
+      'Exam preparation'
+    ];
+    return descriptions[Math.floor(Math.random() * descriptions.length)];
   }
 
   async #createSubjects(courseMap) {
@@ -153,6 +283,84 @@ export class SeedService {
       softwareIntegrationProject,
       softwareQuality
     });
+
+    return [
+      [
+        business,
+        math,
+        discreteMath,
+        programming,
+        tutoring,
+        softwareEngineering,
+        computerArchitecture,
+        introductoryEnglish,
+      ],
+      [
+        effectiveCommunication,
+        calculus,
+        computationalMath,
+        programmingII,
+        administrationFoundations,
+        tutoringII,
+        operatingSystems,
+        universityEnglishA1,
+      ],
+      [
+        problemSolution,
+        linearAlgebra,
+        probabilityStatistics,
+        programmingIII,
+        databases,
+        dataStructures,
+        networks,
+        universityEnglishA2,
+      ],
+      [
+        electiveGeneralTrainingI,
+        appliedStatistics,
+        computerSecurity,
+        advancedDatabases,
+        projectManagement,
+        processModeling,
+        softwareDesign,
+        universityEnglishB1,
+      ],
+      [
+        electiveGeneralTrainingII,
+        computationalNumericalMethods,
+        softwareTesting,
+        webApplications,
+        softwareProjectManagement,
+        requirementsEngineering,
+        softwareArchitecture,
+        universityEnglishB1II,
+      ],
+      [
+        technologicalInnovation,
+        distributedSystems,
+        mobileApplications,
+        embeddedSystems,
+        softwareIntegrationProject,
+        interactiveSystemsDesign,
+        enterpriseArchitectures,
+        universityEnglishB1III,
+      ],
+      [
+        prototypeImplementation,
+        generalTrainingTopic,
+        softwareQuality,
+        agileDevelopmentMethods,
+        topicI,
+        topicII,
+        electiveAccentuation
+      ],
+      [
+        titrationSeminar,
+        professionalPractice,
+        softwareEvaluation,
+        informationTechnologiesBusiness
+      ],
+    ]
   }
 
   async #createSubjectsFirstSemester(courseMap) {
