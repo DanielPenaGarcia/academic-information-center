@@ -18,6 +18,26 @@ function loadOptions() {
                 }
             ]
         },
+        {
+            title: 'Asignar materia a maestro',
+            description: 'Asigna una materia a un maestro',
+            actions: [
+                {
+                    label: 'Asignar',
+                    action: () => goToOption({ path: 'admin/teacher/asign-subject-teacher'})
+                }
+            ]
+        },
+        {
+            title: 'Asignar clase a maestro',
+            description: 'Asigna una clase a un maestro',
+            actions: [
+                {
+                    label: 'Asignar',
+                    action: () => goToOption({ path: 'admin/teacher/asign-class-teacher'})
+                }
+            ]
+        }
     ];
 
     // Mostrar las opciones en el main

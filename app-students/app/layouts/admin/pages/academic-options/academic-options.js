@@ -47,7 +47,17 @@ function loadOptions() {
                     action: () => goToOption({ path: 'admin/subjects/register-subject' })
                 },
             ]
-        }
+        },
+        {
+            title: 'Registrar mapa curricular',
+            description: 'Registra un nuevo mapa curricular en el sistema',
+            actions: [
+                {
+                    label: 'Registrar',
+                    action: () => goToOption({ path: 'admin/course-map/create-course-map' })
+                },
+            ]
+        },
     ];
 
     // Mostrar las opciones en el main

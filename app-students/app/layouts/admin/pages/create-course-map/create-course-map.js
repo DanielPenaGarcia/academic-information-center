@@ -1,8 +1,11 @@
 import api from "../../../../shared/services/api.service.js";
+import Header from "../../components/header/header.js";
+import BackButton from "../../../../shared/components/back-button/back-button.js";
 
 // Asegurarse de que el DOM esté completamente cargado antes de ejecutar el código
 document.addEventListener("DOMContentLoaded", function () {
     addListeners();
+    loadComponents();
 });
 
 const addListeners = () => {
@@ -61,4 +64,9 @@ const submitCreateCourseMap = async ({ year, semesters }) => {
     } else {
         alert("Error al crear mapa curricular");
     }
+};
+
+const loadComponents = () => {
+    window.customElements.define("admin-header", Header);
+    window.customElements.define("back-button", BackButton);
 };
