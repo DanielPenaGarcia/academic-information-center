@@ -7,9 +7,9 @@ export class TeacherSubjectsController {
 
   async asignSubjectToTeacher(req, res) {
     try {
-      const { academicId, subjectId } = req.body;
+      const { teacherId, subjectId } = req.body;
       const result = await this.teacherSubjecstService.asignTeacherToSubject({
-        academicId,
+        academicId: teacherId,
         subjectId,
       });
       res.status(201).json(result);
@@ -32,4 +32,16 @@ export class TeacherSubjectsController {
     }
   }
 
+  async getSubjectsByTeacher(req, res) {
+    try {
+      const teacherAcademicId = req.params;
+      const result = await this.teacherSubjecstService.getSubjectsByTeacher(
+        teacherAcademicId
+      );
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
 }
+

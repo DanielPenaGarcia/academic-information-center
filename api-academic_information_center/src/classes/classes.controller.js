@@ -142,6 +142,57 @@ export class ClassesController {
     }
   }
 
+  async getClassesByTeacher(req, res, next){
+    try {
+        if (!req.body || Object.keys(req.body).length === 0) {
+          throw new BadRequestException("El cuerpo de la petición está vacío");
+        }
+        const { teacherId } = req.body;
+        if (!teacherId) {
+          throw new BadRequestException(
+            "Faltan campos obligatorios en el cuerpo de la petición"
+          );
+        }
+        const classes = await this.classesService.getClassesByTeacher({
+          teacherId,
+        });
+        res.status(200).json(classes);
+      } catch (error) {
+        next(error);
+      }
+  }
+
+  async getClassesWithoutTeacher(req, res, next){
+    try {
+        const classes = await this.classesService.getClassesWithoutTeacher();
+        res.status(200).json(classes);
+      } catch (error) {
+        next(error);
+      }
+  }
+
+  async getClassesByTeacherEspeciality(req, res, next) {
+    try {
+      const { teacherId } = req.query; 
+  
+      if (!teacherId) {
+        throw new BadRequestException("Faltan campos obligatorios en la URL");
+      }
+  
+      const classes = await this.classesService.getClassesByTeacherEspeciality({
+        teacherId,
+      });
+      
+      res.status(200).json(classes);
+      
+    } catch (error) {
+      next(error);
+    }
+
+  }
+  
+  
+    
   async patchClassDescription(req, res, next) {
     try {
       if (!req.body || Object.keys(req.body).length === 0) {
@@ -165,8 +216,10 @@ export class ClassesController {
         },
       });
       res.status(200).json(klass);
+
     } catch (error) {
       next(error);
     }
   }
 }
+

@@ -337,7 +337,7 @@ export class StudentsClassesService {
           "student.motherLastName AS student_mother_lastName",
       ])
       .addSelect("CASE WHEN review.id IS NOT NULL THEN true ELSE false END", "hasReview")
-      .where("student.academicId = :academicId", { academicId })
+      .where("student.academicId = :academicId AND sc.status = 'PENDING'", { academicId })
       .getRawMany();
 
   return results;

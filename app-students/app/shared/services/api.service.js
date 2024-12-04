@@ -16,7 +16,7 @@ const api = {
   
   async get({ endpoint, query, contentType = "application/json" }) {
     const queryString = new URLSearchParams(query).toString();
-    const headers = this.getAuthHeader(contentType);  // Pasamos contentType directamente
+    const headers = this.getAuthHeader(contentType);  
     const response = await fetch(`${this.apiUrl}/${endpoint}?${queryString}`, {
       method: "GET",
       headers: headers,
@@ -77,7 +77,6 @@ const api = {
       "Content-Type": "application/json",
       ...this.getAuthHeader(),
     };
-
     const response = await fetch(`${this.apiUrl}/${endpoint}`, {
       method: "PATCH",
       headers: headers,

@@ -8,10 +8,12 @@ import { days as daysOption } from "../utils/constanst/days.constants.js";
 import { StudentClassSchema } from "../schemas/student-class.schema.js";
 import { CourseMapSchema } from "../schemas/course-map.schema.js";
 import { StudentCourseMapSchema } from "../schemas/student-course-map.schema.js";
-import { In, Not } from "typeorm";
+import { In, IsNull, Not } from "typeorm";
 import { StatusClass } from "../entities/enums/status-class.enum.js";
 import { Klass } from "../entities/klass.entity.js";
+import { TeacherSubjectsService } from "../teachers-subjects/teachers-subjects.service.js";
 import { role } from "../entities/enums/role.enum.js";
+
 
 export class ClassesService {
   constructor() {
@@ -24,6 +26,8 @@ export class ClassesService {
     this.studenCourseMapRepository = dataSource.getRepository(
       StudentCourseMapSchema
     );
+    this.teacherSubjectsService = new TeacherSubjectsService();
+
   }
 
   async createClass({ startTime, duration, days, subjectId, classroom }) {
@@ -111,6 +115,7 @@ export class ClassesService {
       },
       relations: ["subject"],
     });
+    
     if (!klass) {
       throw new BadRequestException(
         `No se encontró la clase con el ${classId}`
@@ -128,7 +133,6 @@ export class ClassesService {
       enrolledClasses = enrolledClasses.data;
     }
 
-    // Iterate over the normalized `enrolledClasses` array
     enrolledClasses.forEach((studentClass) => {
       const enrolledKlass = studentClass.klass;
       console.log(studentClass);
@@ -299,6 +303,7 @@ export class ClassesService {
   }
 
   async getEnrolledClasses({ studentId }) {
+
     let enrolledClasses = await this.studentClassRepository.find({
       where: {
         status: "PENDING",
@@ -358,6 +363,80 @@ export class ClassesService {
 
     return studentClass;
   }
+
+  async getClassesByTeacher({ teacherId }) {
+    const teacher = await this.teacherRepository.findOne({
+      where: {
+        id: teacherId,
+        role: "TEACHER",
+      },
+    });
+    if (!teacher) {
+      throw new BadRequestException(
+        `No se encontró al profesor con el ID ${teacherId}`
+      );
+    }
+    const classes = await this.classesRepository.find({
+      where: {
+        teacher: { id: teacherId },
+      },
+      relations: ["subject", "teacher"],
+    });
+    return classes;
+  }
+
+  async getClassesWithoutTeacher() {
+
+    const classes = await this.classesRepository.find({
+      where: {
+        teacher: { id: IsNull() },
+      },
+      relations: ["subject", "teacher"],
+    });
+    return classes;
+  }
+
+  async getClassesByTeacherEspeciality({ teacherId }) {
+
+    const teacher = await this.teacherRepository.findOne({
+      where: {
+        id: teacherId,
+        role: "TEACHER",
+      },
+    });
+    if (!teacher) {
+      throw new BadRequestException(
+        `No se encontró al profesor con el ID ${teacherId}`
+      );
+    }
+
+
+    const subjectIds = await this.teacherSubjectsService.getSubjectsByTeacher(teacher.id);
+
+    if (!subjectIds.length) {
+      throw new BadRequestException(
+        `El profesor con ID ${teacherId} no tiene materias asignadas.`
+      );
+    }
+
+    const classesAvailable =[];
+    for(let i = 0; i < subjectIds.length; i++){
+      subjectIds[i] = subjectIds[i].id;
+      const classes = await this.classesRepository.find({
+        where: {
+          subject: { id: subjectIds[i] },
+        },
+        relations: ["subject", "teacher"],
+      });
+      if(!classes[i] == []){
+        classesAvailable.push(classes);
+      }
+      
+    }
+  
+    return classesAvailable;
+  }
+
 
   async updateDescription({
     classId,

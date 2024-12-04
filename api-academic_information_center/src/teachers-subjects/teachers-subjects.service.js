@@ -48,4 +48,33 @@ export class TeacherSubjectsService {
 
     return subject;
   }
+  
+  async getSubjectsByTeacher({academicId}) {
+      console.log(academicId); 
+      const teacher = await this.teacherRepository.findOne({
+        where: {
+          academicId: academicId,
+          role: 'TEACHER',
+        },
+      });
+    
+      if (!teacher) {
+        throw new BadRequestException(`Teacher with academic id ${academicId} not found`);
+      }
+    
+      const subjects = await this.subjectRepository.find({
+        where: {
+          teachers: {
+            id: teacher.id,
+          },
+        },
+        relations: ['teachers'],
+      });
+    
+      return subjects;
+    }
 }
+
+
+
+
