@@ -130,13 +130,13 @@ export class SeedService {
     let days;
     switch (duration) {
       case 60: // 3 días a la semana
-        days = 'Monday,Wednesday,Friday';
+        days = 'L,X,V';
         break;
       case 90: // 2 días a la semana
-        days = 'Tuesday,Thursday';
+        days = 'M,J';
         break;
       case 180: // 1 día a la semana
-        days = 'Saturday';
+        days = 'S';
         break;
     }
 

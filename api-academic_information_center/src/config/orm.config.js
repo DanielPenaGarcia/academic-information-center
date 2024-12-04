@@ -5,7 +5,7 @@ export const dataSource = new typeorm.DataSource({
     host: 'localhost',
     port: 3306,
     username: 'root',
-    password: 'admin',
+    password: '1234',
     database: 'academic_information_center',
     synchronize: true,
     logging: false,
