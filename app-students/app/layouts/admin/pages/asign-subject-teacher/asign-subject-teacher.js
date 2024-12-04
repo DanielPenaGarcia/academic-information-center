@@ -1,7 +1,7 @@
-import api from '../../../../app/shared/services/api.service.js';
-import TableSubjects from '../../../../app/layouts/admin/components/table-subject/table-subject.js';
-import Header from '../../../../app/layouts/admin/components/header/header.js';
-import BackButton from '../../../../app/shared/components/back-button/back-button.js';
+import api from '../../../../../app/shared/services/api.service.js';
+import TableSubjects from '../../../../layouts/admin/components/table-subject/table-subject.js';
+import Header from '../../../../layouts/admin/components/header/header.js';
+import BackButton from '../../../../shared/components/back-button/back-button.js';
 let selectedTeacher = null;
 let selectedSubject; // Variable para almacenar la materia seleccionada
 

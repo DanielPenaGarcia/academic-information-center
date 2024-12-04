@@ -37,6 +37,7 @@ class TableClasses extends HTMLElement {
 
   async findClassesByTeacher(teacherId) {
     try {
+      debugger;
       const response = await api.get({
         endpoint: `classes/teacherSubjects`,
         query: { teacherId },
@@ -45,7 +46,6 @@ class TableClasses extends HTMLElement {
 
       if (response.status === 200) {
         console.log(response.data);
-        debugger;
         const data = Array.isArray(response.data) ? response.data.flat() : [];
         this.classes = data.map((classItem) => {
           return {

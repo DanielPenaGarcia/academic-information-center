@@ -135,4 +135,19 @@ export const routes = [
         page: 'app/layouts/admin/pages/student-classes/student-classes.html',
         canActivate: [authGuard, roleGuard('ADMIN')],
     },
+    {
+        path: 'admin/teacher/asign-subject-teacher',
+        page: 'app/layouts/admin/pages/asign-subject-teacher/asign-subject-teacher.html',
+        canActivate: [authGuard, roleGuard('ADMIN')],
+    },
+    {
+        path: 'admin/teacher/asign-class-teacher',
+        page: 'app/layouts/admin/pages/asign-class-teacher/asign-teacher-class.html',
+        canActivate: [authGuard, roleGuard('ADMIN')],
+    },
+    {
+        path: 'admin/course-map/create-course-map',
+        page: 'app/layouts/admin/pages/create-course-map/create-course-map.html',
+        canActivate: [authGuard, roleGuard('ADMIN')],
+    }
 ]
