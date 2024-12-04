@@ -12,10 +12,10 @@ const middlewares = (req, res, next) => {
 };
 
 
-router.get(
-  `${path}/:teacherAcademicId`,
-  teacherSubjectsController.getSubjectsByTeacher.bind(teacherSubjectsController)
-);
+// router.get(
+//   `${path}/:teacherAcademicId`,
+//   teacherSubjectsController.getSubjectsByTeacher.bind(teacherSubjectsController)
+// );
 
 router.post(
   `${path}`,

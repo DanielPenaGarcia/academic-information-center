@@ -4,7 +4,7 @@ import ClassItem from "../../components/class-item/class-item.js";
 import Header from "../../components/header/header.js";
 
 let page = 1;
-let size = 10;
+let size = 12;
 let pages = 1;
 let totalPages = 1;
 let totalElements = 0;

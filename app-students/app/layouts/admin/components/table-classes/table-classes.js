@@ -37,7 +37,6 @@ class TableClasses extends HTMLElement {
 
   async findClassesByTeacher(teacherId) {
     try {
-      debugger;
       const response = await api.get({
         endpoint: `classes/teacherSubjects`,
         query: { teacherId },
@@ -100,7 +99,6 @@ class TableClasses extends HTMLElement {
   }
 
   async addSubjectItemListeners() {
-    debugger;
     const classItems = this.shadowRoot.querySelectorAll(".table-item");
 
     classItems.forEach((classItem) => {
@@ -139,7 +137,6 @@ class TableClasses extends HTMLElement {
   }
 
   async render() {
-    debugger;
     if (!this.shadowRoot) {
       
       this.attachShadow({ mode: "open" });

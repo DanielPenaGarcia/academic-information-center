@@ -50,7 +50,7 @@ const assignSubjectToProfessor = async () => {
       subjectId: selectedSubject.id,
     };
 
-    const response = await api.post({ endpoint: "/subjects/teachers", body });
+    const response = await api.post({ endpoint: "subjects/teachers", body });
     if (response.status === 201) {
       showAlert("Materia asignada exitosamente");
       selectedSubject = null; 
@@ -70,7 +70,6 @@ const loadComponents = () => {
   window.customElements.define("table-subjects", TableSubjects);
   const subjectsTable = document.getElementById("subjects-table");
   subjectsTable.addEventListener("subject-selected", async (e) => { 
-    debugger;
     const subject = e.detail;
     selectedSubject = await getSubject(subject.id); 
   });

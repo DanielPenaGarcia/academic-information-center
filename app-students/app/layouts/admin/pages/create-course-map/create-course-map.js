@@ -18,7 +18,6 @@ const addListenerToForm = () => {
 };
 
 const createCourseMap = async (e) => {
-    debugger;
     e.preventDefault();
     const form = e.target;
     const data = {};
@@ -50,7 +49,6 @@ const validateCreateCourseMap = ({ year, semesters }) => {
     return true;
 }
 const submitCreateCourseMap = async ({ year, semesters }) => {
-   debugger;
     if (!validateCreateCourseMap({ year, semesters })) {
         return;
     }

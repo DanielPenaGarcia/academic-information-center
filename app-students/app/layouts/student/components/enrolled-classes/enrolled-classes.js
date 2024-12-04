@@ -124,12 +124,8 @@ async removeClass(classId) {
             endpoint: `classes/dropClass`,
             body
         });
-
-        if (response.status === 200) {
-            // Remove the class from the `classes` array
+        if (response) {
             this.classes = this.classes.filter(klass => klass.id !== classId);
-
-            // Re-render the component to update the view
             this.render();
         } else {
             console.warn("Failed to remove class:", response.data?.message || "Unknown error");
